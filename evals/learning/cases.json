@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "manual-step-becomes-automation-candidate",
+      "event": {
+        "event_type": "manual-work",
+        "summary": "the project owner manually copied recurring review decisions into morning planning.",
+        "skill": "morning-coffee",
+        "status": "observed",
+        "importance": "medium",
+        "manual_steps": ["Copy recurring-review decision labels into the morning plan"],
+        "automation_candidates": ["Morning coffee should surface learning and recurring-review decisions automatically"],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_candidate_kind": "manual-work-automation",
+      "expected_owner": "morning-coffee"
+    },
+    {
+      "id": "duplicate-events-grouped",
+      "events": [
+        {
+          "event_type": "correction",
+          "summary": "Adapter runner asked for inputs despite default_inputs.",
+          "skill": "adapter-runner",
+          "friction": ["Asked for inputs despite default_inputs"],
+          "created_at": "2026-05-19T08:00:00+02:00"
+        },
+        {
+          "event_type": "correction",
+          "summary": "Adapter runner asked for inputs despite default_inputs.",
+          "skill": "adapter-runner",
+          "friction": ["Asked for inputs despite default_inputs"],
+          "created_at": "2026-05-19T09:00:00+02:00"
+        }
+      ],
+      "expected_candidate_kind": "system-friction",
+      "expected_owner": "adapter-runner",
+      "expected_occurrence_count": 2
+    },
+    {
+      "id": "correction-with-positive-phrase-is-system-friction",
+      "event": {
+        "event_type": "correction",
+        "summary": "Support reply draft overinterpreted a simple customer agreement.",
+        "skill": "project-zoho-desk",
+        "status": "corrected",
+        "importance": "medium",
+        "friction": [
+          "Assistant drafted substantive product-roadmap acknowledgements even though the customer only replied that previous-set comparisons sounded great."
+        ],
+        "created_at": "2026-05-21T10:00:00+02:00"
+      },
+      "expected_candidate_kind": "system-friction",
+      "expected_owner": "project-zoho-desk"
+    },
+    {
+      "id": "resolved-raw-chat-issue-not-suggested",
+      "events": [
+        {
+          "event_type": "learning",
+          "summary": "user: I don't see my messages in raw-chats.",
+          "workflow": "ephemeral-chat-parser",
+          "status": "observed",
+          "source": "raw-chat-parser",
+          "chat_role": "user",
+          "friction": ["I don't see my messages in raw-chats."],
+          "created_at": "2026-05-19T08:00:00+02:00"
+        },
+        {
+          "event_type": "learning",
+          "summary": "assistant: Memory update candidate: Raw chat capture should treat visible user messages as first-class learning input.",
+          "workflow": "ephemeral-chat-parser",
+          "status": "observed",
+          "source": "raw-chat-parser",
+          "chat_role": "assistant",
+          "friction": ["Memory update candidate: Raw chat capture should treat visible user messages as first-class learning input."],
+          "created_at": "2026-05-19T09:00:00+02:00"
+        }
+      ],
+      "expected_absent_title_contains": "I don't see my messages"
+    },
+    {
+      "id": "resolved-structured-scope-fix-not-suggested",
+      "events": [
+        {
+          "event_type": "learning",
+          "summary": "user: Learning should focus on the system itself and not actual business topics.",
+          "workflow": "ephemeral-chat-parser",
+          "status": "observed",
+          "source": "raw-chat-parser",
+          "chat_role": "user",
+          "friction": ["Learning should focus on the system itself and not actual business topics."],
+          "created_at": "2026-05-19T08:00:00+02:00"
+        },
+        {
+          "event_type": "correction",
+          "summary": "Implemented the system itself learning-scope fix and the memory file structure context-loading fix.",
+          "workflow": "learning-review",
+          "status": "resolved",
+          "source": "manual",
+          "friction": ["Learning-review now filters business topics and treats memory/file structure and important files as agentic OS improvement surfaces."],
+          "created_at": "2026-05-19T09:00:00+02:00"
+        }
+      ],
+      "expected_absent_title_contains": "system itself"
+    },
+    {
+      "id": "routine-memory-ingest-worker-not-suggested",
+      "event": {
+        "event_type": "learning",
+        "summary": "user: Use the memory-ingest skill in one-item worker mode. Process exactly this inbox item and no other inbox files: `inbox/example.md`",
+        "workflow": "ephemeral-chat-parser",
+        "status": "observed",
+        "source": "raw-chat-parser",
+        "chat_role": "user",
+        "friction": [
+          "Use the memory-ingest skill in one-item worker mode. Process exactly this inbox item and no other inbox files: `inbox/example.md`"
+        ],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_absent_title_contains": "one-item worker mode"
+    },
+    {
+      "id": "routine-positive-continuation-not-suggested",
+      "event": {
+        "event_type": "learning",
+        "summary": "user: Ok, great, now, let's continue",
+        "workflow": "ephemeral-chat-parser",
+        "status": "observed",
+        "source": "raw-chat-parser",
+        "chat_role": "user",
+        "friction": [
+          "Ok, great, now, let's continue"
+        ],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_absent_title_contains": "let's continue"
+    },
+    {
+      "id": "raw-chat-extracts-learning-event",
+      "raw_chat_payload": {
+        "session_id": "fixture-raw-chat",
+        "messages": [
+          {"role": "user", "content": "This is the same repeated manual step and we should automate it with a hook."}
+        ]
+      },
+      "expected_source": "raw-chat-parser"
+    },
+    {
+      "id": "raw-chat-transcript-path-captures-visible-user-message",
+      "raw_chat_transcript_jsonl": [
+        {
+          "type": "event_msg",
+          "timestamp": "2026-05-19T10:00:00.000Z",
+          "payload": {
+            "type": "user_message",
+            "message": "I keep manually repeating this step and we should automate it with a skill."
+          }
+        },
+        {
+          "type": "response_item",
+          "timestamp": "2026-05-19T10:00:01.000Z",
+          "payload": {
+            "role": "user",
+            "content": "internal tool context that should not be captured as visible chat"
+          }
+        },
+        {
+          "type": "event_msg",
+          "timestamp": "2026-05-19T10:00:02.000Z",
+          "payload": {
+            "type": "agent_message",
+            "message": "Implemented the visible-message parser and validation passed."
+          }
+        }
+      ],
+      "expected_message_roles": ["user", "assistant"],
+      "expected_user_text": "I keep manually repeating this step"
+    },
+    {
+      "id": "raw-chat-one-file-per-thread-appends-messages",
+      "raw_chat_thread_updates": [
+        {
+          "session_id": "fixture-thread",
+          "messages": [
+            {
+              "timestamp": "2026-05-19T10:00:00.000Z",
+              "role": "user",
+              "content": "This is a repeated manual step and we should automate it."
+            }
+          ]
+        },
+        {
+          "session_id": "fixture-thread",
+          "messages": [
+            {
+              "timestamp": "2026-05-19T10:00:00.000Z",
+              "role": "user",
+              "content": "This is a repeated manual step and we should automate it."
+            },
+            {
+              "timestamp": "2026-05-19T10:01:00.000Z",
+              "role": "assistant",
+              "content": "Implemented the one-file-per-thread raw chat capture and validation passed."
+            }
+          ]
+        }
+      ],
+      "expected_file_count": 1,
+      "expected_message_count": 2,
+      "expected_capture_count": 2
+    }
+  ]
+}

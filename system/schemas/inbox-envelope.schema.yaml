@@ -1,0 +1,20 @@
+schema: inbox-envelope
+version: 1
+required_fields:
+  - id
+  - created_at
+  - created_by
+  - origin
+  - domain_guess
+  - artifact_paths
+  - summary
+  - ingest_status
+optional_fields:
+  - source_urls
+  - tool_calls
+  - related_skill
+  - requested_by
+  - approval_needed
+notes:
+  - Inbox envelopes should point at full artifacts rather than replacing them with summaries.
+  - Ingest may promote, append evidence, preserve source-only, record process-only, drop, or escalate.

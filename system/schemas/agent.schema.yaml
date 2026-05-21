@@ -1,0 +1,21 @@
+schema: agent
+version: 1
+required_fields:
+  - name
+  - purpose
+  - use_when
+  - do_not_use_when
+  - model_effort
+  - allowed_tools
+  - forbidden_tools
+  - write_scope
+  - required_skills
+  - optional_skills
+  - memory_behavior
+  - handoff_output
+  - quality_bar
+optional_fields:
+  - aliases
+notes:
+  - Agents are reusable operating roles, not background processes by default.
+  - Skills may name preferred agents, but the root assistant still owns final user-visible accountability.

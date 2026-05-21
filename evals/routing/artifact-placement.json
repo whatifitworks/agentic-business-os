@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "purpose": "Artifact placement fixtures.",
+  "cases": [
+    {
+      "id": "scheduler-brief",
+      "artifact": "Scheduled run brief",
+      "expected_path": "logs/"
+    },
+    {
+      "id": "adapter-run",
+      "artifact": "UI adapter evidence",
+      "expected_path": "sources/adapters/runs/"
+    },
+    {
+      "id": "memory-candidate",
+      "artifact": "Durable candidate insight",
+      "expected_path": "inbox/"
+    },
+    {
+      "id": "shareable-output",
+      "artifact": "Final report or export",
+      "expected_path": "outputs/"
+    }
+  ]
+}

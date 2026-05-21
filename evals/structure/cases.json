@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify that the root vault remains readable, bounded, and auditable.",
+  "cases": [
+    {
+      "id": "required-root-folders",
+      "check": "root contains inbox, wiki, outputs, indexes, sources, dropped, state, domains, evals, system, rules, context, projects, logs, scripts, references, archives; retired memory, research, and processed roots are absent",
+      "severity": "error"
+    },
+    {
+      "id": "approved-root-folders",
+      "check": "every root directory is listed in indexes/folders.md or in the explicit ignored runtime set",
+      "severity": "error"
+    },
+    {
+      "id": "folder-readmes",
+      "check": "each approved durable root folder has a README.md or is documented as a config/runtime exception",
+      "severity": "warn"
+    },
+    {
+      "id": "root-start-page",
+      "check": "00-start-here.md links to the main indexes and v2 operating contract",
+      "severity": "error"
+    },
+    {
+      "id": "domain-contract-shape",
+      "check": "every domains/*.md file has owner scope, exclusions, canonical sources, skills, agents, outputs, and open questions",
+      "severity": "error"
+    },
+    {
+      "id": "no-unindexed-wiki",
+      "check": "every wiki page has an inbound link from 00-start-here.md, indexes, domains, or another wiki page",
+      "severity": "error"
+    },
+    {
+      "id": "inbox-policy-visible",
+      "check": "AGENTS.md and rules/memory-workflow.md state that durable generated artifacts go to root inbox before ingest",
+      "severity": "error"
+    },
+    {
+      "id": "legacy-memory-compatibility",
+      "check": "legacy Basic Memory imports are ingested out of inbox and archived outside the active memory spine",
+      "severity": "error"
+    }
+  ]
+}

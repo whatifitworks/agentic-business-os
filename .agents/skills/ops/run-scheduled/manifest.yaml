@@ -1,0 +1,18 @@
+manifest_version: 1
+name: run-scheduled
+skill: run-scheduled
+domain: ops
+namespace: ops
+status: active
+purpose: Manually run a task from .agents/schedules.yaml while preserving skill approval gates.
+triggers:
+  - run scheduled
+  - run the scheduled task
+  - run the support triage now
+required_sources:
+  - .agents/schedules.yaml
+default_output_policy: underlying_skill_policy
+approval_gates:
+  - inherit approval gates from the underlying skill
+related_agents:
+  - tooling-engineer

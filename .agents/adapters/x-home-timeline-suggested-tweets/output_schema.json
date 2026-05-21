@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "required": [
+    "tweets_json"
+  ],
+  "properties": {
+    "tweets_json": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "author_name",
+          "author_username",
+          "text",
+          "quote",
+          "visual_description"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "author_name": {
+            "type": "string"
+          },
+          "author_username": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "visual_description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "run_status": {
+      "type": "string"
+    },
+    "caveats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

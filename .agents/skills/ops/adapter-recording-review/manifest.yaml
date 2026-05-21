@@ -1,0 +1,48 @@
+manifest_version: 1
+name: adapter-recording-review
+skill: adapter-recording-review
+domain: tooling
+namespace: ops
+status: active
+purpose: Review Browser/Computer adapter evidence records and decide whether they are usable, blocked, or memory-worthy.
+triggers:
+  - review adapter recording
+  - review adapter evidence
+  - adapter run review
+  - validate adapter evidence
+required_sources:
+  - sources/adapters/runs/
+  - .agents/adapters/
+  - system/tools/browser_computer_adapter.py
+default_output_policy: review_decision_with_optional_inbox_envelope
+approval_gates:
+  - ask the project owner before discarding a real adapter artifact that may be important
+related_agents:
+  - adapter-operator
+  - qa-tester
+  - knowledge-librarian
+
+required_tools:
+  commands:
+    - python3 system/tools/browser_computer_adapter.py validate
+    - python3 system/tools/ops_v2_hooks.py --hook adapter-evidence-check
+
+sidecars:
+  reads:
+    - sources/adapters/runs/
+    - .agents/adapters/
+  writes:
+    - inbox/
+    - system/health/
+
+outputs:
+  primary:
+    - review decision in the assistant response or a requested output path
+  optional:
+    - inbox/<timestamp>-adapter-review-candidate.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - Treat missing screenshots/artifacts as blocked unless the adapter contract allows fixture-only evidence.
+    - Fixture runs should usually be process-only, not wiki memory.

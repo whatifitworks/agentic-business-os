@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "last_updated": "2026-05-21",
+  "roles": {
+    "contract": "Always-loaded or high-level instruction contract.",
+    "canonical": "Current source of truth for an active topic.",
+    "rule": "Reusable convention or decision rule.",
+    "skill": "Procedure for a recurring workflow.",
+    "manifest": "Machine-readable context contract for a skill.",
+    "project": "Active workstream workspace.",
+    "state": "Runtime state boundary or state-management implementation.",
+    "reference": "Stable reference material.",
+    "output": "Generated output; not a source of truth unless requested."
+  },
+  "domains": {
+    "ops": {
+      "description": "Planning, health checks, and operating cadence.",
+      "entrypoints": [
+        "domains/ops.md"
+      ],
+      "canonical": [
+        ".agents/skills/ops/repo-health/SKILL.md",
+        ".agents/skills/ops/project-onboarding/SKILL.md"
+      ],
+      "deprioritize": []
+    },
+    "knowledge": {
+      "description": "Memory ingest and graph health.",
+      "entrypoints": [
+        "domains/knowledge.md"
+      ],
+      "canonical": [
+        ".agents/skills/knowledge/memory-ingest/SKILL.md",
+        ".agents/skills/knowledge/memory-graph-health/SKILL.md"
+      ],
+      "deprioritize": []
+    },
+    "tooling": {
+      "description": "Hooks, adapters, scheduler, and automation tooling.",
+      "entrypoints": [
+        "domains/tooling.md"
+      ],
+      "canonical": [
+        ".agents/adapters/README.md",
+        ".agents/hooks/README.md"
+      ],
+      "deprioritize": []
+    },
+    "product": {
+      "description": "Product/design work and handoff artifacts.",
+      "entrypoints": [
+        "domains/product.md"
+      ],
+      "canonical": [
+        ".agents/skills/product/design-studio/SKILL.md"
+      ],
+      "deprioritize": []
+    }
+  },
+  "skills": {
+    "project-onboarding": {
+      "entrypoints": [
+        ".agents/skills/ops/project-onboarding/SKILL.md"
+      ],
+      "canonical": [
+        ".agents/skills/ops/project-onboarding/manifest.yaml"
+      ],
+      "deprioritize": []
+    },
+    "repo-health": {
+      "entrypoints": [
+        ".agents/skills/ops/repo-health/SKILL.md"
+      ],
+      "canonical": [
+        "system/tools/repo_audit.py"
+      ],
+      "deprioritize": []
+    },
+    "memory-ingest": {
+      "entrypoints": [
+        ".agents/skills/knowledge/memory-ingest/SKILL.md"
+      ],
+      "canonical": [
+        "state/ingest-manifest.json"
+      ],
+      "deprioritize": []
+    },
+    "design-studio": {
+      "entrypoints": [
+        ".agents/skills/product/design-studio/SKILL.md"
+      ],
+      "canonical": [
+        ".agents/skills/product/design-studio/scripts/design_studio.py"
+      ],
+      "deprioritize": []
+    }
+  }
+}

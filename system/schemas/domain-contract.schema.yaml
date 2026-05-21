@@ -1,0 +1,22 @@
+schema: domain-contract
+version: 1
+required_frontmatter:
+  - domain
+  - status
+  - primary_kpis
+required_sections:
+  - Purpose
+  - KPIs
+  - Owns
+  - Does Not Own
+  - Canonical Sources
+  - Wiki Links
+  - Skills
+  - Preferred Agents
+  - Hooks And Adapters
+  - Outputs
+  - Active Projects
+  - Open Questions
+notes:
+  - Domain contracts route work before loading broader context.
+  - Domain files should stay short and link to source indexes instead of duplicating evidence.

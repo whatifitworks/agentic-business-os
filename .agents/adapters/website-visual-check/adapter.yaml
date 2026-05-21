@@ -1,0 +1,16 @@
+name: website-visual-check
+owner_domain: growth
+purpose: Legacy Browser evidence contract for website pages. New adapter recording should use Computer Use through the named app.
+target_app: project.app or local website preview.
+tool_type: Browser
+login_requirements: Public website or already-authorized preview session only.
+inputs: url, viewport, checklist, expected_signals
+outputs: status, structured_values, evidence_path, confidence, caveats
+evidence_requirements: timestamp, target URL, viewport, screenshot or browser artifact, checklist result
+freshness_window: 14 days for public pages; same day for launch checks.
+failure_modes: page unavailable, browser access blocked, screenshot missing, layout changed, expected element missing
+confidence_rules: high when screenshot and structured values agree; medium when human interpretation is needed; low when evidence is stale or partial.
+recording_path: sources/adapters/runs/
+source_contract: sources/adapters/website-visual-check.md
+last_verified_at: "2026-05-18"
+status: legacy-browser

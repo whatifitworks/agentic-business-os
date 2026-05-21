@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify skill manifests, namespace ownership, and expected outputs.",
+  "cases": [
+    {
+      "skill": "memory-ingest",
+      "target_namespace": "knowledge",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "decisions",
+        "manifest_updates"
+      ],
+      "expected_output_policy": "update_manifest_and_graph"
+    },
+    {
+      "skill": "repo-health",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "checks",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "logs_and_health_report"
+    },
+    {
+      "skill": "skill-improvement-loop",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "required_sources",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "patch_or_inbox_candidate_with_regression_check"
+    },
+    {
+      "skill": "recurring-review",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "required_sources",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "recurring_decision_report"
+    },
+    {
+      "skill": "learning-review",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "required_sources",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "logs_learning_brief"
+    },
+    {
+      "skill": "project-onboarding",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "required_sources",
+        "default_output_policy",
+        "approval_gates"
+      ],
+      "expected_output_policy": "review_pack_first"
+    },
+    {
+      "skill": "design-studio",
+      "target_namespace": "product",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "required_sources",
+        "default_output_policy",
+        "approval_gates"
+      ],
+      "expected_output_policy": "project_workspace_then_outputs_or_inbox"
+    }
+  ]
+}

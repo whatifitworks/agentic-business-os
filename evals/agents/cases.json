@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify preferred-agent routing for representative workflows.",
+  "cases": [
+    {
+      "id": "memory-ingest-agent",
+      "skill": "memory-ingest",
+      "expected_agent": "knowledge-librarian",
+      "expected_domain": "tooling"
+    },
+    {
+      "id": "repo-health-agent",
+      "skill": "repo-health",
+      "expected_agent": "ops-auditor",
+      "expected_domain": "ops"
+    },
+    {
+      "id": "support-agent",
+      "skill": "review-support",
+      "expected_agent": "support-triager",
+      "expected_domain": "support"
+    },
+    {
+      "id": "growth-agent",
+      "skill": "email-platform-campaign",
+      "expected_agent": "growth-strategist",
+      "expected_domain": "acquisition"
+    },
+    {
+      "id": "product-agent",
+      "skill": "flagship-feature-performance",
+      "expected_agent": "product-analyst",
+      "expected_domain": "retention"
+    }
+  ]
+}

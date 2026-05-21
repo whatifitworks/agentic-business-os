@@ -1,0 +1,91 @@
+---
+name: project-onboarding
+description: Prepare a new or empty single-project agentic operations vault from business context, tools, routines, goals, and constraints. Use when the user asks to onboard a business, initialize or prepare an empty project, learn what a project should know, map tools/connectors, propose starter automations, create first context/wiki/domain files, or turn setup answers into review-only skills, schedules, recurring work, and automation candidates.
+---
+
+# Project Onboarding
+
+Use this skill to prepare one project. Do not introduce a separate workspace concept. In this skill, "project" means the current repo or vault the assistant will operate from.
+
+## Core Rule
+
+Create a review pack first unless the user explicitly asks to write final project files directly. Onboarding output usually starts under `inbox/project-onboarding/<date>-<slug>/`; after review, promote approved pieces into `context/`, `wiki/`, `domains/`, `.agents/`, `projects/`, `rules/`, or `state/`.
+
+Never ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or account credentials during onboarding. Tool setup should be recorded as review-only until the owner explicitly approves a connection path.
+
+## Workflow
+
+1. Read `00-start-here.md` if it exists. If the project is not empty, inspect the relevant existing `context/`, `domains/`, `.agents/skills/`, `.agents/schedules.yaml`, `.agents/recurring.yaml`, and `wiki/` indexes before proposing changes.
+2. Identify the onboarding mode:
+   - `new-project`: little or no project context exists.
+   - `refresh-project`: project exists, but business/tool context needs improvement.
+   - `template-dry-run`: prepare generic starter output for a reusable template.
+3. Gather baseline answers:
+   - project/business name
+   - country or operating region
+   - business type and product/service
+   - customer/user groups
+   - primary objective the assistant should protect
+   - current operating routines
+   - tools already used
+   - approval boundaries and risky actions
+   - first useful outcome expected from the assistant
+4. Ask adaptive follow-up questions one at a time when needed. Prefer choices or short prompts. Stop once you have enough information to create starter context, priorities, tool review tasks, automation candidates, and open questions.
+5. Build a tool map. For each tool, capture category, purpose, owner, source access path, likely connector/API/export/manual path, setup risk, and the first useful workflow.
+6. Propose automations as review-only candidates. Rank by business impact, frequency, setup difficulty, and risk. Classify each as `safe-local`, `review-only`, `needs-permission`, or `needs-credentials`.
+7. Generate the onboarding pack with `scripts/create_onboarding_pack.py` when baseline answers are available. Add any richer interview synthesis by editing the generated markdown files.
+8. Present the review pack summary and ask before promoting anything into live project files.
+
+## Interview Guidance
+
+Use [references/interview-guide.md](references/interview-guide.md) for question banks and business-type prompts. Use [references/setup-suggestion-rubric.md](references/setup-suggestion-rubric.md) to classify tools, skills, routines, scripts, templates, memory work, and recurring jobs.
+
+Keep the first interview practical. The goal is not to fully model the business; it is to create enough reliable context for useful first routines and safe future learning.
+
+## Review Pack
+
+When enough baseline context is known, run:
+
+```bash
+python3 .agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py \
+  --project-name "<name>" \
+  --business-type "<business type>" \
+  --country "<country or region>" \
+  --product "<product or service>" \
+  --customer "<main customer/user group>" \
+  --primary-goal "<primary objective>" \
+  --tool "<tool name>:<category>:<access path>:<purpose>:<owner>:<first workflow>:<risk>" \
+  --routine "<routine title>:<cadence>:<short summary>"
+```
+
+The script writes:
+
+- `README.md` - operator summary
+- `onboarding-summary.md` - business and project context
+- `tool-map.md` - tool/source review table
+- `automation-candidates.md` - starter automation ideas
+- `starter-file-plan.md` - proposed file placements
+- `setup-suggestions.json` - machine-readable suggestions
+- `proposed/` - draft starter files to review before promotion
+
+## Promotion Rules
+
+After the owner approves the review pack:
+
+- Promote business operating truth into `context/`.
+- Promote durable synthesis into `wiki/`.
+- Promote source/tool contracts into `sources/` or `domains/`.
+- Promote repeated procedures into `.agents/skills/<namespace>/<skill>/`.
+- Promote schedules into `.agents/schedules.yaml` only when the cadence and tool access are clear.
+- Promote recurring obligations into `.agents/recurring.yaml` only when they represent real work, not setup guesses.
+- Log meaningful policy or direction changes in `decisions/log.md`.
+
+Do not overwrite existing project files without showing the proposed diff or a clear file-by-file summary.
+
+## Done Criteria
+
+- The project has a reviewable onboarding pack.
+- Tool setup items are review-only and do not contain secrets.
+- Starter context, wiki, routines, and automations are separated from live files until approved.
+- Open questions are explicit.
+- The final response names the pack path and the highest-value next promotion step.

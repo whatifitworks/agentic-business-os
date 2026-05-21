@@ -1,0 +1,65 @@
+manifest_version: 1
+name: project-onboarding
+skill: project-onboarding
+domain: ops
+namespace: ops
+status: active
+purpose: Prepare a single agentic project from business context, tools, routines, approval boundaries, and automation candidates.
+triggers:
+  - project onboarding
+  - onboard this business
+  - prepare empty project
+  - initialize project
+  - learn the business
+  - setup starter automations
+  - map tools and routines
+required_sources:
+  - .agents/skills/ops/project-onboarding/SKILL.md
+  - .agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py
+  - .agents/skills/ops/project-onboarding/references/interview-guide.md
+  - .agents/skills/ops/project-onboarding/references/setup-suggestion-rubric.md
+default_output_policy: review_pack_first
+approval_gates:
+  - ask before promoting generated files from inbox into live project files
+  - ask before adding schedules, recurring obligations, connectors, or external tool setup
+  - never request secrets or credentials in chat
+related_agents:
+  - automation-builder
+  - ops-auditor
+
+required_tools:
+  commands:
+    - python3 .agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py
+
+sidecars:
+  reads:
+    - 00-start-here.md
+    - context/
+    - domains/
+    - wiki/
+    - .agents/schedules.yaml
+    - .agents/recurring.yaml
+    - .agents/skills/
+  writes:
+    - inbox/project-onboarding/
+    - context/
+    - wiki/
+    - domains/
+    - .agents/skills/
+    - .agents/schedules.yaml
+    - .agents/recurring.yaml
+    - projects/
+    - decisions/log.md
+
+outputs:
+  primary:
+    - inbox/project-onboarding/YYYY-MM-DD-<project>/
+  optional:
+    - promoted starter context/wiki/project files after approval
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If business context is insufficient, ask one focused follow-up instead of producing generic filler.
+    - If the project already has live files, produce a review pack and diff summary before promotion.
+    - External tool suggestions remain review-only until the owner approves a setup path.

@@ -1,0 +1,19 @@
+schema: skill-namespace-plan
+version: 1
+required_fields:
+  - schema_version
+  - status
+  - approval_doc
+  - strategy
+  - moves
+optional_fields:
+  - keep_flat_wrappers
+required_move_fields:
+  - skill
+  - namespace
+  - from
+  - to
+notes:
+  - The plan is a dry-run contract until the project owner approves the broad move.
+  - Applying the move must preserve unrelated dirty changes and rerun the post_move_checks.
+  - When keep_flat_wrappers is false, flat compatibility-wrapper skills are intentionally absent.

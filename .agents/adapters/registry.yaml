@@ -1,0 +1,159 @@
+registry_version: 2
+adapters:
+  - name: browser-computer-adapter
+    owner_domain: tooling
+    purpose: Emulate MCP-like structured data collection for workflows that lack stable API or MCP access.
+    target_app: Generic no-API web or desktop workflow.
+    tool_type: Fixture
+    login_requirements: Use only an already-authorized user session; do not bypass login, captcha, or two-factor prompts.
+    inputs:
+      - workflow_name
+      - starting_url_or_app
+      - recorded_steps_or_selectors
+      - expected_fields
+      - freshness_requirement
+    outputs:
+      - status: success | blocked | failed
+      - structured_values
+      - evidence_path
+      - inbox_envelope_path
+      - confidence
+      - caveats
+    evidence_requirements:
+      - timestamp
+      - target app or URL
+      - screenshot, recording, exported file, or stable source artifact
+      - extracted value path
+      - replay notes
+    freshness_window: 30 days unless the source contract overrides it.
+    failure_modes:
+      - login expired
+      - UI changed
+      - selector missing
+      - captcha or manual verification
+      - export or download failed
+      - evidence missing
+    confidence_rules:
+      high: Extracted value is visible in evidence and matches the expected field shape.
+      medium: Value is visible but requires manual interpretation.
+      low: Value is incomplete or source UI is unstable; result must be treated as blocked or needs-the project owner.
+    recording_path: sources/adapters/runs/
+    source_contract: sources/adapters/browser-computer-adapter.md
+    last_verified_at: "2026-05-18"
+    computer_use_decision: Computer Use is the only adapter recording/execution path.
+    status: active-fixture
+  - name: website-visual-check
+    owner_domain: growth
+    purpose: Legacy Browser evidence contract for website pages. New adapter recording should use Computer Use through the named app.
+    target_app: project.app or local website preview.
+    tool_type: Browser
+    login_requirements: Public website or already-authorized preview session only; no captcha, bypass, or private account scraping.
+    inputs:
+      - url
+      - viewport
+      - checklist
+      - expected_signals
+    outputs:
+      - status: success | blocked | failed
+      - structured_values
+      - evidence_path
+      - confidence
+      - caveats
+    evidence_requirements:
+      - timestamp
+      - target URL
+      - screenshot or exported browser evidence
+      - viewport
+      - checklist result
+    freshness_window: 14 days for public pages; same day for launch checks.
+    failure_modes:
+      - page unavailable
+      - browser access blocked
+      - screenshot missing
+      - layout changed
+      - expected element missing
+    confidence_rules:
+      high: Screenshot and structured values agree with the checklist.
+      medium: Evidence is visible but one checklist item requires human interpretation.
+      low: Page loaded partially or evidence is stale; treat as blocked for release decisions.
+    recording_path: sources/adapters/runs/
+    source_contract: sources/adapters/website-visual-check.md
+    last_verified_at: "2026-05-18"
+    computer_use_decision: Browser is preferred; Computer Use is not needed for public website checks.
+    status: legacy-browser
+  - name: computer-use-desktop-recording
+    owner_domain: tooling
+    purpose: Template for repeatable Computer Use workflows that cannot be handled by API, MCP, or project scripts.
+    target_app: App or system UI.
+    tool_type: Computer
+    login_requirements: Already-authorized local session only; stop for passwords, 2FA, captcha, or sensitive prompts.
+    inputs:
+      - app_name
+      - recorded_steps
+      - expected_fields
+      - evidence_requirement
+    outputs:
+      - status: blocked | failed | success
+      - structured_values
+      - evidence_path
+      - confidence
+      - caveats
+    evidence_requirements:
+      - timestamp
+      - app/window name
+      - screenshot or exported artifact
+      - replay notes
+      - extracted visible values
+    freshness_window: 7 days unless the source contract overrides it.
+    failure_modes:
+      - UI changed
+      - window not found
+      - permission prompt
+      - manual verification required
+      - evidence missing
+    confidence_rules:
+      high: Visible desktop evidence and structured fields agree exactly.
+      medium: Evidence is visible but manual interpretation is required.
+      low: Any missing evidence or unstable UI; record as blocked instead of success.
+    recording_path: sources/adapters/runs/
+    source_contract: sources/adapters/computer-use-desktop-recording.md
+    last_verified_at: "2026-05-18"
+    computer_use_decision: Computer Use is the only adapter recording/execution path.
+    status: active-computer-template
+  - name: x-home-timeline-suggested-tweets
+    owner_domain: growth
+    purpose: Collect the first three suggested X home timeline feed cards from an already-authorized Safari session and return them as structured JSON.
+    target_app: Safari
+    tool_type: Computer
+    login_requirements: Already-authorized X session in Safari only; stop for login, captcha, 2FA, account lock, or sensitive confirmation prompts.
+    inputs:
+      - app_name
+      - starting_url
+      - item_count
+    default_inputs:
+      app_name: "Safari"
+      starting_url: "https://x.com"
+      item_count: "3"
+    outputs:
+      - tweets_json
+      - run_status
+      - caveats
+    evidence_requirements:
+      - Redacted Computer Use visible-state summary showing the X home timeline and extracted tweet cards.
+      - Structured JSON array with author_name, author_username, text, quote, and visual_description for each collected item.
+    freshness_window: same run; X timelines are personalized and volatile
+    failure_modes:
+      - X timeline unavailable or login expired
+      - captcha, 2FA, or account verification prompt
+      - fewer than three feed cards are visible or loaded
+      - tweet card structure changed or visual cannot be inspected
+    confidence_rules:
+      high: Evidence and structured values agree exactly.
+      medium: Evidence is visible but needs interpretation.
+      low: Evidence is missing, partial, stale, or unstable; record blocked instead of success.
+    recording_path: sources/adapters/runs/
+    source_contract: sources/adapters/x-home-timeline-suggested-tweets.md
+    output_schema: .agents/adapters/x-home-timeline-suggested-tweets/output_schema.json
+    last_verified_at: "2026-05-18"
+    computer_use_decision: Computer Use is the only adapter recording/execution path for this workflow.
+    status: active

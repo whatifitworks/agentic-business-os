@@ -1,0 +1,16 @@
+name: browser-computer-adapter
+owner_domain: tooling
+purpose: Generic fixture adapter used to verify the adapter run-record contract.
+target_app: Generic fixture or no-API UI workflow.
+tool_type: Fixture
+login_requirements: No live login; fixture-only unless a concrete adapter overrides this contract.
+inputs: workflow_name, target, expected_fields, freshness_requirement
+outputs: status, structured_values, evidence_path, confidence, caveats
+evidence_requirements: timestamp, target, values, caveats
+freshness_window: fixture
+failure_modes: invalid input, missing evidence, malformed output record
+confidence_rules: high when fixture values and generated evidence are complete; low when any required value is missing.
+recording_path: sources/adapters/runs/
+source_contract: sources/adapters/browser-computer-adapter.md
+last_verified_at: "2026-05-18"
+status: active-fixture

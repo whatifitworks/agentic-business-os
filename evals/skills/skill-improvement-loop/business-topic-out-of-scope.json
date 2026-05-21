@@ -1,0 +1,9 @@
+{
+  "id": "business-topic-out-of-scope",
+  "summary": "the project trial conversion dropped after a pricing change.",
+  "expected_behavior": "Business/product findings should be routed to the relevant domain skill and memory-ingest, not patched into skill-improvement-loop contracts.",
+  "actual_behavior": "A product analytics observation needs business analysis, not an agentic-OS patch.",
+  "user_correction": "Do not use skill-improvement-loop to learn business facts.",
+  "deterministic": true,
+  "durable": true
+}

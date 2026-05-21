@@ -1,0 +1,98 @@
+manifest_version: 1
+name: repo-health
+skill: repo-health
+owner: agentic-business-os
+domain: ops
+namespace: ops
+status: active
+purpose: Run deterministic repository hygiene checks and surface actionable ops-system drift.
+triggers:
+  - repo health
+  - repository hygiene
+  - scheduler health
+required_sources:
+  - system/tools/repo_audit.py
+  - system/tools/memory_graph_audit.py
+  - system/tools/ops_v2_audit.py
+checks:
+  - repo_audit
+  - memory_graph_audit
+  - ops_v2_audit
+default_output_policy: logs_and_health_report
+approval_gates: []
+related_agents:
+  - ops-auditor
+  - automation-builder
+
+required_tools:
+  commands:
+    - python3 system/tools/repo_audit.py
+    - python3 system/tools/context_loader.py validate
+
+optional_tools:
+  commands:
+    - uv run .agents/scheduler_helper.py get-task
+    - bash .agents/scheduler.sh
+
+bootstrap_docs:
+  required:
+    - 00-start-here.md
+    - .agents/skills/ops/repo-health/SKILL.md
+    - system/tools/repo_audit.py
+    - system/tools/context_loader.py
+    - system/context/context_index.json
+  optional:
+    - .agents/schedules.yaml
+    - .agents/scheduler.sh
+    - system/health/repo-audit.md
+    - references/agent-bootstrapping.md
+
+sidecars:
+  reads:
+    - .agents/schedules.yaml
+    - .mcp.json
+    - .codex/config.toml
+    - context/current-priorities.md
+    - system/context/context_index.json
+    - projects/
+    - logs/
+  writes:
+    - system/health/repo-audit.md
+    - system/state/ops.db
+    - logs/repo-health/YYYY-MM-DD-HH:MM-brief.md
+
+outputs:
+  primary:
+    - system/health/repo-audit.md
+  scheduler_brief:
+    - logs/repo-health/YYYY-MM-DD-HH:MM-brief.md
+
+interactivity:
+  mode: unattended_supported
+  asks_user_before_writes: false
+  approvals_required: false
+
+mutation_behavior:
+  repo_files:
+    - refreshes system/health/repo-audit.md
+    - records validation summary in system/state/ops.db
+    - writes scheduler brief when run headless
+  external_systems:
+    - none
+  never:
+    - mark pending briefs reviewed without actual review or an explicit operator decision
+    - edit project-brain/wiki directly
+    - mutate MCP server credentials
+
+failure_behavior:
+  fail_soft: true
+  blocked_status: "status: blocked when errors or stale pending/blocked/failed briefs exist"
+  notes:
+    - Scheduled command exits zero after writing a blocked brief so scheduler history records the outcome cleanly.
+    - Broken links in append-only decisions/log.md are warnings unless they affect active navigation.
+
+brain:
+  consult_before_run: false
+  consult_when:
+    - repo-health findings affect retention, conversion, churn, onboarding, paywall, or the flagship feature strategy docs
+  handoff_candidates: []

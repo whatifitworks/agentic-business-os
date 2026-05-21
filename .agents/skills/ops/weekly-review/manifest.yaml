@@ -1,0 +1,16 @@
+name: weekly-review
+domain: ops
+namespace: ops
+triggers:
+  - weekly review
+  - wrap up the week
+  - end of week review
+required_sources:
+  - logs/daily-plans/
+  - context/today.md
+  - context/current-priorities.md
+default_output_policy: logs_weekly_review
+approval_gates:
+  - ask before changing priorities or recurring obligations
+failure_behavior:
+  blocked_status: report missing plans or context clearly

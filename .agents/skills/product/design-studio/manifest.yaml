@@ -1,0 +1,74 @@
+manifest_version: 1
+name: design-studio
+skill: design-studio
+domain: product
+namespace: product
+status: active
+purpose: Manage AI-assisted design projects, references, Stitch iterations, DESIGN.md systems, and implementation handoffs.
+triggers:
+  - design studio
+  - build design
+  - create website design
+  - create app design
+  - google stitch
+  - stitch mcp
+  - design reference
+  - DESIGN.md
+  - design handoff
+  - design benchmark
+  - shareable screenshot
+  - full page mockup
+  - local prototype
+required_sources:
+  - projects/design-studio/README.md
+  - outputs/design-studio/README.md
+  - .agents/skills/product/design-studio/scripts/design_studio.py
+  - .codex/config.toml
+  - .mcp.json
+default_output_policy: project_workspace_then_outputs_or_inbox
+approval_gates:
+  - ask the project owner before generating or materially changing a design direction in Stitch
+  - ask before using live external URLs as design references unless the URL was provided by the project owner
+  - never print, persist, or commit Stitch credentials
+related_agents:
+  - designer
+  - product-analyst
+  - developer
+  - qa-tester
+
+required_tools:
+  commands:
+    - python3 .agents/skills/product/design-studio/scripts/design_studio.py init
+    - python3 .agents/skills/product/design-studio/scripts/design_studio.py add-reference
+    - python3 .agents/skills/product/design-studio/scripts/design_studio.py check-mcp
+    - python3 .agents/skills/product/design-studio/scripts/design_studio.py benchmark-init
+    - python3 .agents/skills/product/design-studio/scripts/design_studio.py register-output
+
+sidecars:
+  reads:
+    - projects/design-studio/
+    - outputs/design-studio/
+    - .codex/config.toml
+    - .mcp.json
+  writes:
+    - projects/design-studio/
+    - outputs/design-studio/
+    - tmp/design-studio/
+    - inbox/
+
+outputs:
+  primary:
+    - projects/design-studio/<project>/README.md
+    - projects/design-studio/<project>/DESIGN.md
+    - projects/design-studio/<project>/REFERENCES.md
+    - projects/design-studio/<project>/stitch.md
+    - projects/design-studio/<project>/handoff.md
+  final:
+    - outputs/design-studio/<project>/
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If Stitch MCP is unavailable, use Stitch Web UI mode through Computer Use or produce a Stitch-ready prompt package instead of pretending MCP generation happened.
+    - Keep large reference files out of wiki/context; register them in the project and summarize reusable lessons in DESIGN.md.
+    - If generated design output is incomplete or too generic, record that honestly and switch to targeted iteration, benchmarking, or a local prototype instead of pretending it is final.

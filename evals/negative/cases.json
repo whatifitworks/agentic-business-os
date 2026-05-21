@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify that v2 checks have explicit negative fixtures for known failure modes.",
+  "cases": [
+    {
+      "id": "orphan-wiki-page",
+      "fixture": "wiki/unlinked-example.md exists but no index, domain, start page, or wiki page links to it.",
+      "expected_detection": "memory_orphan_wiki_page"
+    },
+    {
+      "id": "missing-domain-owner",
+      "fixture": "domains/example.md lacks required domain frontmatter or ownership sections.",
+      "expected_detection": "v2_domain_frontmatter_missing"
+    },
+    {
+      "id": "stale-inbox-item",
+      "fixture": "inbox/example.md is older than stale-days and is not blocked or needs-daniels.",
+      "expected_detection": "hook_stale_inbox_item"
+    },
+    {
+      "id": "output-without-manifest",
+      "fixture": "outputs/example/report.md exists without a state/outputs-manifest.json record.",
+      "expected_detection": "v2_outputs_manifest_missing_or_incomplete"
+    },
+    {
+      "id": "skill-missing-manifest",
+      "fixture": ".agents/skills/example/SKILL.md exists but manifest.yaml is missing.",
+      "expected_detection": "v2_skill_manifest_missing"
+    },
+    {
+      "id": "adapter-without-evidence",
+      "fixture": "adapter run has no sources/adapters evidence path or source contract.",
+      "expected_detection": "hook_adapter_source_missing"
+    },
+    {
+      "id": "schedule-missing-skill",
+      "fixture": ".agents/schedules.yaml points to a nonexistent skill.",
+      "expected_detection": "hook_schedule_skill_missing"
+    }
+  ]
+}

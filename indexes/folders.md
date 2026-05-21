@@ -1,0 +1,23 @@
+# Folder Index
+
+- `.agents/` - skills, hooks, agents, adapters, schedules
+- `archives/` - historical material retained for traceability
+- `context/` - active project context after onboarding
+- `decisions/` - append-only decisions
+- `domains/` - ownership boundaries
+- `dropped/` - rejected artifacts with reasons
+- `evals/` - deterministic behavior fixtures
+- `inbox/` - intake and review queue
+- `indexes/` - navigation spine
+- `logs/` - scheduler and workflow logs
+- `outputs/` - final deliverables
+- `projects/` - active workstreams
+- `references/` - stable reference material
+- `rules/` - reusable conventions
+- `scripts/` - project-owned scripts
+- `sources/` - raw/source evidence and adapter runs
+- `state/` - manifests and machine-readable state
+- `system/` - tools, schemas, health reports
+- `templates/` - reusable document/content templates
+- `tmp/` - temporary local workspace
+- `wiki/` - durable synthesis

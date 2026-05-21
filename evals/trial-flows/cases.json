@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "purpose": "Trial flows for core template workflows.",
+  "cases": [
+    {
+      "id": "repo-health",
+      "prompt": "Run repo health",
+      "expected_domain": "ops",
+      "expected_skill": "repo-health"
+    },
+    {
+      "id": "project-onboarding",
+      "prompt": "Prepare a new project",
+      "expected_domain": "ops",
+      "expected_skill": "project-onboarding"
+    },
+    {
+      "id": "skill-improvement",
+      "prompt": "Patch a failed skill workflow",
+      "expected_domain": "ops",
+      "expected_skill": "skill-improvement-loop"
+    },
+    {
+      "id": "memory-ingest",
+      "prompt": "Ingest a memory item",
+      "expected_domain": "knowledge",
+      "expected_skill": "memory-ingest"
+    }
+  ]
+}

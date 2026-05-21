@@ -1,0 +1,19 @@
+schema: output-manifest
+version: 1
+required_fields:
+  - id
+  - created_at
+  - source_inbox_item
+  - domain
+  - skill
+  - output_path
+  - source_paths
+  - memory_links
+  - ingest_decision
+optional_fields:
+  - approval_status
+  - dropped_reason
+  - follow_up_project
+notes:
+  - Human-facing deliverables in outputs/ should trace back to inbox/source material.
+  - Generated durable artifacts should not bypass inbox unless the skill explicitly documents a narrow exception.

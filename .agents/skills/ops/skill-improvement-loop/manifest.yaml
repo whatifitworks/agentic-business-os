@@ -1,0 +1,82 @@
+manifest_version: 1
+name: skill-improvement-loop
+skill: skill-improvement-loop
+domain: tooling
+namespace: ops
+status: active
+purpose: Convert user interaction signals and workflow evidence into concrete agentic-OS improvements: skills, hooks, tools, adapters, memory structure, indexes, context loading, agents, schedules, or evals.
+triggers:
+  - skill failed
+  - improve this skill
+  - improve the system
+  - this workflow behaved badly
+  - adapter default failed
+  - user corrected agent behavior
+  - user is frustrated or confused
+  - user praised a workflow
+  - repeated manual step
+  - wrong file or context loaded
+  - memory or folder structure issue
+  - repeated tool failure
+required_sources:
+  - system/tools/skill_improvement_loop.py
+  - projects/ops-v2-migration/skills-hooks-backlog.md
+  - evals/skills/cases.json
+default_output_policy: patch_or_inbox_candidate_with_regression_check
+approval_gates:
+  - ask before creating noisy inbox candidates from one-off failures
+related_agents:
+  - automation-builder
+  - ops-auditor
+  - qa-tester
+  - code-reviewer
+
+required_tools:
+  commands:
+    - python3 system/tools/skill_improvement_loop.py analyze
+    - python3 system/tools/ops_v2_eval.py
+    - python3 system/tools/ops_v2_hooks.py --hook all
+    - python3 system/tools/repo_audit.py --exit-zero
+
+sidecars:
+  reads:
+    - .agents/skills/
+    - .agents/adapters/
+    - .agents/hooks/
+    - .agents/agents/
+    - AGENTS.md
+    - CLAUDE.md
+    - 00-start-here.md
+    - indexes/
+    - domains/
+    - system/context/context_index.json
+    - system/tools/
+    - evals/
+    - projects/ops-v2-migration/skills-hooks-backlog.md
+  writes:
+    - .agents/skills/
+    - .agents/adapters/
+    - .agents/hooks/
+    - .agents/agents/
+    - AGENTS.md
+    - CLAUDE.md
+    - 00-start-here.md
+    - indexes/
+    - domains/
+    - system/context/
+    - system/tools/
+    - evals/
+    - inbox/
+
+outputs:
+  primary:
+    - changed system contract/tool/eval files
+  optional:
+    - inbox/YYYYMMDDTHHMMSSZ-*-improvement-candidate.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - No-change is valid only with a clear rationale.
+    - Deterministic failures should get an eval, hook check, or script fixture whenever practical.
+    - Redact sensitive command/tool output before writing any inbox candidate.

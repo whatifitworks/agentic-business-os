@@ -1,0 +1,35 @@
+manifest_version: 1
+name: memory-ingest
+skill: memory-ingest
+domain: tooling
+namespace: knowledge
+status: active
+purpose: Process root inbox items into wiki, outputs, sources, processed, dropped, or escalation records.
+triggers:
+  - ingest memory
+  - process inbox
+  - memory ingest
+  - inbox auto ingest
+  - background memory ingest
+required_sources:
+  - inbox
+  - state
+  - indexes
+decisions:
+  - promote_wiki
+  - append_evidence
+  - preserve_source_only
+  - promote_output
+  - process_only_manifest
+  - drop
+  - escalate
+manifest_updates:
+  - state/ingest-manifest.json
+  - state/memory-ingest-queue.json
+  - state/outputs-manifest.json
+default_output_policy: update_manifest_and_graph
+approval_gates:
+  - ask the project owner before deleting or losing source material
+related_agents:
+  - knowledge-librarian
+  - memory-inbox-processor

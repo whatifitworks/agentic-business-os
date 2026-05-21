@@ -1,0 +1,51 @@
+manifest_version: 1
+name: recurring-review
+skill: recurring-review
+domain: ops
+namespace: ops
+status: active
+purpose: Review recurring obligations and turn stale or overdue items into explicit do, defer, pause, cancel, or convert decisions.
+triggers:
+  - recurring cleanup
+  - stale recurring task
+  - recurring.yaml review
+  - morning-coffee recurring noise
+  - overdue once task
+required_sources:
+  - .agents/recurring.yaml
+  - system/tools/ops_state.py
+  - system/tools/recurring_review.py
+default_output_policy: recurring_decision_report
+approval_gates:
+  - ask before cancelling or pausing obligations unless the project owner explicitly requested that exact action
+related_agents:
+  - ops-auditor
+  - automation-builder
+
+required_tools:
+  commands:
+    - python3 system/tools/ops_state.py sync-recurring
+    - python3 system/tools/recurring_review.py review
+    - python3 system/tools/ops_state.py complete-recurring
+    - python3 system/tools/ops_state.py set-recurring-status
+
+sidecars:
+  reads:
+    - .agents/recurring.yaml
+    - system/state/ops.db
+    - context/today.md
+  writes:
+    - .agents/recurring.yaml
+    - system/state/ops.db
+
+outputs:
+  primary:
+    - recurring decision summary
+  optional:
+    - updated .agents/recurring.yaml
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If the SQLite mirror fails, read .agents/recurring.yaml directly and report that the mirror is stale.
+    - Never update last_done unless actual work happened.

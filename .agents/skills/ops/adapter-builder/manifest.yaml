@@ -1,0 +1,53 @@
+manifest_version: 1
+name: adapter-builder
+skill: adapter-builder
+domain: tooling
+namespace: ops
+status: active
+purpose: Create or update Computer Use adapter contracts and fixture evidence.
+triggers:
+  - build adapter
+  - create adapter
+  - simulated MCP adapter
+  - computer use adapter
+  - record adapter workflow
+  - interactive adapter recording
+required_sources:
+  - .agents/adapters/README.md
+  - indexes/ui-adapters.md
+  - system/tools/browser_computer_adapter.py
+default_output_policy: adapter_contracts_and_fixture_evidence
+approval_gates:
+  - ask the project owner before using Computer Use for desktop-only workflows
+related_agents:
+  - adapter-operator
+  - automation-builder
+  - qa-tester
+
+required_tools:
+  commands:
+    - python3 system/tools/browser_computer_adapter.py scaffold
+    - python3 system/tools/browser_computer_adapter.py record
+    - python3 system/tools/browser_computer_adapter.py validate
+    - python3 system/tools/ops_v2_hooks.py --hook adapter-evidence-check
+
+sidecars:
+  reads:
+    - .agents/adapters/registry.yaml
+    - system/schemas/adapter.schema.yaml
+  writes:
+    - .agents/adapters/
+    - sources/adapters/
+    - indexes/ui-adapters.md
+
+outputs:
+  primary:
+    - .agents/adapters/<adapter>/adapter.yaml
+    - .agents/adapters/<adapter>/steps.md
+    - sources/adapters/<adapter>.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - Prefer no adapter over a fragile workflow that cannot produce durable evidence.
+    - Interactive adapter recording requires Computer Use. If Computer Use is unavailable, block or create a definition-only adapter from the project owner's manual description.

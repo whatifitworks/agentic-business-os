@@ -1,0 +1,20 @@
+schema: skill-manifest
+version: 1
+required_fields:
+  - name
+  - domain
+  - namespace
+  - status
+  - triggers
+  - required_sources
+  - default_output_policy
+  - approval_gates
+optional_fields:
+  - schedules
+  - tools
+  - writes
+  - eval_cases
+  - related_agents
+notes:
+  - Skill manifests make flat skill folders auditable during namespace migration.
+  - Procedure detail belongs in SKILL.md; manifest fields describe routing and contracts.

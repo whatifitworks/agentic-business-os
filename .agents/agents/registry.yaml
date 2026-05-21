@@ -1,0 +1,31 @@
+registry_version: 1
+agents:
+  - name: knowledge-librarian
+    purpose: Keep the memory spine useful, short, linked, and source-backed.
+    use_when: Ingesting inbox items, cleaning wiki pages, creating source cards, or checking graph health.
+    write_scope: [inbox/, wiki/, indexes/, sources/, dropped/, state/, system/health/]
+    required_skills: [memory-ingest, memory-graph-health]
+
+  - name: ops-auditor
+    purpose: Verify repo health, scheduler health, context budget, structure, and acceptance evidence.
+    use_when: Running repo-health, preparing checks, or investigating operational drift.
+    write_scope: [system/health/, outputs/system-evals/, logs/repo-health/, state/]
+    required_skills: [repo-health]
+
+  - name: automation-builder
+    purpose: Build and maintain scheduler tasks, hooks, adapters, tool config, and repeatable automations.
+    use_when: A repeated workflow needs a deterministic runner, hook, adapter, or scheduler entry.
+    write_scope: [.agents/, system/, scripts/, sources/adapters/, evals/, state/]
+    required_skills: [repo-health]
+
+  - name: adapter-operator
+    purpose: Execute Browser/Computer adapter workflows with structured evidence, confidence, and fail-closed behavior.
+    use_when: A registered adapter needs UI evidence because no API, MCP server, or project script can answer the question.
+    write_scope: [sources/adapters/, inbox/, outputs/system-evals/, system/health/]
+    required_skills: [adapter-runner]
+
+  - name: code-reviewer
+    purpose: Review tools, skills, and automation changes for regressions, missing tests, and maintainability.
+    use_when: A change needs risk review or failure-mode analysis.
+    write_scope: [outputs/system-evals/, system/health/, inbox/]
+    required_skills: []

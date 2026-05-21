@@ -1,0 +1,17 @@
+{
+  "id": "skill-testing-backed-scripts-instead-of-skills",
+  "skill": "skill-improvement-loop",
+  "workflow": "Agentic Business OS skill testing",
+  "summary": "Agent tested backing scripts when the project owner wanted actual skill workflow testing.",
+  "expected_behavior": "When the project owner asks to test actual skills, load the relevant SKILL.md files and follow the documented skill workflow, using scripts only as the skill instructs.",
+  "actual_behavior": "Agent first tested backing scripts and aggregate validation rather than explicitly exercising the skill bodies as an agent workflow.",
+  "user_correction": "the project owner said he was thinking about testing actual skills, not just the backing scripts.",
+  "command": "$skill-improvement-loop",
+  "deterministic": true,
+  "durable": true,
+  "changed_files": [
+    ".agents/skills/ops/skill-improvement-loop/SKILL.md",
+    "evals/skills/skill-improvement-loop/actual-skill-test-regression.json",
+    "system/tools/ops_v2_eval.py"
+  ]
+}

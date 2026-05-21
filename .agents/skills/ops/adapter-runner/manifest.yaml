@@ -1,0 +1,51 @@
+manifest_version: 1
+name: adapter-runner
+skill: adapter-runner
+domain: tooling
+namespace: ops
+status: active
+purpose: Execute registered Computer Use adapter workflows and record structured evidence.
+triggers:
+  - run adapter
+  - test adapter
+  - execute computer adapter
+  - execute app adapter
+required_sources:
+  - .agents/adapters/registry.yaml
+  - system/tools/browser_computer_adapter.py
+default_output_policy: adapter_run_record
+approval_gates:
+  - ask the project owner before external mutations
+related_agents:
+  - adapter-operator
+  - qa-tester
+  - knowledge-librarian
+
+required_tools:
+  commands:
+    - python3 system/tools/browser_computer_adapter.py list
+    - python3 system/tools/browser_computer_adapter.py show
+    - python3 system/tools/browser_computer_adapter.py record
+    - python3 system/tools/browser_computer_adapter.py validate
+    - python3 system/tools/ops_v2_hooks.py --hook adapter-evidence-check
+
+sidecars:
+  reads:
+    - .agents/adapters/
+    - sources/adapters/
+  writes:
+    - sources/adapters/runs/
+    - inbox/
+
+outputs:
+  primary:
+    - sources/adapters/runs/<timestamp>-<workflow>.json
+    - sources/adapters/runs/<timestamp>-<workflow>.md
+  optional:
+    - inbox/<timestamp>-<workflow>-adapter-envelope.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - Missing evidence should become a blocked or failed adapter record.
+    - Never infer values just to make the adapter look successful.

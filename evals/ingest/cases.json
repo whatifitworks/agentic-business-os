@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "purpose": "Memory ingest routing fixtures.",
+  "cases": [
+    {
+      "id": "durable-learning",
+      "artifact": "Concise durable setup lesson.",
+      "expected_manifest": true,
+      "expected_destination": "inbox/ then wiki/ or state/"
+    },
+    {
+      "id": "raw-export",
+      "artifact": "Raw external export.",
+      "expected_manifest": true,
+      "expected_destination": "sources/"
+    },
+    {
+      "id": "final-report",
+      "artifact": "Human-facing generated report.",
+      "expected_manifest": true,
+      "expected_destination": "outputs/"
+    }
+  ]
+}

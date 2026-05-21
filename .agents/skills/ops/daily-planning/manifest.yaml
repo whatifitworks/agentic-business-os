@@ -1,0 +1,17 @@
+name: daily-planning
+domain: ops
+namespace: ops
+triggers:
+  - plan my day
+  - daily plan
+  - start work session
+required_sources:
+  - context/today.md
+  - .agents/recurring.yaml
+  - .agents/schedules.yaml
+  - state/memory-ingest-queue.json
+default_output_policy: active_plan_and_daily_archive
+approval_gates:
+  - ask before executing non-planning work
+failure_behavior:
+  blocked_status: report missing context or tool clearly

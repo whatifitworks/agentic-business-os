@@ -1,0 +1,72 @@
+registry_version: 1
+hooks:
+  - name: session-end-memory-candidate
+    trigger: End of meaningful work session.
+    action: Create or recommend an inbox envelope when durable insight, decision, or workflow improvement is detected.
+    writes: [inbox/]
+    status: planned
+  - name: skill-completion-contract
+    trigger: Skill completion.
+    action: Verify expected output path, approval gates, and memory candidate handling.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: wiki-index-guard
+    trigger: Wiki or index edits.
+    action: Detect orphan wiki pages and broken links before completion.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: inbox-staleness-check
+    trigger: Daily repo-health.
+    action: Warn on stale inbox items except blocked or needs-daniels items.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: inbox-auto-ingest-trigger
+    trigger: New eligible file appears under inbox/.
+    action: Queue the file in state/memory-ingest-queue.json and optionally launch one background memory-inbox-processor agent for exactly one item.
+    writes: [state/memory-ingest-queue.json, logs/memory-ingest/]
+    status: implemented-runtime-hook
+  - name: failure-to-inbox-capture
+    trigger: Repeatable tool, hook, adapter, or skill failure with durable learning value.
+    action: Redact a compact failure case and write a candidate to inbox/ for memory-ingest classification.
+    writes: [inbox/]
+    status: implemented-deterministic-check
+  - name: work-session-journal
+    trigger: Meaningful session correction, repeated manual step, blocker, or automation opportunity.
+    action: Record a compact redacted learning event for scheduled learning-review.
+    writes: [state/learning-events.jsonl]
+    status: implemented-manual-tool
+  - name: ephemeral-chat-capture
+    trigger: Runtime Stop hook after a Codex or Claude session response.
+    action: Capture raw chat payloads under gitignored logs/raw-chats/, extract compact learning events, and purge raw captures after seven days.
+    writes: [logs/raw-chats/, state/learning-events.jsonl, state/learning-raw-chat-manifest.json]
+    status: implemented-runtime-hook
+  - name: ingest-outcome-manifest-check
+    trigger: Ingest drops material or marks an item processed without retention.
+    action: Verify dropped files and process-only outcomes have manifest entries and reasons.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: adapter-evidence-check
+    trigger: Browser or Computer Use adapter run.
+    action: Verify evidence path, source card, and replay metadata exist before memory ingest.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: scheduler-drift-check
+    trigger: Scheduler config or skill manifest change.
+    action: Verify schedules point to existing skills and valid output policies.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: prompt-secret-scan
+    trigger: Inbox/wiki/output/eval write.
+    action: Warn if generated artifacts appear to contain secrets.
+    writes: [system/health/]
+    status: implemented-deterministic-check
+  - name: pre-compaction-handoff
+    trigger: Long session or context compaction risk.
+    action: Write a compact handoff envelope to inbox when work would otherwise be lost.
+    writes: [inbox/]
+    status: template-ready
+  - name: agent-output-contract
+    trigger: Agent or subagent handoff.
+    action: Verify files changed, evidence, unresolved blockers, and memory candidate are stated.
+    writes: [system/health/]
+    status: implemented-deterministic-check

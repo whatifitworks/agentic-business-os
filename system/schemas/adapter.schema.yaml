@@ -1,0 +1,26 @@
+schema: adapter
+version: 1
+required_fields:
+  - name
+  - owner_domain
+  - purpose
+  - target_app
+  - tool_type
+  - login_requirements
+  - inputs
+  - outputs
+  - evidence_requirements
+  - freshness_window
+  - failure_modes
+  - confidence_rules
+  - recording_path
+  - source_contract
+  - last_verified_at
+  - status
+optional_fields:
+  - computer_use_decision
+  - rate_limits
+  - eval_cases
+notes:
+  - Browser and Computer Use adapters emulate structured tool calls only for workflows without stable APIs or MCP servers.
+  - Adapters must produce inspectable evidence before data enters memory.

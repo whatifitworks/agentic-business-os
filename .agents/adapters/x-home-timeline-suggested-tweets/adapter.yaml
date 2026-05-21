@@ -1,0 +1,34 @@
+name: x-home-timeline-suggested-tweets
+owner_domain: growth
+purpose: Collect the first three suggested X home timeline feed cards from an already-authorized Safari session and return them as structured JSON.
+target_app: Safari
+tool_type: Computer
+login_requirements: Already-authorized X session in Safari only; stop for login, captcha, 2FA, account lock, or sensitive confirmation prompts.
+inputs:
+  - app_name
+  - starting_url
+  - item_count
+default_inputs:
+  app_name: "Safari"
+  starting_url: "https://x.com"
+  item_count: "3"
+outputs:
+  - tweets_json
+  - run_status
+  - caveats
+evidence_requirements:
+  - Redacted Computer Use visible-state summary showing the X home timeline and extracted tweet cards.
+  - Structured JSON array with author_name, author_username, text, quote, and visual_description for each collected item.
+freshness_window: same run; X timelines are personalized and volatile
+failure_modes:
+  - X timeline unavailable or login expired
+  - captcha, 2FA, or account verification prompt
+  - fewer than three feed cards are visible or loaded
+  - tweet card structure changed or visual cannot be inspected
+confidence_rules: high when evidence and structured values agree; medium when interpretation is needed; low when evidence is partial or stale.
+recording_path: sources/adapters/runs/
+source_contract: sources/adapters/x-home-timeline-suggested-tweets.md
+output_schema: .agents/adapters/x-home-timeline-suggested-tweets/output_schema.json
+last_verified_at: "2026-05-18"
+computer_use_decision: Computer Use is the only adapter recording/execution path for this workflow.
+status: active

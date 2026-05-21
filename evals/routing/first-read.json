@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify first files to read for common task types.",
+  "cases": [
+    {
+      "id": "repo-health",
+      "task": "Audit repo health",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/skills/ops/repo-health/SKILL.md",
+        "system/tools/repo_audit.py"
+      ]
+    },
+    {
+      "id": "memory-ingest",
+      "task": "Process inbox item",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/skills/knowledge/memory-ingest/SKILL.md",
+        "inbox/README.md"
+      ]
+    },
+    {
+      "id": "project-onboarding",
+      "task": "Prepare an empty single project from business and tool context",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/skills/ops/project-onboarding/SKILL.md",
+        ".agents/skills/ops/project-onboarding/references/interview-guide.md"
+      ]
+    },
+    {
+      "id": "adapter",
+      "task": "Use no-API UI workflow",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/adapters/registry.yaml",
+        "sources/adapters/README.md"
+      ]
+    },
+    {
+      "id": "learning-review",
+      "task": "Review recent work for automation candidates",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/skills/ops/learning-review/SKILL.md",
+        "system/tools/learning_review.py"
+      ]
+    },
+    {
+      "id": "design-studio",
+      "task": "Create or continue an AI-assisted design project",
+      "first_files": [
+        "00-start-here.md",
+        ".agents/skills/product/design-studio/SKILL.md",
+        "projects/design-studio/README.md"
+      ]
+    }
+  ]
+}

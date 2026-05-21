@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "stale-once-task",
+      "today": "2026-05-19",
+      "recurring_yaml": "tasks:\n\n  - name: Old one-time follow-up\n    cadence: once_2026-05-01\n    skill: null\n    note: \"Decide whether this obsolete one-time task still matters.\"\n    last_done: null\n    grace_days: 3\n",
+      "expected_state": "overdue",
+      "expected_action": "do-cancel-or-convert"
+    },
+    {
+      "id": "not-due-weekly-task",
+      "today": "2026-05-19",
+      "recurring_yaml": "tasks:\n\n  - name: Friday wrap\n    cadence: weekly_FRI\n    skill: /friday-wrap\n    note: \"End-of-week review.\"\n    last_done: 2026-05-15\n    grace_days: 1\n",
+      "expected_count": 0
+    }
+  ]
+}

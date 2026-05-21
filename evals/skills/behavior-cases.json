@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "purpose": "Behavior-level checks for high-use skills and adapter contracts.",
+  "cases": [
+    {
+      "id": "memory-ingest-behavior",
+      "skill": "memory-ingest",
+      "expected_paths": [
+        "inbox/",
+        "state/ingest-manifest.json"
+      ],
+      "memory_keywords": [
+        "inbox",
+        "state/ingest-manifest",
+        "drop",
+        "escalate"
+      ],
+      "failure_keywords": [
+        "approval_gates",
+        "ask the project owner"
+      ]
+    },
+    {
+      "id": "repo-health-behavior",
+      "skill": "repo-health",
+      "expected_paths": [
+        "system/health/",
+        "system/tools/repo_audit.py"
+      ],
+      "memory_keywords": [
+        "system/health",
+        "repo_audit"
+      ],
+      "failure_keywords": [
+        "failure_behavior",
+        "blocked_status"
+      ]
+    },
+    {
+      "id": "learning-review-behavior",
+      "skill": "learning-review",
+      "expected_paths": [
+        "logs/",
+        "system/tools/learning_review.py",
+        "system/tools/work_session_journal.py",
+        "system/tools/ephemeral_chat_capture.py"
+      ],
+      "memory_keywords": [
+        "state/learning-events.jsonl",
+        "logs/learning",
+        "logs/raw-chats",
+        "seven days"
+      ],
+      "failure_keywords": [
+        "suggest-only",
+        "Do not auto-patch"
+      ]
+    },
+    {
+      "id": "project-onboarding-behavior",
+      "skill": "project-onboarding",
+      "expected_paths": [
+        "inbox/",
+        ".agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py"
+      ],
+      "memory_keywords": [
+        "review pack",
+        "one project",
+        "inbox/project-onboarding",
+        "setup-suggestions.json"
+      ],
+      "failure_keywords": [
+        "Never ask for passwords",
+        "ask before promoting"
+      ]
+    },
+    {
+      "id": "design-studio-behavior",
+      "skill": "design-studio",
+      "expected_paths": [
+        "projects/design-studio/",
+        "outputs/design-studio/",
+        ".agents/skills/product/design-studio/scripts/design_studio.py"
+      ],
+      "memory_keywords": [
+        "DESIGN.md",
+        "tmp/design-studio",
+        "outputs/design-studio",
+        "inbox/"
+      ],
+      "failure_keywords": [
+        "generation is unavailable",
+        "Manual prompt package mode"
+      ]
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "missing-output-path-fails",
+      "skill": "memory-ingest",
+      "expected_paths": [
+        "missing/not-real/"
+      ],
+      "memory_keywords": [
+        "inbox"
+      ],
+      "failure_keywords": [
+        "failure_behavior"
+      ],
+      "expected_failure": "missing_path"
+    }
+  ]
+}

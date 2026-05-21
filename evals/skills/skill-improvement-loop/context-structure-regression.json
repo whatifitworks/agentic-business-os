@@ -1,0 +1,18 @@
+{
+  "id": "context-and-memory-structure-regression",
+  "skill": "skill-improvement-loop",
+  "workflow": "Agentic Business OS context loading and memory structure",
+  "summary": "Agent missed important files and made the memory/file structure hard to understand.",
+  "expected_behavior": "When the project owner says an agent missed important files, loaded the wrong context, or the memory/folder structure is unclear, the improvement loop should treat boot docs, indexes, context index, and memory structure as valid system owners.",
+  "actual_behavior": "The improvement loop focused too narrowly on skills, hooks, and adapters.",
+  "user_correction": "the project owner said system improvement could be outside skills/hooks/adapters and may involve memory, file structure, or important files that need to be loaded.",
+  "command": "$skill-improvement-loop",
+  "deterministic": true,
+  "durable": true,
+  "changed_files": [
+    ".agents/skills/ops/skill-improvement-loop/SKILL.md",
+    ".agents/skills/ops/skill-improvement-loop/manifest.yaml",
+    "system/tools/skill_improvement_loop.py",
+    "evals/skills/skill-improvement-loop/context-structure-regression.json"
+  ]
+}

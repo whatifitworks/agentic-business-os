@@ -1,0 +1,16 @@
+name: computer-use-desktop-recording
+owner_domain: tooling
+purpose: Template for Computer Use workflows that cannot be handled by API, MCP, or project scripts.
+target_app: App or system UI.
+tool_type: Computer
+login_requirements: Already-authorized local session only; stop for passwords, 2FA, captcha, or sensitive prompts.
+inputs: app_name, recorded_steps, expected_fields, evidence_requirement
+outputs: status, structured_values, evidence_path, confidence, caveats
+evidence_requirements: timestamp, app/window name, screenshot or exported artifact, replay notes, extracted visible values
+freshness_window: 7 days unless overridden by source contract.
+failure_modes: UI changed, window not found, permission prompt, manual verification required, evidence missing
+confidence_rules: high when visible desktop evidence and fields agree; medium when interpretation is required; low means blocked.
+recording_path: sources/adapters/runs/
+source_contract: sources/adapters/computer-use-desktop-recording.md
+last_verified_at: "2026-05-18"
+status: active-computer-template

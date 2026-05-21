@@ -1,0 +1,18 @@
+manifest_version: 1
+name: memory-graph-health
+skill: memory-graph-health
+domain: tooling
+namespace: knowledge
+status: active
+purpose: Audit the root memory graph for orphans, broken links, stale inbox items, and missing skill index coverage.
+triggers:
+  - memory graph health
+  - graph audit
+  - orphan wiki pages
+required_sources:
+  - system/tools/memory_graph_audit.py
+  - system/tools/ops_v2_audit.py
+default_output_policy: health_report
+approval_gates: []
+related_agents:
+  - knowledge-librarian

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "adapter-runner-default-input-capture",
+      "workflow": "adapter-runner",
+      "skill": "adapter-runner",
+      "command": "$adapter-runner x-home-timeline-suggested-tweets",
+      "cwd": ".",
+      "exit_code": 0,
+      "expected_behavior": "Use adapter default_inputs when every required input has a default.",
+      "actual_behavior": "Asked the project owner for app_name, starting_url, and item_count.",
+      "user_correction": "The adapter was recorded to run without inputs.",
+      "deterministic": true,
+      "repeated": false,
+      "expected_owner_contains": ".agents/adapters/"
+    },
+    {
+      "id": "one-off-network-flake",
+      "workflow": "repo-health",
+      "command": "python3 system/tools/repo_audit.py --exit-zero",
+      "cwd": ".",
+      "exit_code": 1,
+      "expected_behavior": "Run repo audit.",
+      "actual_behavior": "Transient DNS lookup failed before the audit started.",
+      "severity": "transient",
+      "one_off": true,
+      "deterministic": false,
+      "expected_capture": false
+    }
+  ]
+}

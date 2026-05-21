@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "purpose": "Verify that common Agentic Business OS requests route to the correct domain, skill, sources, and output path.",
+  "cases": [
+    {
+      "id": "repo-health",
+      "prompt": "Run repo health and tell me what is broken.",
+      "expected_domain": "ops",
+      "expected_skill": "repo-health",
+      "expected_sources": [
+        "system/tools/repo_audit.py",
+        "system/tools/memory_graph_audit.py"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "logs/repo-health/"
+    },
+    {
+      "id": "project-onboarding",
+      "prompt": "Help me prepare this empty project by learning the business, tools, routines, and first automation ideas.",
+      "expected_domain": "ops",
+      "expected_skill": "project-onboarding",
+      "expected_sources": [
+        ".agents/skills/ops/project-onboarding/",
+        "inbox/project-onboarding/"
+      ],
+      "expected_inbox_first": true,
+      "expected_output_area": "inbox/"
+    },
+    {
+      "id": "memory-ingest",
+      "prompt": "Process this inbox item and decide whether it belongs in memory.",
+      "expected_domain": "knowledge",
+      "expected_skill": "memory-ingest",
+      "expected_sources": [
+        "inbox/",
+        "wiki/",
+        "state/ingest-manifest.json"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "wiki/"
+    },
+    {
+      "id": "adapter-data-gathering",
+      "prompt": "Use a Computer Use adapter to collect data from a tool that has no API access.",
+      "expected_domain": "tooling",
+      "expected_skill": "adapter-runner",
+      "expected_sources": [
+        "Computer Use",
+        ".agents/adapters/"
+      ],
+      "expected_inbox_first": true,
+      "expected_output_area": "sources/adapters/"
+    },
+    {
+      "id": "design-studio-project",
+      "prompt": "Create a new AI-assisted website design project and iterate it with references.",
+      "expected_domain": "product",
+      "expected_skill": "design-studio",
+      "expected_sources": [
+        "projects/design-studio/"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "outputs/design-studio/"
+    },
+    {
+      "id": "skill-improvement",
+      "prompt": "This workflow behaved badly; update the system so it does not happen again.",
+      "expected_domain": "ops",
+      "expected_skill": "skill-improvement-loop",
+      "expected_sources": [
+        "state/learning-events.jsonl",
+        "evals/"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "evals/"
+    }
+  ]
+}

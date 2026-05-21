@@ -1,0 +1,60 @@
+manifest_version: 1
+name: learning-review
+skill: learning-review
+domain: ops
+namespace: ops
+status: active
+purpose: Scan recent work journals and logs, then propose self-improvement candidates in suggest-only mode.
+triggers:
+  - learning review
+  - auto improve suggestions
+  - dreaming review
+  - review recent work logs
+  - morning coffee learning brief
+required_sources:
+  - state/learning-events.jsonl
+  - state/learning-raw-chat-manifest.json
+  - logs/
+  - .agents/recurring.yaml
+  - system/tools/learning_review.py
+  - system/tools/work_session_journal.py
+default_output_policy: logs_learning_brief
+approval_gates:
+  - ask before applying any suggested patch
+  - ask before writing durable memory candidates from learning review
+related_agents:
+  - ops-auditor
+  - automation-builder
+  - knowledge-librarian
+
+required_tools:
+  commands:
+    - python3 system/tools/learning_review.py review
+    - python3 system/tools/work_session_journal.py record
+    - python3 system/tools/ephemeral_chat_capture.py extract
+    - python3 system/tools/skill_improvement_loop.py analyze
+
+sidecars:
+  reads:
+    - state/learning-events.jsonl
+    - state/learning-raw-chat-manifest.json
+    - logs/raw-chats/
+    - logs/
+    - .agents/recurring.yaml
+  writes:
+    - logs/learning/
+    - state/learning-events.jsonl
+    - state/learning-raw-chat-manifest.json
+    - inbox/
+
+outputs:
+  primary:
+    - logs/learning/YYYY-MM-DD-HH:MM-brief.md
+  optional:
+    - inbox/YYYYMMDDTHHMMSSZ-*-learning-candidate.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If no structured events exist, report the logging gap as a candidate.
+    - Scheduled runs are suggest-only and must not patch skills.
