@@ -13,11 +13,11 @@ triggers:
 required_sources:
   - system/tools/repo_audit.py
   - system/tools/memory_graph_audit.py
-  - system/tools/ops_v2_audit.py
+  - system/tools/agentic_os_audit.py
 checks:
   - repo_audit
   - memory_graph_audit
-  - ops_v2_audit
+  - agentic_os_audit
 default_output_policy: logs_and_health_report
 approval_gates: []
 related_agents:

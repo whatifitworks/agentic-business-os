@@ -7,12 +7,14 @@ description: Interactive daily planning session for a single project. Reviews th
 
 Use this skill when the project owner wants to plan the day, start a work session, review yesterday's open items, or decide what to work on next.
 
+This is the generic daily planning workflow. Rename or wrap it locally only when a project wants a branded routine.
+
 ## Source Of Truth
 
 - Active plan: `context/today.md`
 - Plan archive: `logs/daily-plans/`
-- Priorities: `context/current-priorities.md` after onboarding creates it
-- Goals: `context/goals.md` after onboarding creates it
+- Priorities: `context/current-priorities.md`
+- Goals: `context/goals.md`
 - Recurring work: `.agents/recurring.yaml`
 - Schedules: `.agents/schedules.yaml`
 - Inbox queue: `inbox/` and `state/memory-ingest-queue.json`

@@ -5,6 +5,11 @@ target_app: Generic fixture or no-API UI workflow.
 tool_type: Fixture
 login_requirements: No live login; fixture-only unless a concrete adapter overrides this contract.
 inputs: workflow_name, target, expected_fields, freshness_requirement
+default_inputs:
+  workflow_name: "fixture-adapter-contract-check"
+  target: "local fixture"
+  expected_fields: "status,evidence_path,confidence,caveats"
+  freshness_requirement: "fixture"
 outputs: status, structured_values, evidence_path, confidence, caveats
 evidence_requirements: timestamp, target, values, caveats
 freshness_window: fixture

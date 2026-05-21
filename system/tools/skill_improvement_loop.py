@@ -85,7 +85,7 @@ SYSTEM_SCOPE_TERMS = [
     "computer use",
     "browser use",
     "mcp",
-    "morning-coffee",
+    "daily-planning",
     "recurring-review",
     "learning-review",
     "skill-improvement",
@@ -146,7 +146,7 @@ def improvement_facets(combined: str) -> list[str]:
         ("context-loading", ["load", "loaded", "read", "context", "entrypoint", "agents.md", "claude.md", "00-start-here", "index", "indexes", "missing file"]),
         ("hook-behavior", ["hook", "stop hook", "pretool", "posttool"]),
         ("adapter-contract", ["adapter", "browser use", "computer use"]),
-        ("scheduler-behavior", ["scheduler", "schedule", "recurring", "morning-coffee"]),
+        ("scheduler-behavior", ["scheduler", "schedule", "recurring", "daily-planning"]),
         ("eval-coverage", ["eval", "regression", "deterministic", "test"]),
         ("user-experience", ["confusing", "frustrated", "annoying", "happy", "useful", "expected"]),
     ]
@@ -207,15 +207,15 @@ def analyze_case(data: dict[str, Any]) -> dict[str, Any]:
     if contains_any(combined, ["adapter", "computer use", "browser use", "default_inputs", "default inputs"]) and not broadening_context:
         owners.extend([".agents/adapters/", ".agents/skills/ops/adapter-builder/", ".agents/skills/ops/adapter-runner/"])
     if contains_any(combined, ["hook", "stop hook", "pretool", "posttool"]) and not broadening_context:
-        owners.extend([".agents/hooks/", "system/tools/ops_v2_hooks.py"])
+        owners.extend([".agents/hooks/", "system/tools/agentic_os_hooks.py"])
     if contains_any(combined, ["inbox", "memory", "wiki", "ingest"]):
         owners.extend([".agents/skills/knowledge/memory-ingest/", "state/ingest-manifest.json", "inbox/", "wiki/", "indexes/", "state/"])
     if contains_any(combined, ["file structure", "folder structure", "project structure", "orphan", "graph", "outputs", "sources"]):
         owners.extend(["indexes/project-map.md", "indexes/agentic-os-text-map.md", "indexes/README.md", "domains/", "wiki/", "outputs/", "sources/", "state/"])
     if contains_any(combined, ["load", "loaded", "read", "context", "entrypoint", "agents.md", "claude.md", "00-start-here", "index", "indexes", "missing file"]):
         owners.extend(["AGENTS.md", "CLAUDE.md", "00-start-here.md", "system/context/context_index.json", "indexes/"])
-    if contains_any(combined, ["schedule", "recurring", "morning-coffee"]):
-        owners.extend([".agents/recurring.yaml", ".agents/schedules.yaml", ".agents/skills/ops/morning-coffee/"])
+    if contains_any(combined, ["schedule", "recurring", "daily-planning"]):
+        owners.extend([".agents/recurring.yaml", ".agents/schedules.yaml", ".agents/skills/ops/daily-planning/"])
     if skill != "unknown":
         owners.append(f".agents/skills/*/{skill}/")
 
@@ -244,14 +244,14 @@ def analyze_case(data: dict[str, Any]) -> dict[str, Any]:
         elif facet == "adapter-contract":
             actions.append("update adapter contracts and runner/builder guidance for repeatable UI workflows")
         elif facet == "scheduler-behavior":
-            actions.append("clarify schedule/recurring behavior and how morning planning should surface it")
+            actions.append("clarify schedule/recurring behavior and how daily planning should surface it")
         elif facet == "eval-coverage":
             actions.append("add regression coverage that exercises the skill behavior, not only helper scripts")
         elif facet == "user-experience":
             actions.append("adjust skill wording or flow to reduce user confusion/friction or preserve a praised pattern")
     if deterministic:
         actions.append("add or update a deterministic regression fixture")
-        checks.append("ops_v2_eval")
+        checks.append("agentic_os_eval")
     if contains_any(combined, ["secret", "password", "token", "private"]):
         actions.append("add redaction or fail-closed handling before any memory capture")
         checks.append("prompt-secret-scan")

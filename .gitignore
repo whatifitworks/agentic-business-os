@@ -4,6 +4,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+.claude/settings.local.json
 logs/raw-chats/
 system/state/*.db
 tmp/

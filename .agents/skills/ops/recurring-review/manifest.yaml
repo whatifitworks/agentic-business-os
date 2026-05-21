@@ -9,7 +9,7 @@ triggers:
   - recurring cleanup
   - stale recurring task
   - recurring.yaml review
-  - morning-coffee recurring noise
+  - daily planning recurring noise
   - overdue once task
 required_sources:
   - .agents/recurring.yaml

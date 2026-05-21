@@ -19,7 +19,7 @@ from ops_state import (
     sync_briefs,
     sync_recurring,
 )
-from ops_v2_hooks import run as run_hooks
+from agentic_os_hooks import run as run_hooks
 from recurring_review import review_recurring
 from repo_audit import run as run_repo_audit, summarize as summarize_repo_audit
 

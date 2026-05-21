@@ -1,6 +1,6 @@
 ---
 name: project-onboarding
-description: Prepare a new or empty single-project agentic operations vault from business context, tools, routines, goals, and constraints. Use when the user asks to onboard a business, initialize or prepare an empty project, learn what a project should know, map tools/connectors, propose starter automations, create first context/wiki/domain files, or turn setup answers into review-only skills, schedules, recurring work, and automation candidates.
+description: Prepare a new or empty single-project agentic operations vault from business context, tools, routines, goals, and constraints. Use when the user asks to onboard a business, initialize or prepare an empty project, learn what a project should know, map tools/connectors, propose starter automations, create first context/wiki/domain files, initialize local state/checks, or turn setup answers into review-only skills, schedules, recurring work, and automation candidates.
 ---
 
 # Project Onboarding
@@ -9,18 +9,27 @@ Use this skill to prepare one project. Do not introduce a separate workspace con
 
 ## Core Rule
 
-Create a review pack first unless the user explicitly asks to write final project files directly. Onboarding output usually starts under `inbox/project-onboarding/<date>-<slug>/`; after review, promote approved pieces into `context/`, `wiki/`, `domains/`, `.agents/`, `projects/`, `rules/`, or `state/`.
+The owner should only need to ask for onboarding. The agent runs the local bootstrap/check scripts, interviews the owner, and creates the review pack. Do not tell the owner to run setup scripts as the primary path.
+
+Create a review pack before promoting project-specific files unless the owner explicitly asks to write final project files directly. Onboarding output usually starts under `inbox/project-onboarding/<date>-<slug>/`; after review, promote approved pieces into `context/`, `wiki/`, `domains/`, `.agents/`, `projects/`, `rules/`, or `state/`.
 
 Never ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or account credentials during onboarding. Tool setup should be recorded as review-only until the owner explicitly approves a connection path.
+
+Background jobs are approval-gated. You may prepare scheduler and inbox-auto-ingest install instructions, but do not install launchd jobs or enable external schedules without explicit approval.
 
 ## Workflow
 
 1. Read `00-start-here.md` if it exists. If the project is not empty, inspect the relevant existing `context/`, `domains/`, `.agents/skills/`, `.agents/schedules.yaml`, `.agents/recurring.yaml`, and `wiki/` indexes before proposing changes.
-2. Identify the onboarding mode:
+2. Run local bootstrap and baseline checks yourself:
+   ```bash
+   python3 system/tools/bootstrap_project.py
+   ```
+   If this fails, fix obvious local template issues when safe, or report the blocker. Continue the interview only if the failure does not make the project unsafe to initialize.
+3. Identify the onboarding mode:
    - `new-project`: little or no project context exists.
    - `refresh-project`: project exists, but business/tool context needs improvement.
    - `template-dry-run`: prepare generic starter output for a reusable template.
-3. Gather baseline answers:
+4. Gather baseline answers:
    - project/business name
    - country or operating region
    - business type and product/service
@@ -30,11 +39,21 @@ Never ask for passwords, API keys, tokens, bank details, tax IDs, private keys, 
    - tools already used
    - approval boundaries and risky actions
    - first useful outcome expected from the assistant
-4. Ask adaptive follow-up questions one at a time when needed. Prefer choices or short prompts. Stop once you have enough information to create starter context, priorities, tool review tasks, automation candidates, and open questions.
-5. Build a tool map. For each tool, capture category, purpose, owner, source access path, likely connector/API/export/manual path, setup risk, and the first useful workflow.
-6. Propose automations as review-only candidates. Rank by business impact, frequency, setup difficulty, and risk. Classify each as `safe-local`, `review-only`, `needs-permission`, or `needs-credentials`.
-7. Generate the onboarding pack with `scripts/create_onboarding_pack.py` when baseline answers are available. Add any richer interview synthesis by editing the generated markdown files.
-8. Present the review pack summary and ask before promoting anything into live project files.
+5. Ask adaptive follow-up questions one at a time when needed. Prefer choices or short prompts. Stop once you have enough information to create starter context, priorities, tool review tasks, automation candidates, and open questions.
+6. Build a tool map. For each tool, capture category, purpose, owner, source access path, likely connector/API/export/manual path, setup risk, and the first useful workflow.
+7. Propose automations as review-only candidates. Rank by business impact, frequency, setup difficulty, and risk. Classify each as `safe-local`, `review-only`, `needs-permission`, or `needs-credentials`.
+8. Generate the onboarding pack with `scripts/create_onboarding_pack.py` when baseline answers are available. Add any richer interview synthesis by editing the generated markdown files.
+9. Run verification after pack creation:
+   ```bash
+   python3 system/tests/agentic_os_local_checks.py
+   ```
+10. Prepare the post-onboarding handoff:
+   - review pack path
+   - bootstrap/check status
+   - highest-value files to promote first
+   - hook activation reminder: Codex may require hooks to be enabled or approved in the app/runtime UI; Claude Code hook execution should be verified in the installed runtime
+   - help path: run `get-help` or visit https://whatifitworks.co
+11. Present the review pack summary, verification result, hook reminder, help path, and recommended promotions. Ask before promoting anything into live project files.
 
 ## Interview Guidance
 
@@ -44,7 +63,7 @@ Keep the first interview practical. The goal is not to fully model the business;
 
 ## Review Pack
 
-When enough baseline context is known, run:
+When enough baseline context is known, the agent runs:
 
 ```bash
 python3 .agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py \
@@ -82,10 +101,22 @@ After the owner approves the review pack:
 
 Do not overwrite existing project files without showing the proposed diff or a clear file-by-file summary.
 
+## Optional Background Jobs
+
+After the review pack is approved, ask explicitly before installing any background jobs.
+
+- Scheduler: `bash .agents/install-launchd.sh`
+- Inbox auto-ingest watcher: `bash .agents/hooks/install-inbox-auto-ingest-launchd.sh`
+
+Only install these when the owner approves and the relevant config has been reviewed.
+
 ## Done Criteria
 
 - The project has a reviewable onboarding pack.
+- Local runtime state has been initialized or the blocker is clearly reported.
+- Baseline checks have run or their blocker is clearly reported.
+- Hook activation guidance has been shown to the owner.
 - Tool setup items are review-only and do not contain secrets.
 - Starter context, wiki, routines, and automations are separated from live files until approved.
 - Open questions are explicit.
-- The final response names the pack path and the highest-value next promotion step.
+- The final response names the pack path, the highest-value next promotion step, the hook activation reminder, and the `get-help` path.

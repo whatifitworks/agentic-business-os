@@ -10,7 +10,7 @@ triggers:
   - auto improve suggestions
   - dreaming review
   - review recent work logs
-  - morning coffee learning brief
+  - daily planning learning brief
 required_sources:
   - state/learning-events.jsonl
   - state/learning-raw-chat-manifest.json

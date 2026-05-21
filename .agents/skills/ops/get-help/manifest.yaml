@@ -1,0 +1,53 @@
+manifest_version: 1
+name: get-help
+skill: get-help
+domain: ops
+namespace: ops
+status: active
+purpose: Help project owners troubleshoot Agentic Business OS and prepare safe support requests for What If It Works.
+triggers:
+  - get help
+  - support
+  - contact maintainers
+  - What If It Works
+  - onboarding problem
+  - hooks not working
+  - setup problem
+  - upstream sync help
+required_sources:
+  - .agents/skills/ops/get-help/SKILL.md
+  - docs/get-help.md
+default_output_policy: concise_support_guidance_or_redacted_support_note
+approval_gates:
+  - ask before sending external messages or publishing issues
+  - never request secrets or credentials in chat
+related_agents:
+  - ops-auditor
+  - automation-builder
+
+required_tools:
+  commands:
+    - python3 system/tools/agentic_os_hooks.py --hook all
+    - python3 system/tools/repo_audit.py --exit-zero
+
+sidecars:
+  reads:
+    - README.md
+    - docs/setup.md
+    - docs/get-help.md
+    - .codex/config.toml
+    - .claude/settings.json
+    - system/health/
+  writes:
+    - inbox/get-help/
+
+outputs:
+  primary:
+    - support guidance in final response
+  optional:
+    - inbox/get-help/YYYY-MM-DD-<slug>/support-request.md
+
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If local checks cannot run, include the blocker in the support note.

@@ -146,7 +146,7 @@ def scan(root: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         if rel_path in already_handled:
             continue
         existing = by_path.get(rel_path)
-        if existing and str(existing.get("status")) in TERMINAL_STATUSES | {"pending", "running", "blocked", "needs-daniels", "failed", "needs-review"}:
+        if existing and str(existing.get("status")) in TERMINAL_STATUSES | {"pending", "running", "blocked", "needs-owner", "failed", "needs-review"}:
             continue
         record = {
             "id": record_id(rel_path),
@@ -225,7 +225,7 @@ Process exactly this inbox item and no other inbox files:
 
 Required behavior:
 - Read `.agents/skills/knowledge/memory-ingest/SKILL.md`.
-- Process only the queued inbox path. The v2 inbox should not contain compatibility shelves.
+- Process only the queued inbox path. The Agentic OS inbox should not contain compatibility shelves.
 - If the item is an envelope, inspect the referenced full artifact before deciding.
 - Pick exactly one outcome: promote wiki, append evidence, preserve source-only, promote output, process-only, drop, or block/escalate.
 - Keep wiki edits short and linked. Do not copy bulky artifacts into wiki pages.
@@ -234,9 +234,9 @@ Required behavior:
 - Update `state/memory-ingest-queue.json` for `{rel_path}` with the final status, outcome, and note. You may use:
   `python3 system/tools/inbox_auto_ingest.py mark --path {rel_path} --status processed --outcome <outcome> --note <summary>`
 - Run `python3 system/tools/memory_graph_audit.py --scope root`.
-- Run `python3 system/tools/ops_v2_hooks.py --hook all`.
+- Run `python3 system/tools/agentic_os_hooks.py --hook all`.
 
-If the item is strategically ambiguous or needs the project owner's judgment, mark it `needs-daniels` or `blocked` instead of guessing.
+If the item is strategically ambiguous or needs the project owner's judgment, mark it `needs-owner` or `blocked` instead of guessing.
 """
 
 

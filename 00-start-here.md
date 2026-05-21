@@ -12,7 +12,7 @@ This is the low-token navigation entrypoint for a project built with Agentic Bus
 
 ## First Setup
 
-Use `.agents/skills/ops/project-onboarding/SKILL.md` to learn the project and create a review-first onboarding pack.
+Use `.agents/skills/ops/project-onboarding/SKILL.md` to learn the project, run local bootstrap/checks, and create a review-first onboarding pack.
 
 ## Memory Spine
 

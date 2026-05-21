@@ -149,8 +149,8 @@ def learning_topic_tags(text: str) -> set[str]:
 
 
 SYSTEM_INTERACTION_RE = re.compile(
-    r"\b(agentic os|ops v2|codex|claude|llm|agent|sub-agent|skill|hook|scheduler|schedule|"
-    r"memory|inbox|wiki|raw-chat|raw chat|learning|morning-coffee|friday-wrap|recurring-review|"
+    r"\b(agentic os|business os|codex|claude|llm|agent|sub-agent|skill|hook|scheduler|schedule|"
+    r"memory|inbox|wiki|raw-chat|raw chat|learning|daily-planning|weekly-review|recurring-review|"
     r"adapter|browser use|computer use|mcp|tool|workflow|prompt|eval|test|context|output|"
     r"file structure|folder structure|project structure|entrypoint|agents\.md|claude\.md|00-start-here|"
     r"index|indexes|domain|domains|sources|state|logs|orphan|graph|loaded|read|"

@@ -1,5 +1,76 @@
 # Onboarding
 
-Use `project-onboarding` to create a review pack for a new project. The pack should describe the business, tools, routines, approval boundaries, automation candidates, and proposed starter files.
+`project-onboarding` is the first real workflow for a new Agentic Business OS project.
 
-Promote files only after review.
+It should learn enough about the business, tools, routines, goals, and approval boundaries to make the project useful without connecting tools or writing live operating files prematurely.
+
+The normal UX is agent-operated: the owner asks for onboarding, answers questions, and reviews the pack. The onboarding agent runs local bootstrap and verification scripts itself.
+
+## What Onboarding Produces
+
+The skill creates a review pack under:
+
+```text
+inbox/project-onboarding/<date>-<project-name>/
+```
+
+The pack includes:
+
+- business/project summary
+- tool map
+- approval boundaries
+- automation candidates
+- starter file plan
+- proposed starter files
+- machine-readable setup suggestions
+- post-onboarding hook activation and help guidance
+
+## What Onboarding Does Automatically
+
+Onboarding should:
+
+- initialize local runtime state with `system/tools/bootstrap_project.py`
+- run deterministic local checks after pack creation
+- interview the owner about the business, tools, routines, goals, and approval boundaries
+- create review-only proposed files before changing live operating context
+
+## What Onboarding Does Not Do Automatically
+
+Onboarding does not:
+
+- ask for credentials
+- connect external tools
+- enable schedules
+- install launchd jobs
+- write to customer, billing, publishing, or production systems
+- overwrite live project files without review
+
+## Post-Onboarding Handoff
+
+After the review pack is created, onboarding should tell the owner:
+
+- local bootstrap and checks passed, or which blocker remains
+- where the review pack is
+- which files are recommended for promotion first
+- Codex may require hooks to be enabled or approved in the app/runtime UI
+- Claude Code hook activation should be verified in the installed runtime
+- `get-help` can prepare a safe support note for What If It Works: https://whatifitworks.co
+
+## Promotion
+
+After review, promote approved files into:
+
+- `context/` for current operating truth
+- `domains/` for ownership boundaries
+- `wiki/` for concise durable synthesis
+- `sources/` for source contracts
+- `.agents/skills/` for repeated procedures
+- `.agents/recurring.yaml` for real recurring obligations
+- `.agents/schedules.yaml` for approved scheduled workflows
+- `rules/` for project-specific operating rules
+
+Do not promote everything blindly. The review pack is a proposal.
+
+## Starter Context
+
+The template ships starter placeholders in `context/`. Onboarding can propose replacements for those files, but the project is still navigable before onboarding runs.

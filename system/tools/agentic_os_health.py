@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 REPORTS = [
-    "ops-v2-acceptance-readiness",
+    "agentic-os-acceptance-readiness",
     "repo",
     "memory-graph",
     "context-routing",
@@ -68,25 +68,26 @@ def generate(root: Path) -> list[Path]:
     written: list[Path] = []
 
     from memory_graph_audit import run as run_memory_graph
-    from ops_v2_audit import run as run_ops_v2
-    from ops_v2_eval import run as run_evals
-    from ops_v2_hooks import run as run_hooks
+    from agentic_os_audit import run as run_agentic_os
+    from agentic_os_eval import run as run_evals
+    from agentic_os_hooks import run as run_hooks
     from skill_namespace import load_plan, validate as validate_namespace_plan
 
-    v2_scaffold = run_ops_v2(root, phase="scaffold")
-    v2_final = run_ops_v2(root, phase="final")
+    scaffold_issues = run_agentic_os(root, phase="scaffold")
+    final_issues = run_agentic_os(root, phase="final")
     memory = run_memory_graph(root, scope="root")
     hooks = run_hooks(root, hook="all")
     evals = run_evals(root)
     namespace_plan = load_plan(root)
     namespace_issues = validate_namespace_plan(root, namespace_plan)
-    readiness = root / "system" / "health" / "ops-v2-acceptance-readiness.md"
+    readiness = root / "system" / "health" / "agentic-os-acceptance-readiness.md"
     if readiness.exists():
         written.append(readiness)
 
-    written.append(write_report(root, "repo", "## V2 Scaffold\n\n" + issue_summary(v2_scaffold) + "\n## V2 Final Gate\n\n" + issue_summary(v2_final)))
+    written.append(write_report(root, "repo", "## Scaffold\n\n" + issue_summary(scaffold_issues) + "\n## Final Gate\n\n" + issue_summary(final_issues)))
     written.append(write_report(root, "memory-graph", issue_summary(memory)))
-    written.append(write_report(root, "context-routing", "- Context index: `system/context/context_index.json`\n- Domains indexed: `indexes/domains.md`\n- Routing eval cases: 10\n"))
+    routing_cases = json_count(root / "evals/routing/cases.json", "cases")
+    written.append(write_report(root, "context-routing", f"- Context index: `system/context/context_index.json`\n- Domains indexed: `indexes/domains.md`\n- Routing eval cases: {routing_cases}\n"))
     budget = "\n".join([
         f"- `AGENTS.md`: {line_count(root / 'AGENTS.md')} lines",
         f"- `CLAUDE.md`: {line_count(root / 'CLAUDE.md')} lines",
@@ -94,9 +95,10 @@ def generate(root: Path) -> list[Path]:
         f"- Domain files: max {max(line_count(path) for path in (root / 'domains').glob('*.md'))} lines",
     ])
     written.append(write_report(root, "context-budget", budget))
-    written.append(write_report(root, "domains", "- Domain contracts: 10\n- Required sections enforced by `system/tools/ops_v2_audit.py`\n"))
+    domain_count = len(list((root / "domains").glob("*.md")))
+    written.append(write_report(root, "domains", f"- Domain contracts: {domain_count}\n- Required sections enforced by `system/tools/agentic_os_audit.py`\n"))
     written.append(write_report(root, "outputs", f"- Output manifest records: {json_count(root / 'state/outputs-manifest.json', 'outputs')}\n"))
-    skill_count = len([p for p in (root / ".agents" / "skills").iterdir() if p.is_dir() and (p / "SKILL.md").exists()])
+    skill_count = len(list((root / ".agents" / "skills").rglob("SKILL.md")))
     namespace_moves = namespace_plan.get("moves") if isinstance(namespace_plan.get("moves"), list) else []
     namespace_errors = sum(1 for issue in namespace_issues if issue.level == "error")
     namespace_warnings = sum(1 for issue in namespace_issues if issue.level == "warn")
@@ -104,7 +106,7 @@ def generate(root: Path) -> list[Path]:
         root,
         "skills",
         "\n".join([
-            f"- Flat skill folders: {skill_count}",
+            f"- Skill files: {skill_count}",
             f"- Planned namespace moves: {len(namespace_moves)}",
             f"- Namespace plan errors: {namespace_errors}",
             f"- Namespace plan warnings: {namespace_warnings}",
@@ -140,7 +142,7 @@ def generate(root: Path) -> list[Path]:
         ]),
     ))
     written.append(write_report(root, "rules", "- Rules folder indexed with README\n- Rule files remain outside wiki memory\n"))
-    written.append(write_report(root, "automations", "- Scheduler: `.agents/schedules.yaml`\n- Hook runner: `system/tools/ops_v2_hooks.py`\n"))
+    written.append(write_report(root, "automations", "- Scheduler: `.agents/schedules.yaml`\n- Hook runner: `system/tools/agentic_os_hooks.py`\n"))
     written.append(write_report(root, "schedules", "- Scheduled task config exists\n- Scheduler drift check is included in hook runner\n"))
 
     passed = sum(1 for result in evals if result.status == "pass")
@@ -150,14 +152,14 @@ def generate(root: Path) -> list[Path]:
     cockpit.write_text(
         "# Operator Cockpit\n\n"
         f"Generated: `{datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds')}`\n\n"
-        "## V2 Health\n\n"
-        f"- Scaffold issues: {len(v2_scaffold)}\n"
-        f"- Final-gate issues: {len(v2_final)}\n"
+        "## Agentic OS Health\n\n"
+        f"- Scaffold issues: {len(scaffold_issues)}\n"
+        f"- Final-gate issues: {len(final_issues)}\n"
         f"- Eval passed: {passed}\n"
         f"- Eval failed: {failed}\n\n"
         "## Pending Gates\n\n"
-        "- None. Skill namespace move was approved and applied on 2026-05-18.\n"
-        "- Namespaced skill verification: `python3 system/tools/skill_namespace.py --verify-applied`\n\n"
+        "- None from this generated health pass.\n"
+        "- Run local checks with `python3 system/tests/agentic_os_local_checks.py`.\n\n"
         "## Reports\n\n"
         f"{links}\n"
     )

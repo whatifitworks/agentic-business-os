@@ -41,4 +41,4 @@ The background worker must:
 6. Update `state/memory-ingest-queue.json`.
 7. Run graph and hook checks before finishing.
 
-If the item is ambiguous, the worker must mark it `blocked` or `needs-daniels` rather than guessing.
+If the item is ambiguous, the worker must mark it `blocked` or `needs-owner` rather than guessing.

@@ -70,7 +70,7 @@ Use this for:
 - Read only project-local ephemeral captures under `logs/raw-chats/`; do not mine global Codex/Claude history stores.
 - Raw captures must be purged after seven days and must never enter `inbox/`, `wiki/`, `outputs/`, or git.
 - Do not store secrets, private customer content, raw Computer Use screen state, full transcripts, or long command output outside the gitignored ephemeral raw-chat capture path.
-- Do not produce candidates for ordinary the project business topics, overdue obligations, product facts, analytics findings, or strategy decisions. Those belong to domain skills, `recurring-review`, morning planning, and memory-ingest.
+- Do not produce candidates for ordinary the project business topics, overdue obligations, product facts, analytics findings, or strategy decisions. Those belong to domain skills, `recurring-review`, daily planning, and memory-ingest.
 - Learning-review candidates must improve the OS: skills, hooks, agents, adapters, prompts, schedules, evals, docs, context loading, or user workflow ergonomics.
 - Fixed/resolved implementation issues should remain historical events, not active candidates.
 - Prefer concise summaries over raw dumps.

@@ -19,7 +19,7 @@
     },
     {
       "id": "root-start-page",
-      "check": "00-start-here.md links to the main indexes and v2 operating contract",
+      "check": "00-start-here.md links to the main indexes and Agentic OS operating contract",
       "severity": "error"
     },
     {

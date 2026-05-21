@@ -11,7 +11,7 @@ triggers:
   - orphan wiki pages
 required_sources:
   - system/tools/memory_graph_audit.py
-  - system/tools/ops_v2_audit.py
+  - system/tools/agentic_os_audit.py
 default_output_policy: health_report
 approval_gates: []
 related_agents:

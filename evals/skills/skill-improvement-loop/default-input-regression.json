@@ -3,13 +3,13 @@
   "skill": "adapter-runner",
   "summary": "Adapter runner asked for runtime inputs even though the adapter contract had default values.",
   "expected_behavior": "When adapter.yaml defines default_inputs for all inputs, adapter-runner should use the defaults without asking the project owner.",
-  "actual_behavior": "adapter-runner asked the project owner for app_name, starting_url, and item_count.",
-  "user_correction": "the project owner said the adapter was recorded to run without inputs and the runner should not ask.",
-  "command": "$adapter-runner x-home-timeline-suggested-tweets",
+  "actual_behavior": "adapter-runner asked the project owner for workflow_name, target, expected_fields, and freshness_requirement.",
+  "user_correction": "the project owner said the fixture adapter already has defaults and the runner should not ask.",
+  "command": "$adapter-runner browser-computer-adapter",
   "deterministic": true,
   "durable": true,
   "changed_files": [
-    ".agents/adapters/x-home-timeline-suggested-tweets/adapter.yaml",
+    ".agents/adapters/browser-computer-adapter/adapter.yaml",
     ".agents/skills/ops/adapter-runner/SKILL.md",
     ".agents/skills/ops/adapter-builder/SKILL.md",
     "system/tools/browser_computer_adapter.py"

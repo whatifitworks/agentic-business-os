@@ -61,11 +61,11 @@ def select_owner(case: dict[str, Any], combined: str) -> str:
     if contains_any(combined, ["adapter", "computer use", "browser use", "ui automation"]):
         return ".agents/adapters/ and .agents/skills/ops/adapter-runner/"
     if contains_any(combined, ["hook", "stop hook", "posttool", "pretool"]):
-        return ".agents/hooks/ and system/tools/ops_v2_hooks.py"
+        return ".agents/hooks/ and system/tools/agentic_os_hooks.py"
     if contains_any(combined, ["inbox", "memory", "wiki", "ingest"]):
         return ".agents/skills/knowledge/memory-ingest/ and system/tools/inbox_auto_ingest.py"
-    if contains_any(combined, ["schedule", "recurring", "morning-coffee"]):
-        return ".agents/recurring.yaml and .agents/skills/ops/morning-coffee/"
+    if contains_any(combined, ["schedule", "recurring", "daily-planning"]):
+        return ".agents/recurring.yaml and .agents/skills/ops/daily-planning/"
     if skill:
         return f".agents/skills/*/{skill}/"
     return "needs-owner-triage"

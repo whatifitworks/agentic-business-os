@@ -24,7 +24,7 @@ Hooks should usually warn or queue work. Blocking is reserved for destructive ac
 
 ## Current Implementation
 
-Hook definitions live in [registry.yaml](registry.yaml). Deterministic checks are implemented by [ops_v2_hooks.py](../../system/tools/ops_v2_hooks.py). Runtime editor/agent hook wiring can call that script by hook name; unsupported hooks should produce a visible warning rather than silently passing.
+Hook definitions live in [registry.yaml](registry.yaml). Deterministic checks are implemented by [agentic_os_hooks.py](../../system/tools/agentic_os_hooks.py). Runtime editor/agent hook wiring can call that script by hook name; unsupported hooks should produce a visible warning rather than silently passing.
 
 ## Inbox Auto-Ingest
 
@@ -35,6 +35,14 @@ Preferred wiring for normal LLM-generated files is project-local after-response 
 
 Both scan `inbox/` and launch the one-item background worker only when an eligible pending item exists.
 The Codex hook uses `--hook-json` because Codex `Stop` hooks require JSON on stdout.
+
+## Runtime Activation
+
+Committed config is not always enough to prove hooks are active in the user's runtime.
+
+- Codex may require hooks to be enabled or approved in the app/runtime UI after onboarding.
+- Claude Code reads `.claude/settings.json`, but users should verify hook execution in their installed version.
+- The static hook check validates files and contracts; it cannot prove a specific runtime UI has enabled hooks.
 
 Use [inbox_auto_ingest.py](../../system/tools/inbox_auto_ingest.py) directly for manual checks:
 

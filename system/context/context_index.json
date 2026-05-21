@@ -16,11 +16,14 @@
     "ops": {
       "description": "Planning, health checks, and operating cadence.",
       "entrypoints": [
-        "domains/ops.md"
+        "domains/ops.md",
+        "context/current-priorities.md",
+        "context/today.md"
       ],
       "canonical": [
         ".agents/skills/ops/repo-health/SKILL.md",
-        ".agents/skills/ops/project-onboarding/SKILL.md"
+        ".agents/skills/ops/project-onboarding/SKILL.md",
+        "context/goals.md"
       ],
       "deprioritize": []
     },
@@ -38,7 +41,8 @@
     "tooling": {
       "description": "Hooks, adapters, scheduler, and automation tooling.",
       "entrypoints": [
-        "domains/tooling.md"
+        "domains/tooling.md",
+        "context/tech-stack.md"
       ],
       "canonical": [
         ".agents/adapters/README.md",
@@ -49,7 +53,8 @@
     "product": {
       "description": "Product/design work and handoff artifacts.",
       "entrypoints": [
-        "domains/product.md"
+        "domains/product.md",
+        "context/work.md"
       ],
       "canonical": [
         ".agents/skills/product/design-studio/SKILL.md"
@@ -57,6 +62,251 @@
       "deprioritize": []
     }
   },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "role": "contract",
+      "topics": [
+        "ops",
+        "context-loading"
+      ],
+      "owner": "ops",
+      "load_when": "Always-loaded operating contract for agent runtimes."
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "contract",
+      "topics": [
+        "ops",
+        "context-loading"
+      ],
+      "owner": "ops",
+      "load_when": "Claude Code bootstrap shim."
+    },
+    {
+      "path": "00-start-here.md",
+      "role": "contract",
+      "topics": [
+        "ops",
+        "context-loading"
+      ],
+      "owner": "ops",
+      "load_when": "First low-token navigation file after runtime bootstrap."
+    },
+    {
+      "path": "README.md",
+      "role": "reference",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Human-facing project overview and setup entrypoint."
+    },
+    {
+      "path": "context/work.md",
+      "role": "canonical",
+      "topics": [
+        "ops",
+        "product"
+      ],
+      "owner": "ops",
+      "load_when": "Current business/project operating context."
+    },
+    {
+      "path": "context/current-priorities.md",
+      "role": "canonical",
+      "topics": [
+        "ops",
+        "priorities"
+      ],
+      "owner": "ops",
+      "load_when": "Current priority contract."
+    },
+    {
+      "path": "context/goals.md",
+      "role": "canonical",
+      "topics": [
+        "ops",
+        "priorities"
+      ],
+      "owner": "ops",
+      "load_when": "Goals and milestones."
+    },
+    {
+      "path": "context/tech-stack.md",
+      "role": "canonical",
+      "topics": [
+        "tooling"
+      ],
+      "owner": "tooling",
+      "load_when": "Tools, sources, and integration notes."
+    },
+    {
+      "path": "context/today.md",
+      "role": "state",
+      "topics": [
+        "ops",
+        "planning"
+      ],
+      "owner": "ops",
+      "load_when": "Active day plan for daily-planning."
+    },
+    {
+      "path": "domains/ops.md",
+      "role": "canonical",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Ops domain ownership card."
+    },
+    {
+      "path": "domains/knowledge.md",
+      "role": "canonical",
+      "topics": [
+        "knowledge"
+      ],
+      "owner": "knowledge",
+      "load_when": "Knowledge and memory domain ownership card."
+    },
+    {
+      "path": "domains/tooling.md",
+      "role": "canonical",
+      "topics": [
+        "tooling"
+      ],
+      "owner": "tooling",
+      "load_when": "Tooling, hooks, adapters, and scheduler ownership card."
+    },
+    {
+      "path": "domains/product.md",
+      "role": "canonical",
+      "topics": [
+        "product"
+      ],
+      "owner": "product",
+      "load_when": "Product and design domain ownership card."
+    },
+    {
+      "path": ".agents/skills/ops/project-onboarding/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "New or refreshed project onboarding."
+    },
+    {
+      "path": ".agents/skills/ops/project-onboarding/manifest.yaml",
+      "role": "manifest",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Project onboarding skill contract."
+    },
+    {
+      "path": ".agents/skills/ops/get-help/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Support and maintainer contact workflow."
+    },
+    {
+      "path": ".agents/skills/ops/get-help/manifest.yaml",
+      "role": "manifest",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Get-help skill contract."
+    },
+    {
+      "path": ".agents/skills/ops/repo-health/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "ops"
+      ],
+      "owner": "ops",
+      "load_when": "Repository and system health workflow."
+    },
+    {
+      "path": ".agents/skills/knowledge/memory-ingest/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "knowledge"
+      ],
+      "owner": "knowledge",
+      "load_when": "Memory inbox processing workflow."
+    },
+    {
+      "path": ".agents/skills/knowledge/memory-graph-health/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "knowledge"
+      ],
+      "owner": "knowledge",
+      "load_when": "Memory graph health workflow."
+    },
+    {
+      "path": ".agents/skills/product/design-studio/SKILL.md",
+      "role": "skill",
+      "topics": [
+        "product"
+      ],
+      "owner": "product",
+      "load_when": "Product design and handoff workflow."
+    },
+    {
+      "path": ".agents/adapters/README.md",
+      "role": "reference",
+      "topics": [
+        "tooling"
+      ],
+      "owner": "tooling",
+      "load_when": "Adapter contract overview."
+    },
+    {
+      "path": ".agents/hooks/README.md",
+      "role": "reference",
+      "topics": [
+        "tooling"
+      ],
+      "owner": "tooling",
+      "load_when": "Hook contract overview and runtime activation notes."
+    },
+    {
+      "path": "indexes/project-map.md",
+      "role": "reference",
+      "topics": [
+        "ops",
+        "context-loading"
+      ],
+      "owner": "ops",
+      "load_when": "Full folder contract and artifact routing map."
+    },
+    {
+      "path": "indexes/agentic-os-text-map.md",
+      "role": "reference",
+      "topics": [
+        "ops",
+        "context-loading"
+      ],
+      "owner": "ops",
+      "load_when": "Text-first map for read/write placement decisions."
+    },
+    {
+      "path": "state/memory-ingest-queue.json",
+      "role": "state",
+      "topics": [
+        "knowledge"
+      ],
+      "owner": "knowledge",
+      "load_when": "Machine queue for inbox auto-ingest."
+    }
+  ],
   "skills": {
     "project-onboarding": {
       "entrypoints": [
@@ -64,6 +314,16 @@
       ],
       "canonical": [
         ".agents/skills/ops/project-onboarding/manifest.yaml"
+      ],
+      "deprioritize": []
+    },
+    "get-help": {
+      "entrypoints": [
+        ".agents/skills/ops/get-help/SKILL.md"
+      ],
+      "canonical": [
+        ".agents/skills/ops/get-help/manifest.yaml",
+        "docs/get-help.md"
       ],
       "deprioritize": []
     },

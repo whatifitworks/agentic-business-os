@@ -13,6 +13,8 @@ Learn the project, keep context coherent, run safe review-first workflows, and s
 3. Load only the relevant domain, skill, rule, project, wiki page, output, source, or state file.
 4. Put generated material with possible durable value into `inbox/` unless a skill says otherwise.
 
+For a fresh project, use the `project-onboarding` skill. The agent should run local bootstrap/check scripts itself, then create a review pack before promoting project-specific context.
+
 ## Safety
 
 - Do not ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or credentials in chat.
@@ -32,6 +34,8 @@ Learn the project, keep context coherent, run safe review-first workflows, and s
 ## Skills
 
 Use the matching skill under `.agents/skills/` when a workflow applies. Read only enough of the skill body and sidecars to do the task.
+
+Use `daily-planning` for the generic daily planning workflow. Project-specific variants can be added later as local skills.
 
 ## Development Rules
 

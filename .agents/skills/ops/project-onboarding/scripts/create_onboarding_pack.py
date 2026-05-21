@@ -292,6 +292,29 @@ This pack is review-first. Promote approved files from `proposed/` into the live
 - `starter-file-plan.md` - proposed project file placements
 - `setup-suggestions.json` - machine-readable setup suggestions
 - `proposed/` - draft starter files
+
+## Setup Status
+
+The onboarding agent should already have run local bootstrap and baseline checks before presenting this pack. If it could not, the final onboarding response should name the blocker.
+
+## Runtime Hook Activation
+
+- Codex may require hooks to be enabled or approved in the app/runtime UI even though `.codex/config.toml` is present.
+- Claude Code projects include `.claude/settings.json`; verify hook execution in the installed runtime.
+- Static local checks can validate hook files, but cannot prove a runtime UI has activated them.
+
+## After Review
+
+Optional macOS background jobs, only after reviewing schedules and memory workflow:
+
+```bash
+bash .agents/install-launchd.sh
+bash .agents/hooks/install-inbox-auto-ingest-launchd.sh
+```
+
+## Help
+
+Ask the agent to run `get-help` or visit What If It Works: https://whatifitworks.co
 """,
     )
     write(
@@ -369,7 +392,10 @@ Promote only after review.
 | --- | --- |
 | `context/work.md` | Business and project operating context |
 | `context/current-priorities.md` | Initial priority contract |
+| `context/goals.md` | Initial goals and milestones |
 | `context/tech-stack.md` | Tools, sources, and integration notes |
+| `context/key-learnings.md` | Durable lessons that should shape future work |
+| `context/today.md` | Optional same-day plan placeholder |
 | `wiki/start-here.md` | Durable knowledge entrypoint |
 | `rules/approval-boundaries.md` | Safe action and approval rules |
 | `projects/onboarding/README.md` | Setup workstream and open questions |
@@ -421,6 +447,43 @@ External actions, tool connections, customer replies, publishing, financial chan
             for tool in tools
         )
         + ("\n" if tools else "- No tools captured yet.\n"),
+    )
+    write(
+        output_root / "proposed/context/goals.md",
+        f"""# Goals
+
+## Active Goals
+
+- Confirm the first measurable goal for {project_name}.
+
+## Milestones
+
+- Review onboarding pack.
+- Promote approved starter files.
+- Enable the first useful routine.
+""",
+    )
+    write(
+        output_root / "proposed/context/key-learnings.md",
+        """# Key Learnings
+
+Durable lessons that should shape future work go here after review.
+
+New candidate learnings should usually start in `inbox/` and be promoted through `memory-ingest`.
+""",
+    )
+    write(
+        output_root / "proposed/context/today.md",
+        """# Today
+
+## Active Task
+
+- Review onboarding pack.
+
+## Notes
+
+- Replace this with a daily plan only if the project uses daily planning.
+""",
     )
     write(
         output_root / "proposed/rules/approval-boundaries.md",

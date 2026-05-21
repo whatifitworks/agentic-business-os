@@ -116,7 +116,7 @@ Generated work should not be scattered into arbitrary folders. A task should upd
 
 ### Hooks
 
-`.agents/hooks/` and `system/tools/ops_v2_hooks.py` guard the operating system. Hooks should catch broken graph links, stale inbox work, missing manifests, adapter evidence gaps, schedule drift, source-of-truth corruption, likely secret leaks, and eligible inbox files that should be queued for memory ingest.
+`.agents/hooks/` and `system/tools/agentic_os_hooks.py` guard the operating system. Hooks should catch broken graph links, stale inbox work, missing manifests, adapter evidence gaps, schedule drift, source-of-truth corruption, likely secret leaks, and eligible inbox files that should be queued for memory ingest.
 
 ### Adapters
 

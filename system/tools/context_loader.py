@@ -358,7 +358,7 @@ def build_parser() -> argparse.ArgumentParser:
     domains.set_defaults(func=cmd_list_domains)
 
     load = sub.add_parser("load", help="print a deterministic context load plan")
-    load.add_argument("--skill", help="Skill name, e.g. morning-coffee")
+    load.add_argument("--skill", help="Skill name, e.g. daily-planning")
     load.add_argument("--domain", action="append", help="Context domain; can be repeated")
     load.add_argument("--query", help="Free-text query matched against the index")
     load.add_argument("--include-optional", action="store_true", help="Include optional/conditional manifest bootstrap docs")

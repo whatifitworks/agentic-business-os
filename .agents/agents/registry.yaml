@@ -1,31 +1,187 @@
-registry_version: 1
+registry_version: 2
 agents:
   - name: knowledge-librarian
     purpose: Keep the memory spine useful, short, linked, and source-backed.
     use_when: Ingesting inbox items, cleaning wiki pages, creating source cards, or checking graph health.
+    do_not_use_when: The task requires external system mutation or product code changes.
+    model_effort: medium for normal ingest, high for ambiguous classification.
+    allowed_tools: [filesystem, repo-audit, memory-graph-audit, agentic-os-audit]
+    forbidden_tools: [external_mutation, destructive_cleanup_without_approval]
     write_scope: [inbox/, wiki/, indexes/, sources/, dropped/, state/, system/health/]
     required_skills: [memory-ingest, memory-graph-health]
+    optional_skills: [repo-health]
+    memory_behavior: Full durable artifacts start in inbox; concise synthesis goes to wiki only through ingest.
+    handoff_output: Ingest decision, changed paths, manifest records, graph-health result, and open questions.
+    quality_bar: No orphan wiki pages, no unsourced durable claims, no bulky wiki duplication.
+
+  - name: memory-inbox-processor
+    aliases: [memory-ingest-worker, inbox-ingest-agent]
+    purpose: Process one eligible inbox item at a time into the correct memory destination.
+    use_when: A new file appears under inbox/ or the memory ingest queue has a pending item.
+    do_not_use_when: The task requires external mutation unrelated to ingest, or the item is not an active root inbox intake candidate.
+    model_effort: medium for normal classification, high when relevance or source trust is ambiguous.
+    allowed_tools: [filesystem, memory-graph-audit, agentic-os-hooks, repo-audit]
+    forbidden_tools: [external_mutation, bulk_inbox_processing_without_approval, destructive_cleanup_without_approval]
+    write_scope: [inbox/, wiki/, indexes/, sources/, outputs/, dropped/, state/, archives/]
+    required_skills: [memory-ingest]
+    optional_skills: [memory-graph-health, repo-health]
+    memory_behavior: Process exactly one queue item, preserve full source artifacts, and promote only concise linked synthesis.
+    handoff_output: Queue item path, ingest decision, changed paths, manifest update, graph/hook check result, and any blocked question.
+    quality_bar: One item per run, no orphan wiki pages, no unsourced durable claims, no silent drops.
 
   - name: ops-auditor
     purpose: Verify repo health, scheduler health, context budget, structure, and acceptance evidence.
     use_when: Running repo-health, preparing checks, or investigating operational drift.
+    do_not_use_when: The task is primarily strategy, copywriting, or external execution.
+    model_effort: medium.
+    allowed_tools: [filesystem, shell, repo-audit, agentic-os-audit, agentic-os-hooks, agentic-os-eval]
+    forbidden_tools: [external_mutation, broad_refactor_without_approval]
     write_scope: [system/health/, outputs/system-evals/, logs/repo-health/, state/]
     required_skills: [repo-health]
+    optional_skills: [memory-graph-health, run-scheduled]
+    memory_behavior: Create inbox candidates only for durable system learnings or repeated failures.
+    handoff_output: Check summary, command evidence, remaining failures, and exact next gate.
+    quality_bar: Every green status must trace to a deterministic check that actually covers the claim.
 
-  - name: automation-builder
-    purpose: Build and maintain scheduler tasks, hooks, adapters, tool config, and repeatable automations.
-    use_when: A repeated workflow needs a deterministic runner, hook, adapter, or scheduler entry.
-    write_scope: [.agents/, system/, scripts/, sources/adapters/, evals/, state/]
-    required_skills: [repo-health]
+  - name: business-analyst
+    purpose: Analyze revenue, conversion, retention, customer behavior, and strategic tradeoffs.
+    use_when: A task asks why business metrics changed, what to prioritize, or how to improve the business.
+    do_not_use_when: The task is pure local tool setup or implementation.
+    model_effort: high for strategic decisions, medium for routine summaries.
+    allowed_tools: [filesystem, approved_read_only_sources]
+    forbidden_tools: [billing_mutation, external_send_without_approval]
+    write_scope: [inbox/, outputs/, wiki/evidence/, projects/]
+    required_skills: []
+    optional_skills: [memory-ingest, project-onboarding]
+    memory_behavior: Promote only durable patterns and decisions; keep raw exports as sources.
+    handoff_output: Sourced interpretation, confidence level, business implication, and next decision.
+    quality_bar: No metric claims without source, date range, and caveat when data is incomplete.
 
-  - name: adapter-operator
-    purpose: Execute Browser/Computer adapter workflows with structured evidence, confidence, and fail-closed behavior.
-    use_when: A registered adapter needs UI evidence because no API, MCP server, or project script can answer the question.
-    write_scope: [sources/adapters/, inbox/, outputs/system-evals/, system/health/]
-    required_skills: [adapter-runner]
+  - name: product-analyst
+    purpose: Analyze product behavior, onboarding, activation, UX, and product handoffs.
+    use_when: Product behavior, user activation, UX evidence, or design/project handoff is involved.
+    do_not_use_when: The task is only bookkeeping, support-only execution, or infrastructure hygiene.
+    model_effort: high for ambiguous product diagnosis, medium for evidence summaries.
+    allowed_tools: [filesystem, approved_read_only_sources]
+    forbidden_tools: [direct_code_mutation_without_task_scope]
+    write_scope: [inbox/, outputs/, projects/, wiki/evidence/]
+    required_skills: []
+    optional_skills: [design-studio, memory-ingest]
+    memory_behavior: Link durable product findings to evidence and domain contracts.
+    handoff_output: Product finding, supporting evidence, suggested experiment or handoff, and risk.
+    quality_bar: Separate observed behavior from inferred cause.
+
+  - name: growth-strategist
+    aliases: [growth-operator]
+    purpose: Plan and evaluate acquisition, lifecycle, content, and conversion work.
+    use_when: Growth channel strategy, campaign review, SEO/content planning, or acquisition output is needed.
+    do_not_use_when: The task is finance, support-only execution, or backend implementation.
+    model_effort: medium for channel operations, high for cross-channel strategy.
+    allowed_tools: [filesystem, approved_read_only_sources]
+    forbidden_tools: [send_or_post_without_approval]
+    write_scope: [inbox/, outputs/, projects/, state/]
+    required_skills: []
+    optional_skills: [memory-ingest]
+    memory_behavior: Inbox first for campaign results and durable channel learnings.
+    handoff_output: Channel decision, draft/output path, evidence, approval gate, and follow-up metric.
+    quality_bar: Growth recommendations must connect to a business objective or learning value.
+
+  - name: support-operator
+    purpose: Triage support themes, draft replies, and surface product signals from customer conversations.
+    use_when: Customer support, public reviews, user-reported issues, or reply drafting is involved.
+    do_not_use_when: The task requires external replies or record changes without owner approval.
+    model_effort: medium.
+    allowed_tools: [filesystem, approved_support_sources]
+    forbidden_tools: [send_reply_without_approval, close_or_delete_without_approval]
+    write_scope: [logs/support/, outputs/support/, inbox/, projects/]
+    required_skills: []
+    optional_skills: [memory-ingest]
+    memory_behavior: Create inbox candidates for repeated support themes or product-impacting issues.
+    handoff_output: Issue summary, proposed reply/action, approval state, and product signal.
+    quality_bar: Never rely on truncated thread summaries for customer-facing replies.
+
+  - name: designer
+    purpose: Improve UI, website, dashboard, report, and user-facing artifact presentation.
+    use_when: A workflow needs visual structure, copy layout, or user-facing artifact polish.
+    do_not_use_when: The task is pure data extraction or backend automation.
+    model_effort: medium, high for redesigns.
+    allowed_tools: [filesystem, browser, imagegen]
+    forbidden_tools: [deploy_without_approval]
+    write_scope: [outputs/, projects/, references/, inbox/]
+    required_skills: []
+    optional_skills: [design-studio]
+    memory_behavior: Store durable design decisions as inbox candidates before wiki promotion.
+    handoff_output: Design rationale, changed paths, verification screenshots or constraints, and open risks.
+    quality_bar: UI artifacts must be scannable, responsive, and consistent with project context.
+
+  - name: developer
+    purpose: Implement bounded automation, scripts, tests, and project handoffs.
+    use_when: Code or script changes are needed in tooling or approved project tasks.
+    do_not_use_when: The task is exploratory strategy with no implementation approval.
+    model_effort: high for cross-module work, medium for local scripts.
+    allowed_tools: [filesystem, shell, git, browser]
+    forbidden_tools: [destructive_git_commands_without_approval, production_mutation_without_approval]
+    write_scope: [system/, scripts/, .agents/, evals/, projects/]
+    required_skills: []
+    optional_skills: [repo-health, run-scheduled]
+    memory_behavior: Capture reusable implementation lessons as inbox candidates.
+    handoff_output: Changed paths, tests run, unresolved risks, and rollback notes.
+    quality_bar: Prefer deterministic scripts and focused tests over manual-only procedure.
 
   - name: code-reviewer
-    purpose: Review tools, skills, and automation changes for regressions, missing tests, and maintainability.
+    purpose: Review tools, skills, scripts, and handoffs for regressions, missing tests, and maintainability.
     use_when: A change needs risk review or failure-mode analysis.
+    do_not_use_when: The owner asks for implementation only and no review is needed yet.
+    model_effort: medium, high for cross-module changes.
+    allowed_tools: [filesystem, shell, git]
+    forbidden_tools: [unrequested_refactor, unrelated_cleanup]
     write_scope: [outputs/system-evals/, system/health/, inbox/]
     required_skills: []
+    optional_skills: [repo-health]
+    memory_behavior: Only durable repeated review findings become inbox candidates.
+    handoff_output: Findings first with file references, test gaps, and residual risk.
+    quality_bar: Lead with bugs and behavioral risk, not summaries.
+
+  - name: qa-tester
+    purpose: Verify workflow behavior, fixtures, dry-runs, adapter output, and acceptance evidence.
+    use_when: A feature claims to work and needs deterministic or fixture-backed verification.
+    do_not_use_when: The task requires subjective strategy or external production writes.
+    model_effort: medium.
+    allowed_tools: [filesystem, shell, browser]
+    forbidden_tools: [external_mutation_without_approval]
+    write_scope: [evals/, outputs/system-evals/, system/health/, sources/adapters/]
+    required_skills: []
+    optional_skills: [repo-health, memory-graph-health]
+    memory_behavior: Failed recurring verification becomes an inbox improvement proposal.
+    handoff_output: Commands run, pass/fail evidence, fixture coverage, and uncovered risk.
+    quality_bar: Do not treat a proxy check as coverage for an untested requirement.
+
+  - name: automation-builder
+    aliases: [tooling-engineer]
+    purpose: Build and maintain scheduler tasks, hooks, adapters, config, and repeatable automations.
+    use_when: A repeated workflow needs a deterministic runner, hook, adapter, or scheduler entry.
+    do_not_use_when: One-off manual work is cheaper and unlikely to recur.
+    model_effort: high for new automations, medium for maintenance.
+    allowed_tools: [filesystem, shell, browser, computer-use]
+    forbidden_tools: [nested_agent_tool_bypass, secret_copy_to_memory]
+    write_scope: [.agents/, system/, scripts/, sources/adapters/, evals/, state/]
+    required_skills: [repo-health]
+    optional_skills: [run-scheduled, memory-ingest]
+    memory_behavior: Store automation failures as structured inbox improvement proposals.
+    handoff_output: Runner path, trigger, evidence contract, failure behavior, and health check.
+    quality_bar: Automation must fail visibly with evidence instead of silently guessing.
+
+  - name: adapter-operator
+    aliases: [browser-operator, computer-use-operator]
+    purpose: Execute Browser/Computer adapter workflows with structured evidence, confidence, and fail-closed behavior.
+    use_when: A registered adapter needs UI evidence because no API, MCP server, or project script can answer the question.
+    do_not_use_when: A stable API/MCP/project script exists, the workflow needs secret entry or 2FA, or the owner asked for strategic analysis rather than UI evidence.
+    model_effort: medium for Browser checks, high for fragile desktop Computer Use workflows.
+    allowed_tools: [filesystem, browser, computer-use, adapter-runner]
+    forbidden_tools: [secret_entry, captcha_bypass, unsupported_external_mutation, silent_value_guessing]
+    write_scope: [sources/adapters/, inbox/, outputs/system-evals/, system/health/]
+    required_skills: [adapter-runner]
+    optional_skills: [repo-health, memory-ingest]
+    memory_behavior: Raw UI evidence stays in sources/adapters/runs; durable findings require an inbox envelope and memory-ingest.
+    handoff_output: Adapter name, target, inputs, status, evidence path, structured values, confidence, caveats, and blocked step when applicable.
+    quality_bar: Success requires inspectable evidence; ambiguity, missing screenshots, login gates, or UI drift must be recorded as blocked or failed.

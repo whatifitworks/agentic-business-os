@@ -472,7 +472,7 @@ def write_inbox_envelope(root: Path, record: dict[str, object], record_path: Pat
                 "",
                 "## Summary",
                 "",
-                "Review this adapter result and decide whether it should promote to wiki, outputs, sources, process-only, dropped, or needs-the project owner.",
+                "Review this adapter result and decide whether it should promote to wiki, outputs, sources, process-only, dropped, or needs-owner.",
                 "",
             ]
         )

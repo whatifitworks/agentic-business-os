@@ -137,7 +137,7 @@ def check_inbox_staleness(root: Path, issues: list[HookIssue], stale_days: int) 
         if path.name in {"README.md", ".gitkeep", ".DS_Store"}:
             continue
         text = read(path)
-        if "ingest_status: blocked" in text or "ingest_status: needs-daniels" in text:
+        if "ingest_status: blocked" in text or "ingest_status: needs-owner" in text:
             continue
         modified = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc)
         if modified < cutoff:
@@ -474,7 +474,7 @@ def summarize(issues: list[HookIssue]) -> dict[str, int]:
 def render_markdown(root: Path, hook: str, issues: list[HookIssue]) -> str:
     counts = summarize(issues)
     lines = [
-        "# Ops v2 Hook Check",
+        "# Agentic OS Hook Check",
         "",
         f"Root: `{root.resolve()}`",
         f"Hook: `{hook}`",

@@ -16,21 +16,21 @@
     },
     {
       "id": "support-agent",
-      "skill": "review-support",
-      "expected_agent": "support-triager",
+      "skill": "support-triage",
+      "expected_agent": "support-operator",
       "expected_domain": "support"
     },
     {
       "id": "growth-agent",
-      "skill": "email-platform-campaign",
+      "skill": "growth-campaign-review",
       "expected_agent": "growth-strategist",
-      "expected_domain": "acquisition"
+      "expected_domain": "growth"
     },
     {
       "id": "product-agent",
-      "skill": "flagship-feature-performance",
+      "skill": "product-activation-analysis",
       "expected_agent": "product-analyst",
-      "expected_domain": "retention"
+      "expected_domain": "product"
     }
   ]
 }

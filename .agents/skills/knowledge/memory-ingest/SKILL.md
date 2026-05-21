@@ -49,14 +49,14 @@ Use this mode when triggered by `system/tools/inbox_auto_ingest.py` or a backgro
 
    ```bash
    python3 system/tools/memory_graph_audit.py --scope root
-   python3 system/tools/ops_v2_hooks.py --hook all
+   python3 system/tools/agentic_os_hooks.py --hook all
    ```
 
-7. If the classification is ambiguous, mark the queue item `blocked` or `needs-daniels` instead of guessing.
+7. If the classification is ambiguous, mark the queue item `blocked` or `needs-owner` instead of guessing.
 
 ## Promotion Rule
 
-Promote only knowledge that helps future decisions about retention, conversion, onboarding, churn, the flagship feature, paywall, acquisition, support quality, analytics confidence, or operational reliability.
+Promote only knowledge that helps future decisions about the owner's stated mission, customers, product, revenue, support quality, analytics confidence, delivery reliability, or operational reliability.
 
 Do not promote routine task chatter, raw dashboards, temporary status updates, or long reports that should stay as linked artifacts.
 

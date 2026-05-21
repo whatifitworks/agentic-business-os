@@ -3,6 +3,7 @@
 | Skill | Namespace | Domain |
 |---|---|---|
 | `project-onboarding` | ops | ops |
+| `get-help` | ops | ops |
 | `repo-health` | ops | ops |
 | `recurring-review` | ops | ops |
 | `run-scheduled` | ops | ops |

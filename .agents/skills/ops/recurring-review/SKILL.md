@@ -5,7 +5,7 @@ description: Review Agentic Business OS recurring obligations for due, overdue, 
 
 # Recurring Review
 
-Use this skill when recurring obligations are noisy, stale, overdue, or need cleanup before or during `/morning-coffee`.
+Use this skill when recurring obligations are noisy, stale, overdue, or need cleanup before or during daily planning.
 
 ## Source Of Truth
 
@@ -63,7 +63,7 @@ Use this skill when recurring obligations are noisy, stale, overdue, or need cle
 - Do not let overdue one-time tasks surface forever. Do, cancel, or convert them.
 - Tasks with no skill must name a concrete manual output or be assigned to a skill/project.
 - Paused tasks whose `deferred_until` has arrived are due for operator review, not automatically active or complete.
-- Morning planning should surface the recommended action, not just repeat the task name.
+- Daily planning should surface the recommended action, not just repeat the task name.
 
 ## Output
 

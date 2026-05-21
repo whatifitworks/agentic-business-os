@@ -17,7 +17,7 @@ hooks:
     status: implemented-deterministic-check
   - name: inbox-staleness-check
     trigger: Daily repo-health.
-    action: Warn on stale inbox items except blocked or needs-daniels items.
+    action: Warn on stale inbox items except blocked or needs-owner items.
     writes: [system/health/]
     status: implemented-deterministic-check
   - name: inbox-auto-ingest-trigger

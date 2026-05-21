@@ -20,7 +20,6 @@ triggers:
   - repeated tool failure
 required_sources:
   - system/tools/skill_improvement_loop.py
-  - projects/ops-v2-migration/skills-hooks-backlog.md
   - evals/skills/cases.json
 default_output_policy: patch_or_inbox_candidate_with_regression_check
 approval_gates:
@@ -34,8 +33,8 @@ related_agents:
 required_tools:
   commands:
     - python3 system/tools/skill_improvement_loop.py analyze
-    - python3 system/tools/ops_v2_eval.py
-    - python3 system/tools/ops_v2_hooks.py --hook all
+    - python3 system/tools/agentic_os_eval.py
+    - python3 system/tools/agentic_os_hooks.py --hook all
     - python3 system/tools/repo_audit.py --exit-zero
 
 sidecars:
@@ -52,7 +51,6 @@ sidecars:
     - system/context/context_index.json
     - system/tools/
     - evals/
-    - projects/ops-v2-migration/skills-hooks-backlog.md
   writes:
     - .agents/skills/
     - .agents/adapters/

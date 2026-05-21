@@ -75,7 +75,7 @@ Always run:
 
 ```bash
 python3 system/tools/browser_computer_adapter.py validate
-python3 system/tools/ops_v2_hooks.py --hook adapter-evidence-check
+python3 system/tools/agentic_os_hooks.py --hook adapter-evidence-check
 ```
 
 ## Output

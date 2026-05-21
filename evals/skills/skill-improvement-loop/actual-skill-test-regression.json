@@ -12,6 +12,6 @@
   "changed_files": [
     ".agents/skills/ops/skill-improvement-loop/SKILL.md",
     "evals/skills/skill-improvement-loop/actual-skill-test-regression.json",
-    "system/tools/ops_v2_eval.py"
+    "system/tools/agentic_os_eval.py"
   ]
 }

@@ -8,12 +8,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from repo_audit import run as run_repo_audit
 
+
+def run(root: Path, phase: str = "scaffold"):
+    return run_repo_audit(root)
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--phase', default='scaffold')
     args = parser.parse_args()
     root = Path.cwd()
-    issues = run_repo_audit(root)
+    issues = run(root, args.phase)
     errors = [i for i in issues if i.level == 'error']
     warns = [i for i in issues if i.level == 'warn']
     now = datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds')

@@ -1,1 +1,22 @@
-# Optional Codex project config. Add project-specific MCP servers after onboarding.
+# Codex project config for Agentic Business OS.
+#
+# Add project-specific MCP servers after onboarding. Keep secrets in
+# gitignored local files such as `.claude/settings.local.json`, not here.
+
+[features]
+goals = true
+hooks = true
+
+[[hooks.Stop]]
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = '/usr/bin/python3 "$(git rev-parse --show-toplevel)/system/tools/ephemeral_chat_capture.py" capture --runtime codex --stdin-json --extract --purge --hook-json'
+timeout = 30
+statusMessage = "Capturing ephemeral learning signals"
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = '/usr/bin/python3 "$(git rev-parse --show-toplevel)/system/tools/inbox_auto_ingest.py" launch --runner codex --hook-json'
+timeout = 30
+statusMessage = "Checking memory inbox"

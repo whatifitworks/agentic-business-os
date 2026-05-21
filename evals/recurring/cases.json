@@ -11,7 +11,7 @@
     {
       "id": "not-due-weekly-task",
       "today": "2026-05-19",
-      "recurring_yaml": "tasks:\n\n  - name: Friday wrap\n    cadence: weekly_FRI\n    skill: /friday-wrap\n    note: \"End-of-week review.\"\n    last_done: 2026-05-15\n    grace_days: 1\n",
+      "recurring_yaml": "tasks:\n\n  - name: Weekly review\n    cadence: weekly_FRI\n    skill: /weekly-review\n    note: \"End-of-week review.\"\n    last_done: 2026-05-15\n    grace_days: 1\n",
       "expected_count": 0
     }
   ]

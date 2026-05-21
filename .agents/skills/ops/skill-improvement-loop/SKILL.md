@@ -30,7 +30,7 @@ Do not ask for these fields when they are already visible in the conversation or
 1. Identify the owner.
    - Skill failure -> `.agents/skills/<namespace>/<skill>/`
    - Adapter failure -> `.agents/adapters/`, `sources/adapters/`, and adapter skills
-   - Hook failure -> `.agents/hooks/` and `system/tools/ops_v2_hooks.py`
+   - Hook failure -> `.agents/hooks/` and `system/tools/agentic_os_hooks.py`
    - Routing or folder failure -> `AGENTS.md`, `00-start-here.md`, `indexes/`, `domains/`, or eval fixtures
    - Memory structure failure -> `inbox/`, `wiki/`, `outputs/`, `sources/`, `state/`, `indexes/`, memory skills, or memory graph audits
    - Context-loading failure -> `AGENTS.md`, `CLAUDE.md`, `00-start-here.md`, `system/context/context_index.json`, and relevant indexes
@@ -56,8 +56,8 @@ Do not ask for these fields when they are already visible in the conversation or
    - `blocked`: state the missing evidence or tool that prevents a safe fix.
 
 4. Add a regression check when deterministic.
-   - For skill/adapter/routing behavior, prefer `ops_v2_eval.py` fixtures.
-   - For hook behavior, prefer `ops_v2_hooks.py` fixtures or focused CLI checks.
+   - For skill/adapter/routing behavior, prefer `agentic_os_eval.py` fixtures.
+   - For hook behavior, prefer `agentic_os_hooks.py` fixtures or focused CLI checks.
    - For memory/file-structure behavior, prefer memory graph/audit checks plus routing/first-read eval fixtures.
    - For context-loading behavior, prefer first-read or behavior fixtures that prove agents load the right entrypoint.
    - For scripts, prefer a small deterministic unit-like CLI fixture.
@@ -65,8 +65,8 @@ Do not ask for these fields when they are already visible in the conversation or
 5. Validate the changed surface:
 
    ```bash
-   python3 system/tools/ops_v2_eval.py
-   python3 system/tools/ops_v2_hooks.py --hook all
+   python3 system/tools/agentic_os_eval.py
+   python3 system/tools/agentic_os_hooks.py --hook all
    python3 system/tools/repo_audit.py --exit-zero
    git diff --check
    ```
@@ -90,7 +90,7 @@ Report:
 - Do not mark the failure fixed unless the relevant file changed or a clear no-change rationale exists.
 - If the project owner's correction contradicts an existing contract, update the contract or explicitly document why the contract wins.
 - When the project owner asks to test a skill, do not stop at backing scripts. Treat script-only testing as incomplete unless the skill itself is only a script wrapper and that is explicit in `SKILL.md`.
-- If the issue is a business/domain topic rather than an OS behavior, stop and route it to the domain skill, recurring-review, morning-coffee, or memory-ingest instead of patching skill contracts.
+- If the issue is a business/domain topic rather than an OS behavior, stop and route it to the domain skill, recurring-review, daily-planning, or memory-ingest instead of patching skill contracts.
 
 ## Good Failure Candidates
 

@@ -29,7 +29,9 @@ related_agents:
 
 required_tools:
   commands:
+    - python3 system/tools/bootstrap_project.py
     - python3 .agents/skills/ops/project-onboarding/scripts/create_onboarding_pack.py
+    - python3 system/tests/agentic_os_local_checks.py
 
 sidecars:
   reads:
@@ -40,8 +42,12 @@ sidecars:
     - .agents/schedules.yaml
     - .agents/recurring.yaml
     - .agents/skills/
+    - system/state/ops.db
+    - system/health/repo-audit.md
   writes:
     - inbox/project-onboarding/
+    - system/state/ops.db
+    - system/health/
     - context/
     - wiki/
     - domains/
