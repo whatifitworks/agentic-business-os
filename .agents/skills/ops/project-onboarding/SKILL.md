@@ -11,7 +11,9 @@ Use this skill to prepare one project. Do not introduce a separate workspace con
 
 The owner should only need to ask for onboarding. The agent runs the local bootstrap/check scripts, interviews the owner, and creates the review pack. Do not tell the owner to run setup scripts as the primary path.
 
-Create a review pack before promoting project-specific files unless the owner explicitly asks to write final project files directly. Onboarding output usually starts under `inbox/project-onboarding/<date>-<slug>/`; after review, promote approved pieces into `context/`, `wiki/`, `domains/`, `.agents/`, `projects/`, `rules/`, or `state/`.
+Create a review pack before promoting project-specific files unless the owner explicitly asks to write final project files directly. Onboarding output usually starts under `inbox/project-onboarding/<date>-<slug>/`; after review, promote approved pieces into `AGENTS.md`, `context/`, `wiki/`, `domains/`, `.agents/`, `projects/`, `rules/`, or `state/`.
+
+The template `AGENTS.md` is only a pre-onboarding bootstrap. The onboarding pack must include `proposed/AGENTS.md` with the learned project mission, direct file references, known tools, known routines, and approval boundaries. Recommend promoting that file first after review so future agent turns load the project-specific contract.
 
 Never ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or account credentials during onboarding. Tool setup should be recorded as review-only until the owner explicitly approves a connection path.
 
@@ -50,7 +52,7 @@ Background jobs are approval-gated. You may prepare scheduler and inbox-auto-ing
 10. Prepare the post-onboarding handoff:
    - review pack path
    - bootstrap/check status
-   - highest-value files to promote first
+   - highest-value files to promote first, usually `proposed/AGENTS.md` plus `proposed/context/work.md` and `proposed/context/current-priorities.md`
    - hook activation reminder: Codex may require hooks to be enabled or approved in the app/runtime UI; Claude Code hook execution should be verified in the installed runtime
    - help path: run `get-help` or visit https://whatifitworks.co
 11. Present the review pack summary, verification result, hook reminder, help path, and recommended promotions. Ask before promoting anything into live project files.
@@ -86,11 +88,13 @@ The script writes:
 - `starter-file-plan.md` - proposed file placements
 - `setup-suggestions.json` - machine-readable suggestions
 - `proposed/` - draft starter files to review before promotion
+- `proposed/AGENTS.md` - project-specific agent contract with direct file references
 
 ## Promotion Rules
 
 After the owner approves the review pack:
 
+- Promote `proposed/AGENTS.md` first so the next agent turn starts from the project-specific mission, source map, tools, routines, and approval rules.
 - Promote business operating truth into `context/`.
 - Promote durable synthesis into `wiki/`.
 - Promote source/tool contracts into `sources/` or `domains/`.
@@ -116,6 +120,7 @@ Only install these when the owner approves and the relevant config has been revi
 - Local runtime state has been initialized or the blocker is clearly reported.
 - Baseline checks have run or their blocker is clearly reported.
 - Hook activation guidance has been shown to the owner.
+- A project-specific `proposed/AGENTS.md` exists, or the blocker is clearly reported.
 - Tool setup items are review-only and do not contain secrets.
 - Starter context, wiki, routines, and automations are separated from live files until approved.
 - Open questions are explicit.

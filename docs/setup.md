@@ -22,7 +22,9 @@ The onboarding skill creates a review pack under:
 inbox/project-onboarding/<date>-<project-name>/
 ```
 
-Review the pack before promoting any proposed files into live `context/`, `domains/`, `wiki/`, `.agents/`, `rules/`, or `state/` paths.
+Review the pack before promoting any proposed files into live `AGENTS.md`, `context/`, `domains/`, `wiki/`, `.agents/`, `rules/`, or `state/` paths.
+
+Promote `proposed/AGENTS.md` first after review. The repository starts with a generic bootstrap contract, but a useful onboarded project should have a project-specific `AGENTS.md` with the learned mission, direct source-map references, known tools, known routines, and approval boundaries.
 
 Manual fallback, if an agent is not running onboarding:
 

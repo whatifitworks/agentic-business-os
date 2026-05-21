@@ -201,6 +201,117 @@ def automation_rows(tools: list[Tool], routines: list[Routine]) -> list[str]:
     return rows
 
 
+def render_project_agents_md(
+    *,
+    project_name: str,
+    business_type: str,
+    country: str,
+    product: str,
+    customer: str,
+    primary_goal: str,
+    tools: list[Tool],
+    routines: list[Routine],
+) -> str:
+    tool_lines = (
+        "\n".join(
+            f"- {tool.name}: {tool.category}; purpose: {tool.purpose}; access path: {tool.access_path}; "
+            f"owner: {tool.owner}; first workflow: {tool.first_workflow}; risk: {tool.risk}"
+            for tool in tools
+        )
+        if tools
+        else "- No tools were confirmed during onboarding. Read `context/tech-stack.md` before proposing tool setup."
+    )
+    routine_lines = (
+        "\n".join(f"- {routine.title}: {routine.cadence}; {routine.summary}" for routine in routines)
+        if routines
+        else "- No routines were confirmed during onboarding. Use `projects/onboarding/README.md` to track follow-up."
+    )
+
+    return f"""# {project_name} Project
+
+You are the assistant for {project_name}.
+
+## Mission
+
+Protect this project objective: {primary_goal or "Confirm and protect the owner's primary business outcome."}
+
+Prefer work that improves that objective, operating reliability, knowledge quality, decision speed, or owner leverage.
+
+## Business Snapshot
+
+- Business type: {business_type}
+- Region: {country or "Not captured"}
+- Product/service: {product}
+- Customers/users: {customer or "Not captured"}
+
+## Startup
+
+1. Read this file.
+2. Read `00-start-here.md`.
+3. Read `context/work.md` and `context/current-priorities.md` before planning, prioritizing, or making strategic recommendations.
+4. Load only the relevant source from the source map below.
+5. Put generated material with possible durable value into `inbox/` unless a skill says otherwise.
+
+## Source Map
+
+- `context/work.md` - business model, customers/users, product/service, mission, and operating rule.
+- `context/current-priorities.md` - active priority contract and next focus.
+- `context/goals.md` - active goals, milestones, and measurable outcomes.
+- `context/tech-stack.md` - tools, source access, integration notes, and first workflows.
+- `context/key-learnings.md` - durable lessons that should shape future work.
+- `context/today.md` - current daily plan when daily planning is in use.
+- `rules/approval-boundaries.md` - safe actions, approval-required actions, and never-request rules.
+- `wiki/start-here.md` - durable knowledge entrypoint after reviewed promotion.
+- `projects/onboarding/README.md` - onboarding workstream, open questions, and setup follow-up.
+- `.agents/skills/` - reusable workflows; load the matching `SKILL.md` on demand.
+- `.agents/recurring.yaml` - real recurring obligations after owner approval.
+- `.agents/schedules.yaml` - scheduled workflows after cadence and tool access are proven.
+- `inbox/` - review queue for generated artifacts, source drops, and candidate learnings.
+- `outputs/` - final human-facing deliverables, reports, dashboards, and briefs.
+- `sources/` - source cards, source contracts, raw exports, and adapter evidence.
+- `state/` - manifests, queues, and machine-readable histories.
+- `dropped/` - rejected material with reasons.
+
+## Known Tools
+
+{tool_lines}
+
+Before connecting or acting through any external tool, read `context/tech-stack.md` and `rules/approval-boundaries.md`.
+
+## Known Routines
+
+{routine_lines}
+
+Use these routines to decide which skills, recurring obligations, or schedules deserve promotion first.
+
+## Safety And Approvals
+
+- Do not ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or credentials in chat.
+- Ask before connecting external tools, sending messages, publishing content, changing external records, or enabling schedules.
+- If a required MCP server, API integration, or other tool is unavailable, stop and say so clearly.
+- Do not hide missing tools with nested agents, nested CLIs, or ad-hoc subprocess clients.
+- Read `rules/approval-boundaries.md` before any action that can affect customers, money, accounts, public content, or external systems.
+
+## Memory And Promotion
+
+Generated outputs, source drops, setup lessons, workflow candidates, and durable business learnings start in `inbox/`.
+
+Do not write durable synthesis directly to `wiki/`, `context/`, root docs, schedules, or rules unless the owner explicitly approves promotion or a reviewed ingest path says to do it.
+
+## Skills
+
+Use the matching skill under `.agents/skills/` when a workflow applies. Read only enough of the skill body and sidecars to do the task.
+
+Use `project-onboarding` for onboarding refreshes, `daily-planning` for daily planning, `recurring-review` for recurring obligations, `memory-ingest` for inbox promotion, and `get-help` for setup or maintainer support.
+
+## Development Rules
+
+Preserve unrelated dirty worktree changes. Do not mark work complete unless actual work happened. Keep edits scoped to the requested task and the source map above.
+
+This file is project-specific after onboarding. When pulling upstream template changes, keep private business details here and merge generic upstream instructions deliberately.
+"""
+
+
 def write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text.rstrip() + "\n")
@@ -292,6 +403,7 @@ This pack is review-first. Promote approved files from `proposed/` into the live
 - `starter-file-plan.md` - proposed project file placements
 - `setup-suggestions.json` - machine-readable setup suggestions
 - `proposed/` - draft starter files
+- `proposed/AGENTS.md` - project-specific agent contract to promote after review
 
 ## Setup Status
 
@@ -304,6 +416,8 @@ The onboarding agent should already have run local bootstrap and baseline checks
 - Static local checks can validate hook files, but cannot prove a runtime UI has activated them.
 
 ## After Review
+
+Promote `proposed/AGENTS.md` first so future agent turns load the project-specific mission and source map.
 
 Optional macOS background jobs, only after reviewing schedules and memory workflow:
 
@@ -390,6 +504,7 @@ Promote only after review.
 
 | Proposed file | Purpose |
 | --- | --- |
+| `AGENTS.md` | Project-specific agent contract with direct file references |
 | `context/work.md` | Business and project operating context |
 | `context/current-priorities.md` | Initial priority contract |
 | `context/goals.md` | Initial goals and milestones |
@@ -405,6 +520,19 @@ Promote only after review.
     )
     write_json(output_root / "setup-suggestions.json", [asdict(suggestion) for suggestion in suggestions])
 
+    write(
+        output_root / "proposed/AGENTS.md",
+        render_project_agents_md(
+            project_name=project_name,
+            business_type=business_type,
+            country=country,
+            product=product,
+            customer=customer,
+            primary_goal=primary_goal,
+            tools=tools,
+            routines=routines,
+        ),
+    )
     write(
         output_root / "proposed/context/work.md",
         f"""# Work

@@ -6,7 +6,8 @@ It gives an agent a stable operating structure: where to read context, where to 
 
 ## What You Get
 
-- A thin agent bootstrap contract: `AGENTS.md`, `CLAUDE.md`, and `00-start-here.md`
+- A thin pre-onboarding bootstrap contract: `AGENTS.md`, `CLAUDE.md`, and `00-start-here.md`
+- A generated project-specific `AGENTS.md` proposal after onboarding
 - A memory spine: `inbox/`, `wiki/`, `sources/`, `outputs/`, `state/`, and `dropped/`
 - Starter context files in `context/` that onboarding can replace
 - Core skills for onboarding, memory ingest, repo health, recurring review, learning review, adapters, and design work
@@ -37,7 +38,7 @@ The template works best when the owner wants:
 3. Ask the agent to run the `project-onboarding` skill.
 4. Answer the onboarding questions. The agent should run local bootstrap and checks itself.
 5. Review the onboarding pack under `inbox/project-onboarding/...`.
-6. Promote approved proposed files into live `context/`, `domains/`, `wiki/`, `.agents/`, `rules/`, or `state/` paths.
+6. Promote approved proposed files into live `AGENTS.md`, `context/`, `domains/`, `wiki/`, `.agents/`, `rules/`, or `state/` paths.
 7. Only then connect tools, enable schedules, or install background jobs.
 
 Full setup guide: [docs/setup.md](docs/setup.md)
@@ -51,6 +52,8 @@ Run project-onboarding for this project. Learn the business, tools, routines, ap
 ```
 
 The onboarding skill runs the local bootstrap/check scripts, asks the setup questions, and creates reviewable starter files first. It does not ask for credentials or connect external tools.
+
+After review, promote `proposed/AGENTS.md` first. The template `AGENTS.md` is intentionally generic until onboarding learns the project mission, source map, tools, routines, and approval boundaries.
 
 ## Runtime Support
 

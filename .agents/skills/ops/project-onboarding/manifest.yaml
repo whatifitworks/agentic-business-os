@@ -48,6 +48,7 @@ sidecars:
     - inbox/project-onboarding/
     - system/state/ops.db
     - system/health/
+    - AGENTS.md
     - context/
     - wiki/
     - domains/
@@ -61,6 +62,7 @@ outputs:
   primary:
     - inbox/project-onboarding/YYYY-MM-DD-<project>/
   optional:
+    - promoted project-specific AGENTS.md after approval
     - promoted starter context/wiki/project files after approval
 
 failure_behavior:

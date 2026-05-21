@@ -4,6 +4,8 @@ Agentic Business OS should be treated as the public upstream template. Real busi
 
 This repo intentionally does not ship a downstream project's private sync bridge. Keep that bridge in the downstream private repo so it can encode local redaction rules, blocked terms, and overlay decisions.
 
+After onboarding, downstream `AGENTS.md` is usually project-specific. Treat it as a private overlay file unless you are deliberately extracting a generic improvement back to the public template. When pulling upstream changes, merge the generic bootstrap guidance into the local `AGENTS.md` manually instead of blindly replacing the learned project mission and source map.
+
 Recommended contribution loop:
 
 1. Develop and dogfood changes in a private project.
