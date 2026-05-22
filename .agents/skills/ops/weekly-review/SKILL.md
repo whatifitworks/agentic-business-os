@@ -41,4 +41,5 @@ Use this skill when the project owner wants to wrap up the week, inspect drift, 
 - Be direct about drift between priorities and actual work.
 - Do not inflate routine maintenance into strategic progress.
 - Do not plan weekend work as required capacity.
+- If the owner points to concrete task cards, tickets, screenshots, or a current queue order, preserve those literal tasks as the first next-week focus lane. Do not translate them into broad phase labels unless the owner asks for that abstraction.
 - If the owner corrects the review, update the saved review before finishing.

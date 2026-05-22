@@ -72,6 +72,22 @@
       ]
     },
     {
+      "id": "weekly-review-behavior",
+      "skill": "weekly-review",
+      "expected_paths": [
+        "logs/weekly-reviews/",
+        "context/current-priorities.md"
+      ],
+      "memory_keywords": [
+        "concrete task cards",
+        "current queue order",
+        "first next-week focus lane"
+      ],
+      "failure_keywords": [
+        "update the saved review"
+      ]
+    },
+    {
       "id": "project-onboarding-behavior",
       "skill": "project-onboarding",
       "expected_paths": [
