@@ -17,6 +17,25 @@
       "expected_owner": "daily-planning"
     },
     {
+      "id": "multi-part-automation-candidate-grouped",
+      "event": {
+        "event_type": "automation-candidate",
+        "summary": "Design studio should generate one responsive QA bundle.",
+        "skill": "design-studio",
+        "status": "observed",
+        "importance": "medium",
+        "automation_candidates": [
+          "Capture normalized screenshots and metadata",
+          "Run responsive checks",
+          "Produce a dated report"
+        ],
+        "created_at": "2026-05-21T10:00:00+02:00"
+      },
+      "expected_candidate_kind": "automation-candidate",
+      "expected_owner": "design-studio",
+      "expected_absent_title_contains": "Produce a dated report"
+    },
+    {
       "id": "duplicate-events-grouped",
       "events": [
         {

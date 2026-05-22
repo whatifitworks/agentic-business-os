@@ -191,6 +191,10 @@ def candidate_kind_for_event(event: dict[str, Any]) -> str:
     return "system-learning"
 
 
+def compact_candidate_list(items: list[Any]) -> list[str]:
+    return [str(item).strip() for item in items if str(item).strip()]
+
+
 def suggested_action_for_kind(kind: str) -> str:
     if kind == "successful-pattern-to-preserve":
         return "Keep this behavior; if it repeats, codify it in the relevant skill, hook, eval, or docs."
@@ -306,19 +310,32 @@ def event_candidates(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "suggested_action": suggested_action_for_kind(kind),
                 "fingerprint": f"process:{event.get('fingerprint') or candidate_fingerprint(event)}",
             })
+        manual_steps = compact_candidate_list(manual_steps)
+        automation = compact_candidate_list(automation)
         for step in manual_steps:
             candidates.append({
                 "kind": "manual-work-automation",
-                "title": str(step),
+                "title": step,
                 "reason": summary or "Manual step was recorded during project work.",
                 "owner": skill or "needs-owner-triage",
                 "suggested_action": suggested_action_for_kind("manual-work-automation"),
                 "fingerprint": f"manual:{event.get('fingerprint') or candidate_fingerprint(event)}:{candidate_fingerprint({'kind': 'manual', 'owner': skill, 'title': step})}",
             })
-        for item in automation:
+        if len(automation) > 1:
+            title = summary or f"Grouped automation candidate for {skill or 'needs-owner-triage'}"
             candidates.append({
                 "kind": "automation-candidate",
-                "title": str(item),
+                "title": title,
+                "reason": " / ".join(automation),
+                "owner": skill or "needs-owner-triage",
+                "suggested_action": suggested_action_for_kind("manual-work-automation"),
+                "fingerprint": f"automation-group:{event.get('fingerprint') or candidate_fingerprint(event)}",
+            })
+        elif automation:
+            item = automation[0]
+            candidates.append({
+                "kind": "automation-candidate",
+                "title": item,
                 "reason": summary or "Automation candidate was explicitly recorded.",
                 "owner": skill or "needs-owner-triage",
                 "suggested_action": suggested_action_for_kind("manual-work-automation"),

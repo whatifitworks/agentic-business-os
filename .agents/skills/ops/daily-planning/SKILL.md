@@ -39,9 +39,19 @@ This is the generic daily planning workflow. Rename or wrap it locally only when
    python3 system/tools/repo_audit.py --exit-zero
    ```
 7. Read current priorities and goals when those files exist.
-8. Propose a plan with no more than six work items, grouped as ops, focus, admin, or optional.
-9. Ask for confirmation or edits.
-10. Write the confirmed plan to `context/today.md`.
+8. Apply freshness reconciliation before carrying forward or proposing priority items.
+9. Propose a plan with no more than six work items, grouped as ops, focus, admin, or optional.
+10. Ask for confirmation or edits.
+11. Write the confirmed plan to `context/today.md`.
+
+## Freshness Reconciliation
+
+Weekly reviews, priority docs, recurring lists, and older daily plans are planning inputs, not final authority. Before suggesting an item that came from an older plan, weekly review, recurring list, or project note:
+
+- Check the latest `context/today.md`, recent `logs/daily-plans/`, relevant project notes, and any named task/card IDs.
+- Suppress the original item when newer evidence says it is done, completed, closed, accepted, parked, paused, cancelled, or superseded.
+- If status is unclear, propose `Verify status of <item>` or ask the project owner instead of re-adding the stale item as work.
+- Never re-plan completed planning items just because they still appear in a weekly review, priority stack, or recurring source.
 
 ## Plan Format
 

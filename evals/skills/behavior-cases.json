@@ -57,6 +57,21 @@
       ]
     },
     {
+      "id": "daily-planning-behavior",
+      "skill": "daily-planning",
+      "expected_paths": [
+        "context/today.md",
+        "logs/daily-plans/"
+      ],
+      "memory_keywords": [
+        "freshness reconciliation",
+        "logs/daily-plans"
+      ],
+      "failure_keywords": [
+        "Never re-plan completed planning items"
+      ]
+    },
+    {
       "id": "project-onboarding-behavior",
       "skill": "project-onboarding",
       "expected_paths": [
