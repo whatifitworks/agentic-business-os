@@ -149,13 +149,30 @@ def learning_topic_tags(text: str) -> set[str]:
 
 
 SYSTEM_INTERACTION_RE = re.compile(
-    r"\b(agentic os|business os|codex|claude|llm|agent|sub-agent|skill|hook|scheduler|schedule|"
+    r"\b(agentic os|agentic-business-os|business os|codex|claude|sub-agent|skill|hook|scheduler|schedule|"
     r"memory|inbox|wiki|raw-chat|raw chat|learning|daily-planning|weekly-review|recurring-review|"
     r"adapter|browser use|computer use|mcp|tool|workflow|prompt|eval|test|context|output|"
     r"file structure|folder structure|project structure|entrypoint|agents\.md|claude\.md|00-start-here|"
     r"index|indexes|domain|domains|sources|state|logs|orphan|graph|loaded|read|"
     r"manual|repeated|automate|automation|confusing|frustrated|annoying|misusing|expected|"
     r"happy with|great|beautiful|perfect|works well|useful)\b",
+    re.I,
+)
+SYSTEM_STRONG_RE = re.compile(
+    r"\b(agentic os|agentic-business-os|business os|codex|claude|sub-agent|skill|hook|scheduler|schedule|"
+    r"memory|inbox|wiki|raw-chat|raw chat|learning|daily-planning|weekly-review|recurring-review|"
+    r"adapter|browser use|computer use|context-loading|"
+    r"file structure|folder structure|project structure|entrypoint|agents\.md|claude\.md|00-start-here|"
+    r"index|indexes|domain|domains|orphan|graph|project-onboarding|design-studio)\b",
+    re.I,
+)
+DOMAIN_HANDOFF_RE = re.compile(
+    r"\b(dev agent|backend dev|frontend dev|mobile dev|dev response|dev task|dev_task|"
+    r"issue card|task card|project card|ticket \d|[a-z]{2,}-[a-z0-9-]+|"
+    r"production data|customer|support|billing|analytics|email|campaign|"
+    r"postgres|firebase|google play|app store|revenuecat|stripe|openai|"
+    r"product|backend|frontend|mobile|ios|android|database|db|migration|deploy|deployed|"
+    r"files changed|branch:)\b",
     re.I,
 )
 
@@ -243,6 +260,17 @@ def is_raw_chat_test_probe(event: dict[str, Any]) -> bool:
     return any(pattern in text for pattern in probe_patterns)
 
 
+def is_domain_handoff_event(event: dict[str, Any]) -> bool:
+    if str(event.get("source") or "") != "raw-chat-parser":
+        return False
+    if str(event.get("chat_role") or "") != "user":
+        return False
+    text = event_text(event)
+    if SYSTEM_STRONG_RE.search(text):
+        return False
+    return bool(DOMAIN_HANDOFF_RE.search(text))
+
+
 def is_routine_raw_chat_event(event: dict[str, Any]) -> bool:
     if str(event.get("source") or "") != "raw-chat-parser":
         return False
@@ -277,6 +305,8 @@ def is_non_actionable_event(event: dict[str, Any], resolved_topics: set[str]) ->
         return False
     role = str(event.get("chat_role") or "")
     if role == "assistant":
+        return True
+    if is_domain_handoff_event(event):
         return True
     if is_raw_chat_test_probe(event):
         return True

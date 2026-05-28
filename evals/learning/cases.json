@@ -157,6 +157,54 @@
       "expected_absent_title_contains": "let's continue"
     },
     {
+      "id": "raw-chat-dev-agent-domain-handoff-not-suggested",
+      "event": {
+        "event_type": "learning",
+        "summary": "user: Dev agent response: Implemented onboarding status UI. Changed: apps/web/src/onboarding/StatusPanel.tsx and apps/api/src/onboarding.ts. No commit, no push, no task update.",
+        "workflow": "ephemeral-chat-parser",
+        "status": "observed",
+        "source": "raw-chat-parser",
+        "chat_role": "user",
+        "friction": [
+          "Dev agent response: Implemented onboarding status UI. Changed: apps/web/src/onboarding/StatusPanel.tsx and apps/api/src/onboarding.ts. No commit, no push, no task update."
+        ],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_absent_title_contains": "Dev agent response"
+    },
+    {
+      "id": "raw-chat-backend-prompt-handoff-not-suggested",
+      "event": {
+        "event_type": "learning",
+        "summary": "user: Can you give me a prompt that I should give to the backend dev agent for the onboarding import issue?",
+        "workflow": "ephemeral-chat-parser",
+        "status": "observed",
+        "source": "raw-chat-parser",
+        "chat_role": "user",
+        "friction": [
+          "Can you give me a prompt that I should give to the backend dev agent for the onboarding import issue?"
+        ],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_absent_title_contains": "backend dev agent"
+    },
+    {
+      "id": "raw-chat-tool-domain-handoff-not-suggested",
+      "event": {
+        "event_type": "learning",
+        "summary": "user: DEV_TASK_REPORT backend dev response: Report generation is fixed after the OpenAI tool output-size issue. Production data checked in Postgres. Files changed: services/reports/generator.ts and apps/api/src/reports.ts.",
+        "workflow": "ephemeral-chat-parser",
+        "status": "observed",
+        "source": "raw-chat-parser",
+        "chat_role": "user",
+        "friction": [
+          "DEV_TASK_REPORT backend dev response: Report generation is fixed after the OpenAI tool output-size issue. Production data checked in Postgres. Files changed: services/reports/generator.ts and apps/api/src/reports.ts."
+        ],
+        "created_at": "2026-05-19T08:00:00+02:00"
+      },
+      "expected_absent_title_contains": "DEV_TASK_REPORT"
+    },
+    {
       "id": "raw-chat-extracts-learning-event",
       "raw_chat_payload": {
         "session_id": "fixture-raw-chat",
