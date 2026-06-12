@@ -1,6 +1,6 @@
 ---
 name: memory-ingest
-description: Review Agentic Business OS memory inbox items, decide whether each item should be promoted, appended as evidence, preserved source-only, recorded process-only, dropped, or escalated, then keep the Obsidian memory graph indexed and concise.
+description: "Process memory inbox items: promote, append evidence, preserve source, process-only, drop, or escalate; keep the memory graph indexed and concise."
 ---
 
 # Memory Ingest

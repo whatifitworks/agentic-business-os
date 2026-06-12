@@ -1,6 +1,6 @@
 ---
 name: project-onboarding
-description: Prepare a new or empty single-project agentic operations vault from business context, tools, routines, goals, and constraints. Use when the user asks to onboard a business, initialize or prepare an empty project, learn what a project should know, map tools/connectors, propose starter automations, create first context/wiki/domain files, initialize local state/checks, or turn setup answers into review-only skills, schedules, recurring work, and automation candidates.
+description: Bootstrap a new single-project agentic ops vault from business context, tools, routines, goals; creates starter context, skills, and schedules.
 ---
 
 # Project Onboarding

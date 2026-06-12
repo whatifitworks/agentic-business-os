@@ -1,6 +1,6 @@
 ---
 name: learning-review
-description: Review recent Agentic Business OS structured learning events, raw-chat interaction signals, scheduler/tool failures, and manual-work notes to propose agentic-OS self-improvement candidates without auto-patching. Use when the project owner asks for the learning loop, auto-improve suggestions, project reflection, or scheduled "dreaming" review.
+description: Review learning events, raw-chat signals, and failures; propose agentic-OS improvements without auto-patching. Use for the learning loop.
 ---
 
 # Learning Review

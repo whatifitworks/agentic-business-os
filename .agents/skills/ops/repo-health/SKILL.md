@@ -1,6 +1,6 @@
 ---
 name: repo-health
-description: Run the deterministic Agentic Business OS repository hygiene audit, review broken navigation, stale pending briefs, scheduler drift, project/priority mismatch, MCP config drift, and context-contract manifest coverage. Use when the project owner asks for repo health, ops system hygiene, scheduler health, or when the weekly repo-health scheduled task fires.
+description: "Run the deterministic repo hygiene audit: navigation, stale briefs, scheduler drift, MCP config drift, manifest coverage. Use for repo health checks."
 ---
 
 # Repo Health

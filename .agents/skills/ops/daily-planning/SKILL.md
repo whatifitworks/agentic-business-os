@@ -1,6 +1,6 @@
 ---
 name: daily-planning
-description: Interactive daily planning session for a single project. Reviews the previous plan, checks inbox/recurring/scheduler signals, proposes a small focused plan, and writes context/today.md plus an archive copy under logs/daily-plans/.
+description: "Interactive daily planning: review the previous plan, check inbox/recurring/scheduler signals, write context/today.md plus a daily-plan archive copy."
 ---
 
 # Daily Planning

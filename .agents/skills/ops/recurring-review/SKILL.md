@@ -1,6 +1,6 @@
 ---
 name: recurring-review
-description: Review Agentic Business OS recurring obligations for due, overdue, paused, stale once-task, or no-owner states, then recommend do, defer, pause, cancel, or convert actions without falsely marking work complete.
+description: Review recurring obligations for due, overdue, paused, stale, or ownerless states; recommend do/defer/pause/cancel/convert without false completion.
 ---
 
 # Recurring Review

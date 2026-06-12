@@ -1,6 +1,6 @@
 ---
 name: adapter-recording-review
-description: Review Browser/Computer adapter run records for evidence quality, confidence, stale UI assumptions, and memory routing. Use after adapter-runner records a result, when adapter evidence needs approval, or when deciding whether an adapter output should become an inbox item, output, source, process-only record, or blocked follow-up.
+description: Review adapter run records for evidence quality, confidence, stale UI assumptions, and memory routing. Use after adapter-runner records a result.
 ---
 
 # Adapter Recording Review

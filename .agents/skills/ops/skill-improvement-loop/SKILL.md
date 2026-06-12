@@ -1,6 +1,6 @@
 ---
 name: skill-improvement-loop
-description: "Review failed, awkward, praised, or manually corrected Agentic Business OS workflows and turn them into concrete agentic-OS improvements: skills, hooks, adapters, tools, evals, memory structure, file layout, context-loading docs, indexes, agents, or schedules. Use when the project owner corrects a workflow, says a skill behaved badly, repeats manual work, is frustrated/confused, praises a flow worth preserving, or an adapter/scheduler/hook/memory/context behavior produced an avoidable bad result."
+description: "Turn failed, awkward, or praised workflows into concrete agentic-OS improvements: skills, hooks, adapters, tools, evals, schedules."
 ---
 
 # Skill Improvement Loop

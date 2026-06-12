@@ -1,6 +1,6 @@
 ---
 name: design-studio
-description: Create or continue AI-assisted product, website, app, or brand design projects. Use when the project owner wants to generate or iterate visual designs with Google Stitch MCP, manage design references, build a DESIGN.md system, benchmark against strong real-world examples, create or refine local prototypes when generation tools are insufficient, capture desktop/mobile previews, export shareable design artifacts, or prepare implementation handoff artifacts.
+description: "Create or continue AI-assisted design projects: Stitch generation, references, DESIGN.md, prototypes, previews, handoff artifacts."
 ---
 
 # Design Studio

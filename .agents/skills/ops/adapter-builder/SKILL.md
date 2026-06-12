@@ -1,6 +1,6 @@
 ---
 name: adapter-builder
-description: Create or update Computer Use UI adapter contracts for repeated app workflows that lack reliable API, MCP, or project-script access. Use when the project owner wants to add a new simulated-MCP adapter, record a manual app workflow step by step, or define inputs, steps, evidence, failure modes, and validation for UI automation.
+description: "Create or update Computer Use UI adapter contracts for app workflows without API/MCP access: inputs, steps, evidence, failure modes, validation."
 ---
 
 # Adapter Builder

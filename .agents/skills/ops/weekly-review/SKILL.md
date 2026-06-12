@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: Interactive weekly review for a single project. Summarizes daily plans, checks priorities and metrics when available, surfaces drift, and proposes next week's focus areas.
+description: "Interactive weekly review: summarize daily plans, check priorities and metrics, surface drift, propose next week's focus areas."
 ---
 
 # Weekly Review

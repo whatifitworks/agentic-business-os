@@ -1,6 +1,6 @@
 ---
 name: adapter-runner
-description: Run an existing Computer Use adapter workflow and record structured evidence. Use when the project owner wants to test or execute a simulated-MCP UI adapter, capture Computer Use evidence, validate a run record, or create an inbox envelope from adapter output.
+description: Run an existing Computer Use adapter workflow, record structured evidence, validate the run record, or create an inbox envelope from output.
 ---
 
 # Adapter Runner

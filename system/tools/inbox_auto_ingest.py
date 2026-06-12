@@ -22,6 +22,9 @@ DEFAULT_MODEL = "gpt-5.4-mini"
 IGNORED_TOP_LEVEL: set[str] = set()
 IGNORED_NAMES = {"README.md", ".gitkeep", ".DS_Store"}
 TERMINAL_STATUSES = {"processed", "dropped", "preserved-source-only", "processed-only", "missing"}
+WORKER_TIMEOUT_SECONDS = 3600
+STALE_RUNNING_SECONDS = 5400
+MAX_AUTO_RETRIES = 3
 
 
 def utcnow() -> str:
@@ -119,6 +122,17 @@ def record_id(rel_path: str) -> str:
     return "inbox-" + hashlib.sha1(rel_path.encode("utf-8")).hexdigest()[:12]
 
 
+def _running_is_stale(record: dict[str, Any]) -> bool:
+    started = record.get("last_started_at")
+    if not isinstance(started, str):
+        return True
+    try:
+        started_at = datetime.fromisoformat(started)
+    except ValueError:
+        return True
+    return (datetime.now(timezone.utc) - started_at.astimezone(timezone.utc)).total_seconds() > STALE_RUNNING_SECONDS
+
+
 def existing_records_by_path(queue: dict[str, Any]) -> dict[str, dict[str, Any]]:
     records = queue.get("records", [])
     if not isinstance(records, list):
@@ -178,6 +192,16 @@ def scan(root: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
             record["status"] = "missing"
             record["last_finished_at"] = utcnow()
             record["note"] = "Inbox file no longer exists at the queued path."
+            continue
+        if status == "running" and _running_is_stale(record):
+            attempts = int(record.get("attempts") or 0)
+            if attempts < MAX_AUTO_RETRIES:
+                record["status"] = "pending"
+                record["note"] = f"Auto-recovered: worker exceeded {STALE_RUNNING_SECONDS}s without finishing; requeued (attempt {attempts})."
+            else:
+                record["status"] = "failed"
+                record["last_finished_at"] = utcnow()
+                record["note"] = f"Auto-recovery gave up after {attempts} stale-running attempts."
 
     save_queue(root, queue)
     return queue, added
@@ -298,8 +322,21 @@ def run_worker(root: Path, rel_path: str, runner: str, model: str, log_path: Pat
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("a") as log:
         log.write(f"[{utcnow()}] START runner={runner} model={model} path={rel_path}\n")
-        proc = subprocess.run(command, cwd=root, stdout=log, stderr=subprocess.STDOUT, text=True, check=False)
-        log.write(f"[{utcnow()}] END rc={proc.returncode}\n")
+        try:
+            proc = subprocess.run(
+                command,
+                cwd=root,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=False,
+                timeout=WORKER_TIMEOUT_SECONDS,
+            )
+            returncode = proc.returncode
+        except subprocess.TimeoutExpired:
+            returncode = -1
+            log.write(f"[{utcnow()}] TIMEOUT after {WORKER_TIMEOUT_SECONDS}s; worker killed\n")
+        log.write(f"[{utcnow()}] END rc={returncode}\n")
 
     queue = load_queue(root)
     status = None
@@ -307,8 +344,8 @@ def run_worker(root: Path, rel_path: str, runner: str, model: str, log_path: Pat
         if isinstance(record, dict) and record.get("path") == rel_path:
             status = record.get("status")
             break
-    if proc.returncode != 0:
-        update_record(root, rel_path, status="failed", last_finished_at=utcnow(), note=f"Background worker exited {proc.returncode}.")
+    if returncode != 0:
+        update_record(root, rel_path, status="failed", last_finished_at=utcnow(), note=f"Background worker exited {returncode}.")
     elif status == "running":
         update_record(
             root,
@@ -317,7 +354,7 @@ def run_worker(root: Path, rel_path: str, runner: str, model: str, log_path: Pat
             last_finished_at=utcnow(),
             note="Background worker exited successfully but did not mark a terminal ingest outcome.",
         )
-    return proc.returncode
+    return returncode
 
 
 def render_queue(queue: dict[str, Any], added: list[dict[str, Any]] | None = None) -> str:

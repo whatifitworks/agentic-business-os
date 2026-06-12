@@ -1,6 +1,6 @@
 ---
 name: run-scheduled
-description: Manually run any task defined in .agents/schedules.yaml interactively, ignoring its schedule and async/sync mode. Use whenever the project owner asks to "run the support triage now", "run the daily statistics report", "run the SEO scan", "/run-scheduled X", or otherwise wants to fire a scheduled workflow ad-hoc. Looks the task up by name, loads its underlying skill, and runs the SKILL.md procedure with all approval gates intact.
+description: Run any .agents/schedules.yaml task on demand with approval gates intact. Use for /run-scheduled or 'run the <task> now'.
 ---
 
 # Run-scheduled

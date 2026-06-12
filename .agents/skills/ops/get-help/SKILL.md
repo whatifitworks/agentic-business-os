@@ -1,6 +1,6 @@
 ---
 name: get-help
-description: Help a project owner get support for Agentic Business OS setup, onboarding, hooks, sync, publishing, or custom automation. Use when the user asks for help, support, contact, troubleshooting, What If It Works, or how to report a problem.
+description: Help a project owner get support for setup, onboarding, hooks, sync, publishing, or custom automation. Use for help, troubleshooting, or contact.
 ---
 
 # Get Help

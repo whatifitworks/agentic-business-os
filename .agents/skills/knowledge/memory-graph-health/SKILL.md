@@ -1,6 +1,6 @@
 ---
 name: memory-graph-health
-description: Audit the Agentic Business OS Obsidian memory vault for orphan wiki pages, broken memory links, stale inbox items, and skills missing from the skill index.
+description: Audit the Obsidian memory vault for orphan wiki pages, broken memory links, stale inbox items, and skills missing from the skill index.
 ---
 
 # Memory Graph Health
