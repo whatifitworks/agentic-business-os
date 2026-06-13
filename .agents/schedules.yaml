@@ -22,6 +22,34 @@ tasks:
       --state-db system/state/ops.db
       --exit-zero
 
+  - name: retention-sweep
+    skill: repo-health
+    log_dir: repo-health
+    schedule: weekly_MON_08:15
+    runner: command
+    model: local
+    mode: async
+    notify: false
+    notify_policy: on_problem
+    remind_until_reviewed: false
+    enabled: false
+    command: >-
+      python3 system/tools/retention_sweep.py --apply > {{LOG_FILE}} 2>&1
+
+  - name: golden-questions
+    skill: repo-health
+    log_dir: repo-health
+    schedule: weekly_MON_08:20
+    runner: command
+    model: local
+    mode: async
+    notify: false
+    notify_policy: on_problem
+    remind_until_reviewed: false
+    enabled: false
+    command: >-
+      python3 system/tools/golden_questions.py --exit-zero > {{LOG_FILE}} 2>&1
+
   - name: learning-review
     skill: learning-review
     log_dir: learning

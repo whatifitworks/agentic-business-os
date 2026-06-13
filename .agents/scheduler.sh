@@ -262,6 +262,14 @@ EOF
 
   log "RUN done  name=$name rc=$rc"
 
+  # Best-effort token telemetry: extract usage from the runner log if present.
+  # Never fail a scheduled run on telemetry problems.
+  if [[ -f "$runner_log" ]]; then
+    python3 "$PROJECT_ROOT/system/tools/token_telemetry.py" parse-log \
+      --task "$name" --skill "$skill" --runner "$runner" \
+      --runner-log "$runner_log" >/dev/null 2>&1 || true
+  fi
+
   if [[ $rc -eq 0 ]] && grep -q '^stub: true$' "$log_file"; then
     log "RUN verify failed name=$name stub_not_overwritten log=$log_file"
     printf '\n[post-run verification] Stub brief was not overwritten.\n' >>"$runner_log"

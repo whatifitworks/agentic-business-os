@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "updated_at": "REPLACE-WITH-DATE",
+  "description": "Known-answer questions run against the vault to catch staleness and contradiction. Add entries to 'questions' to activate. 'must_include' = phrases the canonical answer should contain; 'stale_claims' = withdrawn/disproven phrases that must NOT reappear anywhere in the durable corpus except on a line carrying a negation/correction marker; 'canonical_paths' = files where the correct, current answer lives. Empty 'questions' passes trivially.",
+  "negation_markers": ["not ", "no longer", "withdrawn", "superseded", "supersedes", "stale", "corrected", "incorrect", "disproven", "myth", "is moot", "withdraw"],
+  "_example_question": {
+    "id": "example-core-fact",
+    "question": "your most important recurring question here",
+    "canonical_paths": ["context/key-learnings.md", "context/current-priorities.md"],
+    "must_include": ["a phrase the correct current answer must contain"],
+    "stale_claims": ["an old claim you have since withdrawn and never want to see again"]
+  },
+  "questions": []
+}
