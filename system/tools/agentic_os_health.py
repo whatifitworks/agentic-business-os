@@ -148,7 +148,16 @@ def generate(root: Path) -> list[Path]:
     passed = sum(1 for result in evals if result.status == "pass")
     failed = sum(1 for result in evals if result.status != "pass")
     cockpit = root / "system" / "health" / "operator-cockpit.md"
-    links = "\n".join(f"- [{name}]({name}.md)" for name in REPORTS)
+    # Link only reports that actually exist on disk. Every report except
+    # agentic-os-acceptance-readiness is written above; that one is produced by a
+    # separate acceptance run (see the readiness.exists() guard) and is absent in a
+    # fresh scaffold, so linking it unconditionally left a broken_markdown_link that
+    # repo_audit flagged on every run.
+    links = "\n".join(
+        f"- [{name}]({name}.md)"
+        for name in REPORTS
+        if (root / "system" / "health" / f"{name}.md").exists()
+    )
     cockpit.write_text(
         "# Operator Cockpit\n\n"
         f"Generated: `{datetime.now(timezone.utc).astimezone().isoformat(timespec='seconds')}`\n\n"
