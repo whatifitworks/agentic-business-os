@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dev-task/question.schema.json",
+  "title": "DEV_TASK_QUESTION",
+  "description": "A genuine blocking judgment call for the project owner (ambiguous scope, trade-off, undiagnosable failure).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question"],
+  "properties": {
+    "question": { "type": "string", "description": "The specific question." },
+    "context": { "type": "string", "description": "Why you're asking and what options you see." }
+  }
+}

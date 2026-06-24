@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dev-task/report.schema.json",
+  "title": "DEV_TASK_REPORT",
+  "description": "Investigation result (Phase 1): the proposed plan plus the acceptance criteria the verification agent checks against.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root_cause", "target_sub_repo", "affected_files", "proposed_diff", "acceptance_criteria", "rollback_plan"],
+  "properties": {
+    "root_cause": { "type": "string", "description": "Concise diagnosis." },
+    "target_sub_repo": { "type": "string", "description": "Name of the sub-repo the change lands in." },
+    "affected_files": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "proposed_diff": { "type": "string", "description": "Unified diff of the proposed change." },
+    "tests_to_add": { "type": "array", "items": { "type": "string" } },
+    "acceptance_criteria": {
+      "type": "array",
+      "description": "Checkable cases that prove the fix works (the verification agent's case list). Each as 'action -> expected result'. Cover happy path + negative/gated + edge/empty.",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "rollback_plan": { "type": "string", "description": "One line: how to revert if this breaks." }
+  }
+}

@@ -1,0 +1,22 @@
+manifest_version: 1
+name: test-task
+skill: test-task
+owner: agentic-business-os
+domain: product
+namespace: product
+status: active
+purpose: "Verify a code change end-to-end and report with screenshots: build/serve, drive the changed behavior, capture screens, AI-judge integrity and (on UI changes) aesthetics, post a PR comment."
+triggers:
+  - test-task
+  - test this PR
+  - verify the build
+  - check the screens
+required_sources:
+  - .agents/skills/product/test-task/platforms/
+default_output_policy: pr_comment_with_inbox_candidates
+approval_gates:
+  - external writes (PR comment, screenshot upload) require explicit approval
+related_agents:
+  - qa-tester
+  - developer
+  - code-reviewer

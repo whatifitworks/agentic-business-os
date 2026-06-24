@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dev-task/data_request.schema.json",
+  "title": "DEV_TASK_DATA_REQUEST",
+  "description": "The coder needs production data the ops side fulfills via its integrations. category-specific fields (query, record id, etc.) ride alongside.",
+  "type": "object",
+  "required": ["category", "reason"],
+  "properties": {
+    "category": {
+      "type": "string",
+      "description": "Maps to one of the ops side's data-request handlers.",
+      "enum": [
+        "datastore_query", "logs", "log_query", "support_ticket", "billing_record",
+        "analytics_events", "auth_user", "issue", "pull_request", "object_store_read"
+      ]
+    },
+    "reason": { "type": "string", "description": "Why this data is needed." },
+    "query": { "type": "string", "description": "Query / filter expression, when applicable." }
+  },
+  "additionalProperties": true
+}
