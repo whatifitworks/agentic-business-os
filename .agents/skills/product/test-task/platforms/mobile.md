@@ -6,8 +6,9 @@ record) is in [../SKILL.md](../SKILL.md); this is the *how* for mobile.
 ## Build + install + capture
 - **Build** the debug app for a simulator/emulator with the platform's CLI (e.g. `xcodebuild` for iOS,
   `gradlew assembleDebug` for Android). Verify the real success line - `| tail` masks failures.
-- **Install** onto a booted simulator/emulator and **drive** the UI with a flow runner (an open-source
-  UI-automation tool). Keep one flow per screen under a tracked `flows/<platform>/` dir.
+- **Install** onto a booted simulator/emulator and **drive** the UI with a flow runner - e.g. **Maestro**
+  (open-source, declarative YAML flows), or another mobile UI-automation tool (Appium, Espresso/XCUITest,
+  Detox). Keep one flow per screen under a tracked `flows/<platform>/` dir.
 - **Pin the status bar / system chrome** to fixed values so captures are deterministic, and **wait for a real
   element** (never a fixed timer) - the app loads async.
 
@@ -21,8 +22,9 @@ record) is in [../SKILL.md](../SKILL.md); this is the *how* for mobile.
   the onboarding as if it were the target.
 
 ## Driving controls
-- **Icon-only / un-text-matchable controls:** read the element tree (the runner's hierarchy dump) for the
-  element's accessibility text + exact bounds, then tap by the bounds center - don't guess coordinates.
+- **Icon-only / un-text-matchable controls:** read the element tree (the runner's hierarchy dump, e.g.
+  `maestro hierarchy`) for the element's accessibility text + exact bounds, then tap by the bounds center -
+  don't guess coordinates.
 - **Element-tree dump** is also how you satisfy the shared "verify gated controls BOTH directions" rule:
   confirm a control is present in the allowed state and **absent** in the disallowed state.
 

@@ -1,8 +1,9 @@
 # test-task - web sidecar
 
 Platform mechanics for verifying a **web** change. The shared spine is in [../SKILL.md](../SKILL.md); this is
-the *how* for web. The driver is a **browser-automation tool / MCP** (not the mobile flow runner); the rest
-of the spine is the same (AI integrity + aesthetic -> publish).
+the *how* for web. The driver is a **browser-automation tool / MCP** - e.g. a **Playwright** MCP (or
+Puppeteer / Selenium) - not the mobile flow runner; the rest of the spine is the same (AI integrity +
+aesthetic -> publish).
 
 ## 🚨 Safety - know what your local build touches
 - **Never run a build/up command that mutates production at build time.** If the app's container/build runs
