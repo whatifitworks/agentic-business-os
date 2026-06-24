@@ -15,5 +15,7 @@
 | `memory-ingest` | knowledge | knowledge |
 | `memory-graph-health` | knowledge | knowledge |
 | `design-studio` | product | product |
+| `dev-task` | product | product |
+| `test-task` | product | product |
 | `daily-planning` | ops | ops |
 | `weekly-review` | ops | ops |

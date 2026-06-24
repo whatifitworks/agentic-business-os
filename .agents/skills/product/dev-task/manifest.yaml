@@ -1,0 +1,27 @@
+manifest_version: 1
+name: dev-task
+skill: dev-task
+owner: agentic-business-os
+domain: product
+namespace: product
+status: active
+purpose: "Orchestrate a development task in a separate code workspace: risk-classify, autonomous apply + PR, cross-model review loop, automated verification, then hand off for manual testing and merge."
+triggers:
+  - dev-task
+  - fix this bug
+  - implement this feature
+  - ship this change
+required_sources:
+  - .agents/skills/product/dev-task/config.yaml
+  - .agents/skills/product/dev-task/prompt-templates.md
+  - .agents/skills/product/dev-task/schemas/
+default_output_policy: project_handoff_with_inbox_candidates
+approval_gates:
+  # No pre-apply "approve the plan" gate. The pipeline is autonomous from
+  # investigate -> apply + PR -> review<->fix loop -> verification.
+  - version + release notes verified by the project owner before any build/upload (user-shipping changes)
+  - merge to the main branch is manual (dev-task never merges)
+related_agents:
+  - developer
+  - code-reviewer
+  - qa-tester

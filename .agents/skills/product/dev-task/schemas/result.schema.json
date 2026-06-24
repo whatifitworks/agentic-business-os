@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dev-task/result.schema.json",
+  "title": "DEV_TASK_RESULT",
+  "description": "Apply result (Phase 2): what landed and how far (per scope).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["target_sub_repo", "branch", "base_branch", "build_passed", "push_status"],
+  "properties": {
+    "target_sub_repo": { "type": "string" },
+    "branch": { "type": "string", "description": "Feature branch, or the main branch name for edit-only." },
+    "base_branch": { "type": "string" },
+    "commits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["hash", "message"],
+        "properties": { "hash": { "type": "string" }, "message": { "type": "string" } }
+      }
+    },
+    "build_passed": { "type": "string", "enum": ["true", "false", "not run"] },
+    "tests_passed": { "type": "string", "description": "true | false | skipped — explain." },
+    "push_status": { "type": "string", "description": "pushed | not pushed — reason." },
+    "pr_url": { "type": "string" },
+    "files_modified": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  }
+}

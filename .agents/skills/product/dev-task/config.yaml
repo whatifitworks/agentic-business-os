@@ -1,0 +1,74 @@
+# Runtime config for the /dev-task skill. The skill reads this at the start of every
+# run (Phase 0), so changes take effect on the next run. Per-call overrides from the
+# project owner win over this file for that one call.
+
+# --- coder backend ---
+# The runner drives a persistent coding-agent session per sub-repo. `runner` names the
+# backend (any coding-agent CLI your runner supports); `model`/`effort` tune it. Keep the
+# coder a DIFFERENT tier from the review panel so "coder != reviewer" holds.
+runner: <your-coder-cli>
+model: <a-strong-fast-coder-model>
+effort: high
+
+# Apply-phase scope: edit-only | commit-only | push-only | full-cycle.
+scope: full-cycle
+
+# Safety caps.
+max_iterations_per_phase: 10
+invocation_timeout_min: 25
+
+# --- cross-model review panel (Phase 2.5) ---
+# Reviews run on a DIFFERENT model than the coder for an independent perspective.
+review:
+  runner: <your-review-cli>
+  model: <a-strong-reasoning-model>
+  lenses:
+    - correctness   # logic, does it fix the thing, off-by-ones, nulls, error handling
+    - security      # authz, input validation, secrets, data exposure, injection
+    - performance   # N+1s, hot paths, cost, memory, query plans
+    - regression    # edge cases, backward compat, repo conventions, side effects
+
+# --- risk-based review depth + hand-off detail (NO human gate) ---
+risk_tiers:
+  low:    { review_lenses: [correctness], handoff: summary }
+  medium: { review_lenses: [correctness, regression], handoff: summary }
+  high:   { review_lenses: [correctness, security, performance, regression], handoff: step-by-step }
+
+# Risk classifier rubric (Phase 0). HIGH if the change touches any of these surfaces.
+risk_high_signals:
+  - payment
+  - billing
+  - subscription
+  - auth
+  - login
+  - token
+  - password
+  - migration
+  - schema change
+  - delete
+  - drop table
+  - webhook
+  - money
+  - price
+  - refund
+
+# --- automated verification (Phase 2.6) ---
+verify:
+  enabled: true
+  mandatory: true               # any UI change MUST run verification + post screenshots to the PR
+  surfaces: [mobile, web]       # the rendered surfaces your app ships; backend-only changes skip
+  loop_back_on_defect: true     # integrity failure OR a clear visual defect -> back to the coder
+
+# --- release to a testing track (Phase 2.7 prepare + Phase 4 ship) ---
+release:
+  enabled: true
+  track: internal               # internal/testing track only; never beta/production from here
+  version_bump: patch           # patch | minor — default; owner overrides at the verify gate
+  verify_notes: true            # ALWAYS show version + notes for approval before any build/upload
+  skip_for: [backend, docs, infra, tests-only]
+
+# --- post-ship watch (Phase 5) ---
+post_ship_watch:
+  enabled: true
+  tiers: [high]                 # only high-risk changes get a watch
+  window_hours: 24              # check ~next business day after ship; suggest-only, never auto-rollback
