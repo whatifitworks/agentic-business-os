@@ -20,3 +20,4 @@
 | `roast` | product | product |
 | `daily-planning` | ops | ops |
 | `weekly-review` | ops | ops |
+| `create-goal` | ops | ops |

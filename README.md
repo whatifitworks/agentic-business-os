@@ -98,6 +98,7 @@ Public core skills are intentionally generic:
 - `get-help`
 - `daily-planning`
 - `weekly-review`
+- `create-goal`
 - `memory-ingest`
 - `memory-graph-health`
 - `repo-health`
