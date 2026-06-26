@@ -4,7 +4,7 @@ Current operating truth lives here. These files are starter placeholders; the on
 
 - `work.md` - project/business context and mission
 - `current-priorities.md` - current priority contract
-- `goals.md` - active goals and milestones
+- `goals.md` - active goals index; per-goal detail in `goals/<slug>.md` (see the `create-goal` skill)
 - `tech-stack.md` - tools, integrations, and source access
 - `key-learnings.md` - durable lessons that should shape future work
 - `today.md` - optional same-day plan and active task state

@@ -16,7 +16,7 @@ Turn product or service evidence into better user value and implementation hando
 
 ## Owns
 
-- design-studio work, product evidence, implementation handoffs
+- design-studio work, idea pressure-testing, product evidence, implementation handoffs
 
 ## Does Not Own
 

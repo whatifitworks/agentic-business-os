@@ -1,0 +1,38 @@
+manifest_version: 1
+name: create-goal
+skill: create-goal
+domain: ops
+namespace: ops
+status: active
+purpose: Turn a rough intention into a clear, runnable goal with a verifiable completion condition for the built-in /goal, saved one file per goal, then run it or save it.
+triggers:
+  - create a goal
+  - create-goal
+  - define a goal
+  - set a goal
+  - new goal
+  - goal with success criteria
+  - completion condition
+  - make a goal runnable
+  - what does done look like
+required_sources:
+  - .agents/skills/ops/create-goal/SKILL.md
+  - context/goals.md
+default_output_policy: goal_file_and_index
+approval_gates:
+  - never start the /goal loop on the owner's behalf; present the ready-to-send /goal line and let the owner send it
+  - ask before overwriting or changing an existing goal file
+related_agents:
+  - business-analyst
+  - automation-builder
+outputs:
+  primary:
+    - context/goals/<slug>.md
+    - updated context/goals.md index
+  optional:
+    - a ready-to-send "/goal <condition>" line in the final response
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If the owner cannot name a verifiable end state, save the goal as `proposed` with the open question recorded instead of inventing a metric.
+    - The completion condition must be demonstrable from Claude's own output, because the /goal evaluator only sees the conversation.

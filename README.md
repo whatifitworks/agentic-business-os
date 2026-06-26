@@ -98,6 +98,7 @@ Public core skills are intentionally generic:
 - `get-help`
 - `daily-planning`
 - `weekly-review`
+- `create-goal`
 - `memory-ingest`
 - `memory-graph-health`
 - `repo-health`
@@ -109,6 +110,7 @@ Public core skills are intentionally generic:
 - `adapter-runner`
 - `adapter-recording-review`
 - `design-studio`
+- `roast`
 
 Domain-specific skills, such as support desks, analytics providers, app-store review workflows, accounting, or email platforms, should be added later as project-local skills or optional plugins.
 
