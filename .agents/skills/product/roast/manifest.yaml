@@ -1,0 +1,34 @@
+manifest_version: 1
+name: roast
+skill: roast
+domain: product
+namespace: product
+status: active
+purpose: Convene a five-persona adversarial council to pressure-test an idea from every angle, then deliver one GO / RESHAPE / KILL verdict plus the cheapest test to de-risk it.
+triggers:
+  - roast
+  - roast my idea
+  - roast this idea
+  - pressure-test an idea
+  - stress-test an idea
+  - validate a business idea
+  - convene the council
+  - brutal second opinion
+  - second opinion before building
+required_sources:
+  - .agents/skills/product/roast/SKILL.md
+default_output_policy: council_verdict_in_chat
+approval_gates:
+  - generalize or redact confidential idea details before the Researcher persona uses web search, so private specifics are not sent to a search engine
+  - the verdict is advisory only; do not treat GO as approval to spend money, sign anything, or start building
+related_agents:
+  - business-analyst
+  - product-analyst
+outputs:
+  primary:
+    - council verdict in the final response (GO / RESHAPE / KILL plus the cheapest 48-hour test)
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If the five personas cannot be spawned in parallel, run them sequentially rather than dropping any persona.
+    - If web search is unavailable, the Researcher must say so and reason from general knowledge instead of inventing citations.

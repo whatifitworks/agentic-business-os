@@ -17,5 +17,6 @@
 | `design-studio` | product | product |
 | `dev-task` | product | product |
 | `test-task` | product | product |
+| `roast` | product | product |
 | `daily-planning` | ops | ops |
 | `weekly-review` | ops | ops |
