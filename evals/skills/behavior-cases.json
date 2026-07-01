@@ -123,6 +123,61 @@
         "generation is unavailable",
         "Manual prompt package mode"
       ]
+    },
+    {
+      "id": "approval-boundaries-behavior",
+      "skill": "approval-boundaries",
+      "expected_paths": [
+        "rules/approval-boundaries.yaml",
+        "system/tools/approval_gate.py",
+        "system/schemas/approval-boundaries.schema.yaml"
+      ],
+      "memory_keywords": [
+        "observe",
+        "enforce",
+        "fails open",
+        "ledger"
+      ],
+      "failure_keywords": [
+        "never weaken",
+        "owner approval"
+      ]
+    },
+    {
+      "id": "decision-ledger-behavior",
+      "skill": "decision-ledger",
+      "expected_paths": [
+        "system/tools/ledger.py",
+        "state/ledger.jsonl",
+        "system/schemas/ledger-entry.schema.yaml",
+        "system/tools/decisions_index.py"
+      ],
+      "memory_keywords": [
+        "hash",
+        "tamper",
+        "evidence"
+      ],
+      "failure_keywords": [
+        "corrections are new entries",
+        "verify"
+      ]
+    },
+    {
+      "id": "memory-benchmark-behavior",
+      "skill": "memory-benchmark",
+      "expected_paths": [
+        "state/golden-questions.json",
+        "system/tools/golden_questions.py"
+      ],
+      "memory_keywords": [
+        "golden question",
+        "trend",
+        "canonical"
+      ],
+      "failure_keywords": [
+        "fix the vault",
+        "empty question set"
+      ]
     }
   ],
   "negative_cases": [

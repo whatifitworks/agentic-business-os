@@ -73,6 +73,40 @@
       ],
       "expected_inbox_first": false,
       "expected_output_area": "evals/"
+    },
+    {
+      "id": "approval-boundaries",
+      "prompt": "Review what the agent is allowed to do on its own and tighten the rules.",
+      "expected_domain": "ops",
+      "expected_skill": "approval-boundaries",
+      "expected_sources": [
+        "rules/approval-boundaries.yaml"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "rules/"
+    },
+    {
+      "id": "decision-ledger",
+      "prompt": "Record the decision we just made and link the evidence.",
+      "expected_domain": "ops",
+      "expected_skill": "decision-ledger",
+      "expected_sources": [
+        "state/ledger.jsonl",
+        "decisions/log.md"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "state/"
+    },
+    {
+      "id": "memory-benchmark",
+      "prompt": "Is the knowledge base actually getting better? Run the memory benchmark.",
+      "expected_domain": "knowledge",
+      "expected_skill": "memory-benchmark",
+      "expected_sources": [
+        "state/golden-questions.json"
+      ],
+      "expected_inbox_first": false,
+      "expected_output_area": "state/"
     }
   ]
 }

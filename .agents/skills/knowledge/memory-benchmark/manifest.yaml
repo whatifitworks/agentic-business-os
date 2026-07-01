@@ -1,0 +1,37 @@
+manifest_version: 1
+name: memory-benchmark
+skill: memory-benchmark
+domain: knowledge
+namespace: knowledge
+status: active
+purpose: Curate known-answer golden questions and score vault retrieval against them over time, proving memory compounds instead of rotting.
+triggers:
+  - memory benchmark
+  - golden questions
+  - is memory improving
+  - test the vault
+  - memory score
+  - knowledge quality check
+  - benchmark the knowledge base
+required_sources:
+  - .agents/skills/knowledge/memory-benchmark/SKILL.md
+  - state/golden-questions.json
+  - state/golden-question-runs.jsonl
+default_output_policy: recorded_benchmark_run_with_trend_report
+approval_gates:
+  - owner approves the question set and any question removals
+  - never alter a question just to turn a failure into a pass without telling the owner
+related_agents:
+  - business-analyst
+outputs:
+  primary:
+    - state/golden-question-runs.jsonl run record
+    - trend report in the conversation
+  optional:
+    - vault fix proposals for failing questions
+    - state/golden-questions.json updates
+failure_behavior:
+  fail_soft: true
+  notes:
+    - A failing question is a memory bug to fix in the vault, not a reason to weaken the question.
+    - Empty question sets pass trivially and are not recorded; curation comes first.

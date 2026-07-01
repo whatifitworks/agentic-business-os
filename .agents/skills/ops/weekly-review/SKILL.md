@@ -25,7 +25,7 @@ Use this skill when the project owner wants to wrap up the week, inspect drift, 
 3. Count completed and open checklist items.
 4. Ask the owner what unplanned work happened and what consumed more time than expected.
 5. Read priorities and goals when present. Compare actual work against them.
-6. Review any available metrics or project-specific scorecards, but do not invent data when files are absent.
+6. Review any available metrics or project-specific scorecards, but do not invent data when files are absent. When `state/golden-questions.json` has questions, run `python3 system/tools/golden_questions.py --record` then `--trend`, and report whether vault memory improved, held, or regressed this week.
 7. Surface:
    - wins
    - fell-through items

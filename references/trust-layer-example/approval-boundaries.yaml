@@ -1,0 +1,49 @@
+# Lumen Candle Studio (fictional) — approval boundaries after onboarding.
+# Started 2026-05-04 in observe mode; flipped to enforce 2026-05-18 after two
+# clean weeks (both changes are in ledger.jsonl). Compare with the generic
+# starter contract in rules/approval-boundaries.yaml to see how onboarding
+# turns worries into business-specific rules.
+schema_version: 1
+mode: enforce
+updated_at: "2026-05-18"
+description: >
+  One-person candle studio. The agent drafts everything, sends nothing on its
+  own, never touches money or credentials, and logs supplier-facing actions.
+
+defaults:
+  unmatched: allow
+  log_unmatched: false
+
+rules:
+  - id: never-credential-files
+    intent: The agent never reads credential material
+    decision: deny
+    match:
+      tools: ["Read", "Bash", "Grep", "Glob"]
+      input_any: [".env", "credentials", "id_rsa", ".pem"]
+
+  - id: never-move-money
+    intent: Refunds and payments are owner-only, whatever the amount
+    decision: deny
+    match:
+      tools: ["mcp__*payment*", "mcp__*refund*", "mcp__*payout*", "mcp__*charge*"]
+
+  - id: no-unattended-campaign-send
+    intent: Newsletters and campaigns go out only after the owner reads the draft
+    decision: ask
+    match:
+      tools: ["mcp__mailerlite__*send*", "mcp__mailerlite__*schedule*"]
+
+  - id: ask-before-supplier-messages
+    intent: Anything sent to suppliers or the fulfillment partner gets owner eyes first
+    decision: ask
+    match:
+      tools: ["mcp__*send*", "mcp__*reply*"]
+      input_any: ["nordwax", "fulfillment"]
+
+  - id: ask-before-destructive-shell
+    intent: Irreversible local operations get a human eye first
+    decision: ask
+    match:
+      tools: ["Bash"]
+      input_any: ["rm -rf", "git push --force", "git reset --hard"]

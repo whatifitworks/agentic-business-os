@@ -21,3 +21,6 @@
 | `daily-planning` | ops | ops |
 | `weekly-review` | ops | ops |
 | `create-goal` | ops | ops |
+| `approval-boundaries` | ops | ops |
+| `decision-ledger` | ops | ops |
+| `memory-benchmark` | knowledge | knowledge |

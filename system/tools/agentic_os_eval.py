@@ -206,6 +206,62 @@ def run_learning_review(root: Path, results: list[Result]) -> None:
         add(results, "Learning", case_id, matched, f"candidates={len(candidates)}, expected={expected_kind}/{expected_owner}")
 
 
+def run_trust_layer(root: Path, results: list[Result]) -> None:
+    """Execute the trust-layer code paths: gate decisions, ledger chain, benchmark runs."""
+    sys.path.insert(0, str(root / "system" / "tools"))
+    try:
+        import approval_gate
+        import approval_boundaries_audit
+        import golden_questions
+        import ledger as ledger_mod
+    except Exception as exc:  # noqa: BLE001
+        add(results, "Trust", "import", False, str(exc))
+        return
+
+    contract = approval_gate.load_contract(root)
+    if not isinstance(contract, dict):
+        add(results, "Trust", "contract-loads", False, "rules/approval-boundaries.yaml unreadable")
+        return
+    add(results, "Trust", "contract-loads", True, f"mode={contract.get('mode')}")
+    problems = approval_boundaries_audit.validate(contract)
+    add(results, "Trust", "contract-valid", not problems, ",".join(problems) or "ok")
+
+    gate_cases = read_json(root / "evals/trust/cases.json")
+    for case in gate_cases.get("gate_cases", []):
+        if not isinstance(case, dict):
+            continue
+        outcome = approval_gate.evaluate(contract, str(case.get("tool")), case.get("input", {}))
+        expected = str(case.get("expected_decision"))
+        expected_rules = [str(r) for r in case.get("expected_rules", [])]
+        got_rules = [str(r.get("id")) for r in outcome["matched"]]
+        ok = outcome["decision"] == expected and all(r in got_rules for r in expected_rules)
+        add(results, "Trust", str(case.get("id")), ok,
+            f"decision={outcome['decision']} rules={','.join(got_rules) or 'none'}")
+
+    # Ledger: append → verify passes; tamper → verify fails; hand-edit is caught.
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_root = Path(tmp)
+        ledger_mod.append_entry(tmp_root, "decision", "fixture decision", "human:owner", ["decisions/log.md"], None)
+        ledger_mod.append_entry(tmp_root, "action", "fixture action", "agent:claude", [], {"n": 1})
+        entries = ledger_mod.read_entries(ledger_mod.ledger_path(tmp_root))
+        add(results, "Trust", "ledger-chain-intact", not ledger_mod.verify_chain(entries),
+            f"entries={len(entries)}")
+        path = ledger_mod.ledger_path(tmp_root)
+        path.write_text(path.read_text().replace("fixture decision", "edited decision"))
+        tampered = ledger_mod.read_entries(path)
+        add(results, "Trust", "ledger-tamper-detected", bool(ledger_mod.verify_chain(tampered)),
+            "edit must break the chain")
+
+    # Benchmark: recorded runs round-trip through the history file.
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_root = Path(tmp)
+        fake_results = [{"id": "q1", "ok": True}, {"id": "q2", "ok": False}]
+        run_row = golden_questions.record_run(tmp_root, fake_results, [])
+        loaded = golden_questions.load_runs(tmp_root)
+        ok = len(loaded) == 1 and loaded[0].get("passed") == 1 and run_row.get("score") == 0.5
+        add(results, "Trust", "benchmark-run-recorded", ok, f"runs={len(loaded)}")
+
+
 def run(root: Path) -> list[Result]:
     results: list[Result] = []
     routing = read_json(root / "evals/routing/cases.json")
@@ -241,7 +297,8 @@ def run(root: Path) -> list[Result]:
         missing = [p for p in files if not (root / p).exists()]
         add(results, "First-Read", str(case.get("id")), not missing, "missing=" + ",".join(missing))
     run_learning_review(root, results)
-    for path in ["evals/ingest/cases.json", "evals/routing/artifact-placement.json", "evals/agents/cases.json", "evals/recurring/cases.json", "evals/structure/cases.json"]:
+    run_trust_layer(root, results)
+    for path in ["evals/ingest/cases.json", "evals/routing/artifact-placement.json", "evals/agents/cases.json", "evals/recurring/cases.json", "evals/structure/cases.json", "evals/trust/cases.json"]:
         add(results, "Structure", path, (root / path).exists(), "exists" if (root / path).exists() else "missing")
     for folder in ["inbox", "wiki", "outputs", "sources", "state", ".agents", "system", "evals", "domains", "indexes"]:
         add(results, "Structure", f"folder-{folder}", (root / folder).is_dir(), folder)

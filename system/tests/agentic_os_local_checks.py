@@ -20,6 +20,9 @@ COMMANDS = [
     ["python3", "system/tools/context_loader.py", "load", "--domain", "product", "--paths-only"],
     ["python3", "system/tools/skill_namespace.py"],
     ["python3", "system/tools/agentic_os_health.py"],
+    ["python3", "system/tools/approval_boundaries_audit.py"],
+    ["python3", "system/tools/ledger.py", "verify"],
+    ["python3", "system/tools/golden_questions.py", "--exit-zero"],
 ]
 
 

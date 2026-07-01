@@ -1,0 +1,40 @@
+schema: approval-boundaries
+version: 1
+file: rules/approval-boundaries.yaml
+compiled_mirror: state/approval-boundaries.compiled.json
+required_fields:
+  - schema_version   # 1
+  - mode             # observe | enforce
+  - defaults         # { unmatched: allow|ask|deny, log_unmatched: bool }
+  - rules            # list of rule objects
+rule_required_fields:
+  - id               # unique kebab-case identifier
+  - intent           # one plain-language line: why this rule exists
+  - decision         # allow | ask | deny
+  - match            # { tools: [glob, ...], input_any: [pattern, ...] }
+matching:
+  - tools patterns are case-insensitive globs against the runtime tool name,
+    e.g. "Bash", "mcp__*send*".
+  - input_any patterns run against the flattened JSON of the tool input,
+    lowercased. Patterns containing * ? [ are globs over the whole input;
+    plain patterns match as substrings anywhere.
+  - A rule matches when the tool name matches AND (input_any is absent or any
+    input pattern matches).
+  - When several rules match one call, the most restrictive decision wins:
+    deny > ask > allow.
+enforcement:
+  - mode observe — every matched rule is logged to state/ledger.jsonl as a
+    boundary_evaluation entry; nothing is ever blocked. Start here.
+  - mode enforce — matched decisions are returned to the runtime PreToolUse
+    hook (Claude Code), so ask/deny actually gate the call. Logging unchanged.
+  - The gate fails open: any loading or evaluation error allows the call and
+    is recorded to the ledger when possible. The contract must never brick a
+    session.
+  - Codex and other runtimes without a PreToolUse equivalent consult the same
+    file as instructions (see AGENTS.md Safety); enforcement there is
+    advisory until wired.
+notes:
+  - Validate and compile with system/tools/approval_boundaries_audit.py; the
+    compiled JSON mirror lets the gate run on machines without PyYAML.
+  - Keep rules generic in the public template; business-specific rules land
+    during onboarding.

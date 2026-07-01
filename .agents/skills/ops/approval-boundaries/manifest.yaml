@@ -1,0 +1,40 @@
+manifest_version: 1
+name: approval-boundaries
+skill: approval-boundaries
+domain: ops
+namespace: ops
+status: active
+purpose: Author, review, and enforce the machine-readable approval contract that gates agent actions, with an observe-first rollout and ledger-logged changes.
+triggers:
+  - approval boundaries
+  - approval-boundaries
+  - what can the agent do alone
+  - permission rules
+  - enforce boundaries
+  - observe mode
+  - boundary log review
+  - gate a tool
+  - never send without asking
+required_sources:
+  - .agents/skills/ops/approval-boundaries/SKILL.md
+  - rules/approval-boundaries.yaml
+  - system/schemas/approval-boundaries.schema.yaml
+default_output_policy: contract_edit_with_ledger_entry
+approval_gates:
+  - never edit rules/approval-boundaries.yaml without showing the owner the diff and getting approval
+  - never flip mode to enforce (or back) without explicit owner approval
+  - never weaken a boundary to unblock the current task
+related_agents:
+  - automation-builder
+outputs:
+  primary:
+    - rules/approval-boundaries.yaml
+    - state/approval-boundaries.compiled.json
+    - state/ledger.jsonl entry recording the change
+  optional:
+    - observe-log review summary in the conversation
+failure_behavior:
+  fail_soft: true
+  notes:
+    - The runtime gate fails open; a broken contract means no gating, so validator failures are urgent.
+    - Codex runtimes read the contract as instructions; hard enforcement is Claude Code PreToolUse only.

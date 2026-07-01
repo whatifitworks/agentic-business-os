@@ -1,0 +1,3 @@
+{"contradictions": 1, "failed_ids": ["restock-lead-time", "best-channel"], "passed": 3, "score": 0.6, "total": 5, "ts": "2026-05-11T09:30:00+00:00"}
+{"contradictions": 0, "failed_ids": ["restock-lead-time"], "passed": 4, "score": 0.8, "total": 5, "ts": "2026-06-08T09:30:00+00:00"}
+{"contradictions": 0, "failed_ids": [], "passed": 5, "score": 1.0, "total": 5, "ts": "2026-06-29T09:30:00+00:00"}

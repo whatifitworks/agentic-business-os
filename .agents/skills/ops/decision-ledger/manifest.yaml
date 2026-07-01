@@ -1,0 +1,37 @@
+manifest_version: 1
+name: decision-ledger
+skill: decision-ledger
+domain: ops
+namespace: ops
+status: active
+purpose: Record decisions, external actions, and outcomes in the hash-chained ledger with evidence links, and answer provenance questions from it.
+triggers:
+  - record a decision
+  - decision ledger
+  - log this decision
+  - why did we
+  - what did we decide
+  - audit trail
+  - record the outcome
+  - ledger verify
+required_sources:
+  - .agents/skills/ops/decision-ledger/SKILL.md
+  - state/ledger.jsonl
+  - decisions/log.md
+default_output_policy: ledger_entry_and_decision_log_line
+approval_gates:
+  - never edit or delete existing ledger or decision-log entries; corrections are new entries
+  - confirm decision wording with the owner before recording it as theirs
+related_agents:
+  - business-analyst
+outputs:
+  primary:
+    - state/ledger.jsonl entry (via system/tools/ledger.py append)
+    - decisions/log.md line for decision entries
+  optional:
+    - provenance timeline answer in the conversation
+failure_behavior:
+  fail_soft: true
+  notes:
+    - If ledger verify fails, report the exact broken line and treat the ledger as non-authoritative until the owner resolves it.
+    - If the owner cannot articulate reasoning yet, record the decision with reasoning marked open rather than inventing it.

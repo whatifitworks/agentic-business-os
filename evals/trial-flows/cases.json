@@ -25,6 +25,24 @@
       "prompt": "Ingest a memory item",
       "expected_domain": "knowledge",
       "expected_skill": "memory-ingest"
+    },
+    {
+      "id": "approval-boundaries",
+      "prompt": "Set up approval boundaries",
+      "expected_domain": "ops",
+      "expected_skill": "approval-boundaries"
+    },
+    {
+      "id": "decision-ledger",
+      "prompt": "Log this decision with evidence",
+      "expected_domain": "ops",
+      "expected_skill": "decision-ledger"
+    },
+    {
+      "id": "memory-benchmark",
+      "prompt": "Score the vault against our golden questions",
+      "expected_domain": "knowledge",
+      "expected_skill": "memory-benchmark"
     }
   ]
 }

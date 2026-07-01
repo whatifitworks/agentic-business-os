@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-20",
+  "description": "Lumen Candle Studio (fictional) golden questions. Five things the owner actually needs answered correctly; each names the vault file holding the current answer.",
+  "negation_markers": ["not ", "no longer", "withdrawn", "superseded", "corrected", "stale"],
+  "questions": [
+    {
+      "id": "current-wax-supplier",
+      "question": "who supplies our wax and on what lead time",
+      "canonical_paths": ["wiki/entities/nordwax.md"],
+      "must_include": ["NordWax", "4 days"],
+      "stale_claims": ["wax comes from CandleCraft"]
+    },
+    {
+      "id": "refund-policy",
+      "question": "what is our refund policy for damaged deliveries",
+      "canonical_paths": ["wiki/areas/operations.md"],
+      "must_include": ["photo within 14 days", "full refund"]
+    },
+    {
+      "id": "best-channel",
+      "question": "which sales channel has the best margin",
+      "canonical_paths": ["wiki/areas/sales.md"],
+      "must_include": ["own webshop"]
+    },
+    {
+      "id": "restock-lead-time",
+      "question": "how long does a full restock take end to end",
+      "canonical_paths": ["wiki/areas/operations.md"],
+      "must_include": ["6 business days"]
+    },
+    {
+      "id": "newsletter-cadence",
+      "question": "when do we send the newsletter and why that day",
+      "canonical_paths": ["wiki/areas/marketing.md"],
+      "must_include": ["first Tuesday"]
+    }
+  ]
+}

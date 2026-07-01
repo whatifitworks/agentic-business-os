@@ -70,3 +70,8 @@ hooks:
     action: Verify files changed, evidence, unresolved blockers, and memory candidate are stated.
     writes: [system/health/]
     status: implemented-deterministic-check
+  - name: approval-boundary-gate
+    trigger: Every tool call (Claude Code PreToolUse).
+    action: Evaluate the call against rules/approval-boundaries.yaml; log matched rules to the ledger, and in enforce mode return ask/deny to the runtime. Fails open.
+    writes: [state/ledger.jsonl]
+    status: implemented-runtime-hook

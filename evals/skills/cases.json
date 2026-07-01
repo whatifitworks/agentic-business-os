@@ -94,6 +94,45 @@
         "approval_gates"
       ],
       "expected_output_policy": "project_workspace_then_outputs_or_inbox"
+    },
+    {
+      "skill": "approval-boundaries",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "approval_gates",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "contract_edit_with_ledger_entry"
+    },
+    {
+      "skill": "decision-ledger",
+      "target_namespace": "ops",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "approval_gates",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "ledger_entry_and_decision_log_line"
+    },
+    {
+      "skill": "memory-benchmark",
+      "target_namespace": "knowledge",
+      "required_manifest_fields": [
+        "name",
+        "domain",
+        "namespace",
+        "triggers",
+        "approval_gates",
+        "default_output_policy"
+      ],
+      "expected_output_policy": "recorded_benchmark_run_with_trend_report"
     }
   ]
 }

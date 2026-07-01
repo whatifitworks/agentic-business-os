@@ -1,0 +1,97 @@
+{
+  "defaults": {
+    "log_unmatched": false,
+    "unmatched": "allow"
+  },
+  "description": "Generic starter contract for the public template. Onboarding replaces or extends these rules with business-specific ones (refund limits, send policies, publishing rules) before any external tool is connected.\n",
+  "mode": "observe",
+  "rules": [
+    {
+      "decision": "deny",
+      "id": "never-credential-files",
+      "intent": "The agent never reads credential material, even to be helpful",
+      "match": {
+        "input_any": [
+          ".env",
+          "id_rsa",
+          ".pem",
+          "credentials",
+          "secrets.",
+          ".p12",
+          "keychain"
+        ],
+        "tools": [
+          "Read",
+          "Bash",
+          "Grep",
+          "Glob"
+        ]
+      }
+    },
+    {
+      "decision": "deny",
+      "id": "never-move-money",
+      "intent": "The agent never executes payments, transfers, refunds, or payouts",
+      "match": {
+        "tools": [
+          "mcp__*payment*",
+          "mcp__*transfer*",
+          "mcp__*payout*",
+          "mcp__*refund*",
+          "mcp__*charge*"
+        ]
+      }
+    },
+    {
+      "decision": "ask",
+      "id": "ask-before-external-send",
+      "intent": "Sending, publishing, or posting to the outside world needs owner approval",
+      "match": {
+        "tools": [
+          "mcp__*send*",
+          "mcp__*publish*",
+          "mcp__*post*",
+          "mcp__*campaign*",
+          "mcp__*reply*",
+          "mcp__*broadcast*"
+        ]
+      }
+    },
+    {
+      "decision": "ask",
+      "id": "ask-before-external-send-shell",
+      "intent": "Catch outbound sends attempted through the shell instead of a tool",
+      "match": {
+        "input_any": [
+          "curl* -x post*",
+          "curl* --data*",
+          "sendmail",
+          "*mail -s*"
+        ],
+        "tools": [
+          "Bash"
+        ]
+      }
+    },
+    {
+      "decision": "ask",
+      "id": "ask-before-destructive-shell",
+      "intent": "Irreversible local operations get a human eye first",
+      "match": {
+        "input_any": [
+          "rm -rf",
+          "git push --force",
+          "git push -f",
+          "git reset --hard",
+          "drop table",
+          "truncate table"
+        ],
+        "tools": [
+          "Bash"
+        ]
+      }
+    }
+  ],
+  "schema_version": 1,
+  "updated_at": "2026-07-01"
+}

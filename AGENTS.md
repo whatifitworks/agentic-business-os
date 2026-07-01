@@ -17,6 +17,7 @@ For a fresh project, use the `project-onboarding` skill. The agent should run lo
 
 ## Safety
 
+- Follow `rules/approval-boundaries.yaml` — the machine-readable contract of allow/ask/deny actions. Claude Code enforces it through a PreToolUse gate; treat it as binding instructions in every other runtime. Never weaken a boundary to unblock your current task.
 - Do not ask for passwords, API keys, tokens, bank details, tax IDs, private keys, or credentials in chat.
 - Keep external tool setup review-only until the owner approves a connection method.
 - Ask before sending messages, publishing content, changing external records, or enabling external schedules.
