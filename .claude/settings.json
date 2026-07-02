@@ -1,5 +1,16 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && python3 system/tools/approval_gate.py --hook"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

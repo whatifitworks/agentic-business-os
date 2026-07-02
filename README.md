@@ -16,7 +16,8 @@ It gives an agent a stable operating structure: where to read context, where to 
 - SQLite runtime state through `system/state/ops.db`
 - Browser/Computer adapter contracts for UI workflows that lack APIs
 - A `get-help` skill for troubleshooting and contacting the maintainers
-- Local audits and eval fixtures
+- A trust layer: an enforceable approval contract, a hash-chained business ledger, and a scored memory benchmark
+- Local audits and executable eval fixtures, CI-ready via one workflow file
 - Privacy guardrails for downstream private projects
 
 ## Who This Is For
@@ -90,6 +91,18 @@ Secrets belong in gitignored local files, not in committed configs or chat.
 
 `system/state/ops.db` is generated runtime state. It is initialized during onboarding by `bootstrap_project.py` and ignored by git.
 
+## Trust Layer
+
+Three pieces make the OS auditable rather than merely organized:
+
+**Approval boundaries** — `rules/approval-boundaries.yaml` is the machine-readable contract of what the agent may do alone (`allow`), with a human (`ask`), or never (`deny`). A Claude Code PreToolUse gate (`system/tools/approval_gate.py`) evaluates every tool call against it. Start in `observe` mode: nothing is blocked, matches are logged. Flip to `enforce` when the log matches reality. The gate fails open — a broken contract never bricks a session.
+
+**Business ledger** — `state/ledger.jsonl` is an append-only, hash-chained record of decisions, external actions, outcomes, and boundary evaluations, each linking its evidence. `system/tools/ledger.py verify` detects any edit to history; `query` answers "why did we do X?" months later. Use the `decision-ledger` skill to record and the `approval-boundaries` skill to review gate activity.
+
+**Memory benchmark** — golden questions (`state/golden-questions.json`) are the owner's real questions with known canonical answers in the vault. `system/tools/golden_questions.py --record` scores retrieval against them over time; the trend is the measurable proof that the OS is learning the business instead of rotting. Wired into `weekly-review`.
+
+A complete fictional worked example — eight weeks of contract, ledger, and benchmark use — lives in [references/trust-layer-example/](references/trust-layer-example/README.md).
+
 ## Skills
 
 Public core skills are intentionally generic:
@@ -99,8 +112,11 @@ Public core skills are intentionally generic:
 - `daily-planning`
 - `weekly-review`
 - `create-goal`
+- `approval-boundaries`
+- `decision-ledger`
 - `memory-ingest`
 - `memory-graph-health`
+- `memory-benchmark`
 - `repo-health`
 - `recurring-review`
 - `run-scheduled`

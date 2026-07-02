@@ -1,0 +1,69 @@
+# Approval boundaries — the machine-readable contract for what the agent may
+# do in this business without a human. Schema: system/schemas/approval-boundaries.schema.yaml
+#
+# Lifecycle: start in `observe` (log matches, block nothing), review the log
+# weekly with the approval-boundaries skill, then flip to `enforce` once the
+# rules match reality. Compile after every edit:
+#   python3 system/tools/approval_boundaries_audit.py --compile
+schema_version: 1
+mode: observe
+updated_at: "2026-07-01"
+description: >
+  Generic starter contract for the public template. Onboarding replaces or
+  extends these rules with business-specific ones (refund limits, send
+  policies, publishing rules) before any external tool is connected.
+
+defaults:
+  unmatched: allow
+  log_unmatched: false
+
+rules:
+  - id: never-credential-files
+    intent: The agent never reads credential material, even to be helpful
+    decision: deny
+    match:
+      tools: ["Read", "Bash", "Grep", "Glob"]
+      input_any:
+        - ".env"
+        - "id_rsa"
+        - ".pem"
+        - "credentials"
+        - "secrets."
+        - ".p12"
+        - "keychain"
+
+  - id: never-move-money
+    intent: The agent never executes payments, transfers, refunds, or payouts
+    decision: deny
+    match:
+      tools: ["mcp__*payment*", "mcp__*transfer*", "mcp__*payout*", "mcp__*refund*", "mcp__*charge*"]
+
+  - id: ask-before-external-send
+    intent: Sending, publishing, or posting to the outside world needs owner approval
+    decision: ask
+    match:
+      tools: ["mcp__*send*", "mcp__*publish*", "mcp__*post*", "mcp__*campaign*", "mcp__*reply*", "mcp__*broadcast*"]
+
+  - id: ask-before-external-send-shell
+    intent: Catch outbound sends attempted through the shell instead of a tool
+    decision: ask
+    match:
+      tools: ["Bash"]
+      input_any:
+        - "curl* -x post*"
+        - "curl* --data*"
+        - "sendmail"
+        - "*mail -s*"
+
+  - id: ask-before-destructive-shell
+    intent: Irreversible local operations get a human eye first
+    decision: ask
+    match:
+      tools: ["Bash"]
+      input_any:
+        - "rm -rf"
+        - "git push --force"
+        - "git push -f"
+        - "git reset --hard"
+        - "drop table"
+        - "truncate table"

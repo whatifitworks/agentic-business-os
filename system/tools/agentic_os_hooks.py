@@ -37,8 +37,10 @@ HOOKS = {
 
 
 SECRET_PATTERNS = [
-    re.compile(r"sk-[A-Za-z0-9_-]{20,}"),
-    re.compile(r"xox[baprs]-[A-Za-z0-9-]{20,}"),
+    # Lookbehind keeps natural kebab phrases ("ask-before-...", "task-...") from
+    # matching key prefixes mid-word.
+    re.compile(r"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"(?<![A-Za-z0-9])xox[baprs]-[A-Za-z0-9-]{20,}"),
     re.compile(r"AIza[0-9A-Za-z_-]{20,}"),
     re.compile(r"-----BEGIN PRIVATE KEY-----"),
 ]

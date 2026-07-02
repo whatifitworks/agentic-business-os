@@ -1,0 +1,23 @@
+schema: ledger-entry
+version: 1
+file: state/ledger.jsonl
+required_fields:
+  - id            # led-NNNNNN, sequential
+  - ts            # ISO-8601 UTC timestamp
+  - actor         # human:<name> | agent:<runtime> | hook:<hook-name>
+  - kind          # decision | action | outcome | evidence | boundary_evaluation | note
+  - summary       # one line, plain language
+  - refs          # list of repo-relative paths or entry ids (may be empty)
+  - prev_hash     # sha256 of the previous entry; "genesis" for the first
+  - hash          # sha256 of this entry's canonical JSON without the hash field
+optional_fields:
+  - data          # structured detail object (rule ids, counts, tool names)
+notes:
+  - Append-only. Never edit or delete existing lines; corrections are new entries
+    that reference the corrected id in refs.
+  - The chain is tamper-evident, not tamper-proof — `ledger.py verify` detects
+    edits; git history attributes them.
+  - Human decision narrative lives in decisions/log.md; a ledger `decision`
+    entry references it rather than duplicating the reasoning.
+  - Write entries with system/tools/ledger.py append, never by hand, so hashes
+    stay valid.

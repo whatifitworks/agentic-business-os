@@ -16,10 +16,16 @@ silently mislead future decisions. This eval guards against that:
 Definitions live in state/golden-questions.json. Pure stdlib. Exit non-zero on
 failure unless --exit-zero. Wire into the scheduler / repo-health.
 
+Runs recorded with --record append one summary line to
+state/golden-question-runs.jsonl; --trend prints the score history, which is
+the memory-benchmark proof that vault knowledge is compounding, not rotting.
+
 Usage:
     python3 system/tools/golden_questions.py
     python3 system/tools/golden_questions.py --json
     python3 system/tools/golden_questions.py --exit-zero
+    python3 system/tools/golden_questions.py --record
+    python3 system/tools/golden_questions.py --trend
 """
 
 from __future__ import annotations
@@ -27,6 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Reuse the retrieval ranking so the eval tests what agents actually retrieve.
@@ -35,10 +42,69 @@ import vault_search  # noqa: E402
 
 CORPUS_SCOPES = vault_search.DEFAULT_SCOPES
 TOP_K = 5
+RUNS_REL = "state/golden-question-runs.jsonl"
 
 
 def load_spec(root: Path) -> dict:
     return json.loads((root / "state" / "golden-questions.json").read_text())
+
+
+def load_runs(root: Path) -> list[dict]:
+    path = root / RUNS_REL
+    if not path.exists():
+        return []
+    runs = []
+    for line in path.read_text(errors="replace").splitlines():
+        if line.strip():
+            try:
+                runs.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return runs
+
+
+def record_run(root: Path, answer_results: list[dict], contradictions: list[dict]) -> dict:
+    total = len(answer_results)
+    passed = len([r for r in answer_results if r["ok"]])
+    run = {
+        "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "total": total,
+        "passed": passed,
+        "failed_ids": [r["id"] for r in answer_results if not r["ok"]],
+        "contradictions": len(contradictions),
+        "score": round(passed / total, 4) if total else None,
+    }
+    path = root / RUNS_REL
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(run, ensure_ascii=False, sort_keys=True) + "\n")
+    return run
+
+
+def print_trend(root: Path) -> int:
+    runs = load_runs(root)
+    if not runs:
+        print("No recorded runs yet — run with --record after the question set has entries.")
+        return 0
+    print("# Memory benchmark trend\n")
+    prev_score = None
+    for run in runs:
+        score = run.get("score")
+        pct = f"{score * 100:.0f}%" if isinstance(score, (int, float)) else "n/a"
+        delta = ""
+        if isinstance(score, (int, float)) and isinstance(prev_score, (int, float)):
+            diff = (score - prev_score) * 100
+            delta = f" ({'+' if diff >= 0 else ''}{diff:.0f}pt)"
+        contra = f", {run.get('contradictions', 0)} contradictions" if run.get("contradictions") else ""
+        failed = f" — failed: {', '.join(run['failed_ids'])}" if run.get("failed_ids") else ""
+        print(f"  {run.get('ts', '?')}: {run.get('passed', '?')}/{run.get('total', '?')} ({pct}){delta}{contra}{failed}")
+        prev_score = score if isinstance(score, (int, float)) else prev_score
+    latest, first = runs[-1], runs[0]
+    if isinstance(latest.get("score"), (int, float)) and isinstance(first.get("score"), (int, float)) and len(runs) > 1:
+        overall = (latest["score"] - first["score"]) * 100
+        direction = "improving" if overall > 0 else ("holding" if overall == 0 else "REGRESSING")
+        print(f"\nOverall: {direction} ({'+' if overall >= 0 else ''}{overall:.0f}pt across {len(runs)} runs)")
+    return 0
 
 
 def corpus_lines(root: Path, scopes: list[str]):
@@ -109,9 +175,15 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--exit-zero", action="store_true")
+    parser.add_argument("--record", action="store_true",
+                        help="Append this run's summary to state/golden-question-runs.jsonl")
+    parser.add_argument("--trend", action="store_true",
+                        help="Print recorded run history instead of evaluating")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
+    if args.trend:
+        return print_trend(root)
     spec = load_spec(root)
     sections = vault_search.build_index(root, CORPUS_SCOPES)
 
@@ -124,6 +196,12 @@ def main() -> int:
 
     failed_answers = [r for r in answer_results if not r["ok"]]
     has_failure = bool(failed_answers or contradictions)
+
+    if args.record:
+        if answer_results:
+            record_run(root, answer_results, contradictions)
+        else:
+            print("Not recording: question set is empty, a 100% score would be noise.\n")
 
     if args.json:
         print(json.dumps({
