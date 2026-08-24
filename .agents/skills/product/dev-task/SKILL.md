@@ -159,6 +159,14 @@ indistinguishable from no review. Blocking findings loop back to the coder; re-r
 
 - **Verify every `block` before looping.** A block is a claim, not a fact - check it against the full file;
   dismiss context-blind false positives with evidence rather than sending the coder to "fix" a non-issue.
+- **Apply reviewer-warning scope before looping.** Only a confirmed `warn` in production functional code -
+  code that ships or executes as part of the product or its production migrations - is eligible for an
+  automatic fix, and only when that fix stays inside the approved scope. A `warn` or `nit` attributable
+  solely to tests, fixtures, snapshots, documentation, examples, developer/support tooling, or workflow
+  code is report-only: surface it in the hand-off, but do not auto-fix it, re-review it, or block readiness.
+  A confirmed `block` in those files still loops when it invalidates correctness, security, migration, or
+  verification evidence. This policy governs AI review findings; configured format, compile, lint, test,
+  security, and CI gates must still pass at their required warning threshold.
 - Spawn each lens as its own independent reviewer, **schema-forced** with `schemas/review.schema.json` (its
   output is exactly one REVIEW block - single-shape, safe to force). Lens prompts: [prompt-templates.md](prompt-templates.md).
 - Low risk runs 1 lens (correctness); high runs all (correctness, security, performance, regression).
@@ -252,6 +260,11 @@ Anything off-list: surface to the owner ("not in auto-fulfill handlers, asking")
 - **Mandatory PR artifacts.** Before hand-off the PR MUST carry the review verdict and - for any UI change -
   the verification verdict + >=1 embedded screenshot, posted to the PR itself.
 - **Review panel runs on a different model than the coder.** No self-review by the coding agent.
+- **Do not spend fix-loop time on non-production reviewer warnings.** AI-review `warn`/`nit` findings in
+  tests, fixtures, snapshots, documentation, examples, developer/support tooling, or workflow code are
+  report-only and never block hand-off. Only production-functional-code warnings are fix-eligible. This
+  does not relax deterministic lint/compiler/test/security/CI gates or confirmed blockers that undermine
+  the validity of migration, verification, correctness, or security evidence.
 - **Caps:** `max_iterations_per_phase`, 3 review->fix rounds, a per-call timeout. On any cap, surface state -
   never loop forever. **Trace-log every iteration.**
 

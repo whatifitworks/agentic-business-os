@@ -103,7 +103,12 @@ Per-lens focus: **correctness** (does it fix the stated problem; logic, nulls, e
 **security** (authz, input validation, secrets, data exposure, injection); **performance** (N+1s, hot
 paths, cost, memory, blocking I/O); **regression** (backward compat, edge cases, side effects, conventions,
 migration safety). Merge rule: any `block` -> verify it, then loop back to the coder to fix; re-run the
-panel (cap 3 rounds). `warn`/`nit` are surfaced to the owner, not auto-fixed.
+panel (cap 3 rounds). Only a confirmed `warn` in production functional code is eligible for automatic
+fixing, and only when the fix stays inside the approved scope. A `warn`/`nit` limited to tests, fixtures,
+snapshots, documentation, examples, developer/support tooling, or workflow code is report-only: surface it
+to the owner, but do not auto-fix it, re-review it, or block readiness. A confirmed `block` in those files
+still loops when it invalidates correctness, security, migration, or verification evidence. Deterministic
+format, compile, lint, test, security, and CI gates retain their configured warning thresholds.
 
 ## Walkthrough (Phase 3)
 
